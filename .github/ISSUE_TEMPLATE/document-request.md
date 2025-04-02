@@ -1,5 +1,5 @@
 ---
-name: Suggest a documentation for this project
+name: Document request
 about: Describe this issue template's purpose here.
 title: "[DOC] 여기에 문서 이슈 제목 작성"
 labels: documentation
