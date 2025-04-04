@@ -7,7 +7,7 @@ assignees: ''
 
 ---
 
-** Version (commit id) **
+**Version (commit id)**
 Must specify exact version because behavior may differ from version to version.
 
 **Describe the bug**
