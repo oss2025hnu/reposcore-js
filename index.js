@@ -18,7 +18,7 @@ const options = program.opts();
 
         // Collect data
         console.log('Collecting data...');
-        await analyzer.collectCommits();
+        await analyzer.collectPRs();
         await analyzer.collectIssues();
 
         // Calculate scores
