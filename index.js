@@ -18,8 +18,7 @@ const options = program.opts();
 
         // Collect data
         console.log('Collecting data...');
-        await analyzer.collectPRs();
-        await analyzer.collectIssues();
+        await analyzer.collectPRsAndIssues();
 
         // Calculate scores
         const scores = analyzer.calculateScores();
@@ -30,7 +29,7 @@ const options = program.opts();
         }
         if (options.format === 'chart' || options.format === 'both') {
             await analyzer.generateChart(scores);
-            console.log('Chart saved as participation_chart.png');
+            // console.log('Chart saved as participation_chart.png');
         }
     } catch (error) {
         console.error(`Error: ${error.message}`);
