@@ -13,7 +13,7 @@ npm install
 Usage: index [options]
 
 Options:
-  -a, --api-key <token>', Github Access Token (optional)
+  -a, --api-key <token>, Github Access Token (optional)
   -r, --repo <path>    Repository path (e.g., user/repo)
   -o, --output <dir>   Output directory (default: "results")
   -f, --format <type>  Output format (table, chart, both) (default: "both")
