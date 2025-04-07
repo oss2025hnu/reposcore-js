@@ -55,4 +55,4 @@ $S = 3P_{fb}^* + 2P_d^* + 2I_{fb}^* + 1I_d^*$
 
 
 # token 생성하는법
-[./creative token/github_token.md](https://github.com/jungsuryeon/reposcore-js1/blob/main/creative%20token/github_token.md)
+[링크](./creative token/github_token.md)
