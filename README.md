@@ -1,12 +1,12 @@
 # reposcore-js
 A CLI for scoring student participation in an open-source class repo, implemented in JavaScript (Node.js).
 
-# Install dependencies
+## Install dependencies
 ```bash
 npm install
 ```
 
-# Usage
+## Usage
 아래는 `node index.js -h` 또는 `node index.js --help` 실행 결과를 붙여넣은 것이므로
 명령줄 관련 코드가 변경되면 아래 내용도 그에 맞게 수정해야 함.
 ```
@@ -54,5 +54,5 @@ $I_d^* = I_{\text{valid}} - I_{fb}^*$
 $S = 3P_{fb}^* + 2P_d^* + 2I_{fb}^* + 1I_d^*$
 
 
-# token 생성하는법
+## token 생성하는법
 <a href="./creative token/github_token.md">링크</a>
