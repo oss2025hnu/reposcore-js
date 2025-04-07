@@ -3,7 +3,9 @@
 const { program } = require('commander');
 const RepoAnalyzer = require('./lib/analyzer');
 
+
 program
+    .option('-a, --api-key <token>', 'Github Access Token (optional)')
     .option('-r, --repo <path>', 'Repository path (e.g., user/repo)')
     .option('-o, --output <dir>', 'Output directory', 'results')
     .option('-f, --format <type>', 'Output format (table, chart, both)', 'both');
@@ -13,8 +15,10 @@ const options = program.opts();
 
 (async () => {
     try {
+
         // Initialize analyzer with repo path
-        const analyzer = new RepoAnalyzer(options.repo);
+        const analyzer = new RepoAnalyzer(options.repo, options.apiKey);
+        await analyzer.validateToken();
 
         // Collect data
         console.log('Collecting data...');
@@ -22,6 +26,8 @@ const options = program.opts();
 
         // Calculate scores
         const scores = analyzer.calculateScores();
+
+
 
         // Generate outputs based on format
         if (options.format === 'table' || options.format === 'both') {
