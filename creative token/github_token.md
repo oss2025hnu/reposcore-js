@@ -40,5 +40,5 @@ GitHub API 제한을 피하고 private 저장소에 접근하려면 **Personal A
 
 ## 7. 생성된 토큰을 복사하고 CLI에 아래처럼 사용
 
-$ node index.js -a (자기 토큰 입력)
+$ node index.js -a 자기 토큰 입력
 
