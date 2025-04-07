@@ -52,3 +52,7 @@ $I_d^* = I_{\text{valid}} - I_{fb}^*$
 
 최종 점수 계산 공식:\
 $S = 3P_{fb}^* + 2P_d^* + 2I_{fb}^* + 1I_d^*$
+
+
+# token 생성하는법
+/workspaces/reposcore-js1/creative token/github_token.md
