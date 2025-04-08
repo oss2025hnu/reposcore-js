@@ -5,6 +5,7 @@ const { program } = require('commander');
 const fs = require('fs');
 const path = require('path');
 const RepoAnalyzer = require('./lib/analyzer');
+const generateCsv = require('./lib/generateCsv');
 
 const ENV_PATH = path.join(__dirname, '.env');
 
@@ -68,6 +69,10 @@ const options = program.opts();
         }
         if (options.format === 'chart' || options.format === 'both') {
             await analyzer.generateChart(scores, options.output);
+        }
+        if (options.format === 'csv') {
+            generateCsv(scores, options.output);
+            console.log(`CSV 파일이 ${options.output}에 저장되었습니다.`);
         }
 
     } catch (error) {
