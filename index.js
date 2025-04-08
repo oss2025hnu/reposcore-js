@@ -3,6 +3,7 @@ require('dotenv').config();
 
 const { program } = require('commander');
 const RepoAnalyzer = require('./lib/analyzer');
+const generateCsv = require('./lib/generateCsv');
 
 const fs = require('fs');
 const path = require('path');
@@ -71,6 +72,11 @@ const options = program.opts();
         if (options.format === 'chart' || options.format === 'both') {
             await analyzer.generateChart(scores, options.output);
         }
+        if (options.format === 'csv') {
+            generateCsv(scores, options.output);
+            console.log(`CSV 파일이 ${options.output}에 저장되었습니다.`);
+        }
+
     } catch (error) {
         console.error(`Error: ${error.message}`);
         process.exit(1);
