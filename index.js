@@ -6,7 +6,7 @@ const RepoAnalyzer = require('./lib/analyzer');
 
 program
     .option('-a, --api-key <token>', 'Github Access Token (optional)')
-    .option('-r, --repo <path>', 'Repository path (e.g., user/repo)')
+    .option('-r, --repo <path...>', 'Repository path (e.g., user/repo)')
     .option('-o, --output <dir>', 'Output directory', 'results')
     .option('-f, --format <type>', 'Output format (table, chart, both)', 'both');
 
