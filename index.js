@@ -2,17 +2,17 @@
 require('dotenv').config();
 
 const { program } = require('commander');
-const fs = require('fs');
-const path = require('path');
 const RepoAnalyzer = require('./lib/analyzer');
 const generateCsv = require('./lib/generateCsv');
 
+const fs = require('fs');
+const path = require('path');
 const ENV_PATH = path.join(__dirname, '.env');
 
 program
     .option('-a, --api-key <token>', 'Github Access Token (optional)')
     .option('-t, --text', 'Save table as text file')
-    .option('-r, --repo <path>', 'Repository path (e.g., user/repo)')
+    .option('-r, --repo <path...>', 'Repository path (e.g., user/repo)')
     .option('-o, --output <dir>', 'Output directory', 'results')
     .option('-f, --format <type>', 'Output format (table, chart, both)', 'both');
 
@@ -27,6 +27,7 @@ const options = program.opts();
             program.help();
             process.exit(1);
         }
+
 
         // API 토큰이 입력되었으면 .env에 저장 (이미 있지 않은 경우)
         if (options.apiKey) {
@@ -50,6 +51,7 @@ const options = program.opts();
         // Initialize analyzer with repo path
         const token = options.apiKey || process.env.GITHUB_TOKEN;
         const analyzer = new RepoAnalyzer(options.repo, token);
+
 
         await analyzer.validateToken();
 
