@@ -6,6 +6,7 @@ const RepoAnalyzer = require('./lib/analyzer');
 
 program
     .option('-a, --api-key <token>', 'Github Access Token (optional)')
+    .option('-t, --text', 'Save table as text file')
     .option('-r, --repo <path>', 'Repository path (e.g., user/repo)')
     .option('-o, --output <dir>', 'Output directory', 'results')
     .option('-f, --format <type>', 'Output format (table, chart, both)', 'both');
@@ -33,11 +34,11 @@ const options = program.opts();
         // Calculate scores
         const scores = analyzer.calculateScores();
 
-
+        
 
         // Generate outputs based on format
         if (options.format === 'table' || options.format === 'both') {
-            analyzer.generateTable(scores);
+            analyzer.generateTable(scores, options.text);
         }
         if (options.format === 'chart' || options.format === 'both') {
             await analyzer.generateChart(scores);
