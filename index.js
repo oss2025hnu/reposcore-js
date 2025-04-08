@@ -2,16 +2,17 @@
 require('dotenv').config();
 
 const { program } = require('commander');
-const fs = require('fs');
-const path = require('path');
 const RepoAnalyzer = require('./lib/analyzer');
 
+
+const fs = require('fs');
+const path = require('path');
 const ENV_PATH = path.join(__dirname, '.env');
 
 program
     .option('-a, --api-key <token>', 'Github Access Token (optional)')
     .option('-t, --text', 'Save table as text file')
-    .option('-r, --repo <path>', 'Repository path (e.g., user/repo)')
+    .option('-r, --repo <path...>', 'Repository path (e.g., user/repo)')
     .option('-o, --output <dir>', 'Output directory', 'results')
     .option('-f, --format <type>', 'Output format (table, chart, both)', 'both');
 
@@ -26,6 +27,7 @@ const options = program.opts();
             program.help();
             process.exit(1);
         }
+
 
         // API 토큰이 입력되었으면 .env에 저장 (이미 있지 않은 경우)
         if (options.apiKey) {
@@ -50,6 +52,7 @@ const options = program.opts();
         const token = options.apiKey || process.env.GITHUB_TOKEN;
         const analyzer = new RepoAnalyzer(options.repo, token);
 
+
         await analyzer.validateToken();
 
         // Collect data
@@ -68,6 +71,9 @@ const options = program.opts();
         }
         if (options.format === 'chart' || options.format === 'both') {
             await analyzer.generateChart(scores, options.output);
+        }
+        if (options.format === 'csv') {
+            console.log(`CSV 파일이 ${options.output}에 저장하는 기능은 아직 구현되지 않았습니다.`);
         }
 
     } catch (error) {
