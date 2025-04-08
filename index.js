@@ -16,6 +16,12 @@ const options = program.opts();
 (async () => {
     try {
 
+        if (!options.repo) {
+            console.error('Error :  -r (--repo) 옵션을 필수로 사용하여야 합니다. 예) node index.js -r oss2025hnu/reposcore-js');
+            program.help();
+            process.exit(1);
+        }
+
         // Initialize analyzer with repo path
         const analyzer = new RepoAnalyzer(options.repo, options.apiKey);
         await analyzer.validateToken();
