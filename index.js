@@ -58,6 +58,9 @@ const options = program.opts();
         // Calculate scores
         const scores = analyzer.calculateScores();
 
+        // Calculate AverageScore
+        await analyzer.calculateAverageScore(scores);
+
         // Generate outputs based on format
         if (options.format === 'table' || options.format === 'both') {
             analyzer.generateTable(scores);
