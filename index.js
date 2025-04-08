@@ -14,7 +14,8 @@ program
     .option('-t, --text', 'Save table as text file')
     .option('-r, --repo <path...>', 'Repository path (e.g., user/repo)')
     .option('-o, --output <dir>', 'Output directory', 'results')
-    .option('-f, --format <type>', 'Output format (table, chart, both)', 'both');
+    .option('-f, --format <type>', 'Output format (table, chart, both)', 'both')
+    .option('test for update usage_');
 
 program.parse(process.argv);
 const options = program.opts();
