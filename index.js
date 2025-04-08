@@ -1,8 +1,12 @@
 #!/usr/bin/env node
+require('dotenv').config();
 
 const { program } = require('commander');
+const fs = require('fs');
+const path = require('path');
 const RepoAnalyzer = require('./lib/analyzer');
 
+const ENV_PATH = path.join(__dirname, '.env');
 
 program
     .option('-a, --api-key <token>', 'Github Access Token (optional)')
@@ -22,8 +26,29 @@ const options = program.opts();
             process.exit(1);
         }
 
+        // API 토큰이 입력되었으면 .env에 저장 (이미 있지 않은 경우)
+        if (options.apiKey) {
+            const tokenLine = `GITHUB_TOKEN=${options.apiKey}`;
+            let shouldWrite = true;
+
+            if (fs.existsSync(ENV_PATH)) {
+                const envContent = fs.readFileSync(ENV_PATH, 'utf-8');
+                if (envContent.includes('GITHUB_TOKEN=')) {
+                    shouldWrite = false;
+                    console.log('.env 파일에 이미 토큰이 등록되어 있습니다.');
+                }
+            }
+
+            if (shouldWrite) {
+                fs.appendFileSync(ENV_PATH, `${tokenLine}\n`);
+                console.log('.env 파일에 토큰이 저장되었습니다.');
+            }
+        }
+
         // Initialize analyzer with repo path
-        const analyzer = new RepoAnalyzer(options.repo, options.apiKey);
+        const token = options.apiKey || process.env.GITHUB_TOKEN;
+        const analyzer = new RepoAnalyzer(options.repo, token);
+
         await analyzer.validateToken();
 
         // Collect data
@@ -33,16 +58,14 @@ const options = program.opts();
         // Calculate scores
         const scores = analyzer.calculateScores();
 
-
-
         // Generate outputs based on format
         if (options.format === 'table' || options.format === 'both') {
             analyzer.generateTable(scores);
         }
         if (options.format === 'chart' || options.format === 'both') {
-            await analyzer.generateChart(scores);
-            // console.log('Chart saved as participation_chart.png');
+            await analyzer.generateChart(scores, options.output);
         }
+
     } catch (error) {
         console.error(`Error: ${error.message}`);
         process.exit(1);
