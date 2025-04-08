@@ -2,13 +2,13 @@
 
 const { program } = require('commander');
 const RepoAnalyzer = require('./lib/analyzer');
-
+const generateCsv = require('./lib/generateCsv');
 
 program
     .option('-a, --api-key <token>', 'Github Access Token (optional)')
     .option('-r, --repo <path>', 'Repository path (e.g., user/repo)')
     .option('-o, --output <dir>', 'Output directory', 'results')
-    .option('-f, --format <type>', 'Output format (table, chart, both)', 'both');
+    .option('-f, --format <type>', 'Output format (table, chart, both, csv)', 'both');
 
 program.parse(process.argv);
 const options = program.opts();
@@ -36,6 +36,10 @@ const options = program.opts();
         if (options.format === 'chart' || options.format === 'both') {
             await analyzer.generateChart(scores);
             // console.log('Chart saved as participation_chart.png');
+        }
+        if (options.format === 'csv') {
+            generateCsv(scores, options.output);
+            console.log(`CSV 파일이 ${options.output}에 저장되었습니다.`);
         }
     } catch (error) {
         console.error(`Error: ${error.message}`);
