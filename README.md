@@ -60,4 +60,4 @@ $S = 3P_{fb}^* + 2P_d^* + 2I_{fb}^* + 1I_d^*$
 
 
 ## token 생성하는법
-<a href="./creative token/github_token.md">링크</a>
+<a href="./token_guide/README.md">링크</a>

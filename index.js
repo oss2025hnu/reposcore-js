@@ -23,6 +23,7 @@ const options = program.opts();
             process.exit(0);
         }
 
+
         // 환경변수에서 토큰을 가져옴
         const tokenFromEnv = getEnvToken();
 
@@ -32,6 +33,7 @@ const options = program.opts();
 
         // 분석기 초기화
         const analyzer = new RepoAnalyzer(options.repo, tokenFromEnv);
+
         await analyzer.validateToken();
 
         // 데이터 수집
