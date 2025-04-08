@@ -4,6 +4,7 @@ A CLI for scoring student participation in an open-source class repo, implemente
 ## Install dependencies
 ```bash
 npm install
+npm install dotenv 
 ```
 
 ## Usage
@@ -19,6 +20,19 @@ Options:
   -f, --format <type>  Output format (table, chart, both) (default: "both")
   -h, --help           display help for command
 ```
+
+###Github Access Token 관리 방법 (환경변수 사용)
+프로그램 실행 시 매번 -a <token> 옵션을 입력하는 번거로움을 줄이기 위해, .env 파일을 이용한 API 토큰 자동 인증 기능이 추가되었습니다.
+먼저 아래에 있는 코드를 입력하여 .env파일을 자동 생성합니다.
+```
+node index.js -a ghp_xxxxxxYOURTOKENxxxxx
+```
+.env파일이 생성되고 난 뒤부턴
+```
+node index.js -r oss2025hnu/reposcore-py
+```
+와 같이 입력하여 토큰을 직접 입력하지 않고 결과물을 얻을 수 있습니다.
+.env파일은 .gitignore 132번줄에 적어두었으므로, 자동커밋 및 푸쉬가 되지 않고 자신의 로컬저장소에 남아있게 됨으로써 계속하여 토큰 없이 결과물을 얻을 수 있습니다.
 
 ## Score Formula
 아래는 PR 개수와 이슈 개수의 비율에 따라 점수로 인정가능한 최대 개수를 구하고 각 배점에 따라 최종 점수를 산출하는 공식이다.
