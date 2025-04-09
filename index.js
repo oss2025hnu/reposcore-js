@@ -73,12 +73,10 @@ if (!validFormats.includes(options.format)) {
         // Generate outputs based on format
         if (options.format === 'table' || options.format === 'both') {
             analyzer.generateTable(scores, options.text);
+            analyzer.generateCsv(scores, options.output)
         }
         if (options.format === 'chart' || options.format === 'both') {
             await analyzer.generateChart(scores, options.output);
-        }
-        if (options.format === 'csv') {
-            console.log(`CSV 파일이 ${options.output}에 저장하는 기능은 아직 구현되지 않았습니다.`);
         }
 
     } catch (error) {
