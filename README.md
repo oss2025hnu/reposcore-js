@@ -21,6 +21,21 @@ Options:
   -h, --help            display help for command
 ```
 
+## 토큰 실행 방법
+
+1. 최초 실행 (API KEY 포함)
+- 처음 실행 시에는 아래와 같이 토큰을 함께 입력해야 합니다.
+```bash
+node index.js -r oss2025hnu/reposcore-js -a ghp_ABC123ABC123
+```
+위 명령어 실행 시 .env 파일이 자동 생성되며, 입력한 토큰이 로컬 환경에 저장됩니다.
+
+2. 이후 실행 (API KEY 생략 가능)
+- .env 파일이 생성된 이후에는 토큰 없이도 실행이 가능합니다.
+```bash
+node index.js -r oss2025hnu/reposcore-js
+```
+
 ## Score Formula
 아래는 PR 개수와 이슈 개수의 비율에 따라 점수로 인정가능한 최대 개수를 구하고 각 배점에 따라 최종 점수를 산출하는 공식이다.
 
