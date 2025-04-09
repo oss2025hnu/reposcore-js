@@ -67,7 +67,7 @@ const options = program.opts();
 
         // Generate outputs based on format
         if (options.format === 'table' || options.format === 'both') {
-            analyzer.generateTable(scores, options.text);
+            await analyzer.generateTable(scores, options.text);
         }
         if (options.format === 'chart' || options.format === 'both') {
             await analyzer.generateChart(scores, options.output);
