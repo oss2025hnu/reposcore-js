@@ -48,3 +48,6 @@ $S = 3P_{fb}^* + 2P_d^* + 2I_{fb}^* + 1I_d^*$
 
 ## token 생성하는법
 <a href="./token_guide/README.md">링크</a>
+
+## 프로젝트 가이드라인
+<a href="./project_guidelines.md">링크</a>
