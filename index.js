@@ -19,6 +19,12 @@ program
 program.parse(process.argv);
 const options = program.opts();
 
+const validFormats = ['table', 'chart', 'both'];
+if (!validFormats.includes(options.format)) {
+  console.error(`Error : Invalid format: "${options.format}"\nValid formats are: ${validFormats.join(', ')}`);
+  process.exit(1);
+}
+
 (async () => {
     try {
 
