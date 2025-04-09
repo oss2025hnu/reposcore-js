@@ -18,8 +18,13 @@ Options:
   -r, --repo <path>    Repository path (e.g., user/repo)
   -o, --output <dir>   Output directory (default: "results")
   -f, --format <type>  Output format (table, chart, both) (default: "both")
+  -c, --use-cache Use previously cached GitHub data (cache.json)
   -h, --help           display help for command
 ```
+If `--use-cache` is used, GitHub API data is loaded from the `cache.json` file (if it exists).  
+This reduces API requests and speeds up execution.  
+If no cache is found or the file is corrupted, new data will be fetched automatically.
+
 
 ## Score Formula
 아래는 PR 개수와 이슈 개수의 비율에 따라 점수로 인정가능한 최대 개수를 구하고 각 배점에 따라 최종 점수를 산출하는 공식이다.

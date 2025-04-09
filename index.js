@@ -15,9 +15,29 @@ program
     .option('-r, --repo <path...>', 'Repository path (e.g., user/repo)')
     .option('-o, --output <dir>', 'Output directory', 'results')
     .option('-f, --format <type>', 'Output format (table, chart, both)', 'both');
+    .option('-c, --use-cache', 'Use previously cached GitHub data');
 
 program.parse(process.argv);
 const options = program.opts();
+
+const CACHE_PATH = path.join(__dirname, 'cache.json');
+
+function loadCache() {
+    if (fs.existsSync(CACHE_PATH)) {
+      return JSON.parse(fs.readFileSync(CACHE_PATH, 'utf-8'));
+    }
+    return null;
+  }
+  
+  function saveCache(participantsMap) {
+    const obj = {};
+    participantsMap.forEach((repoMap, repoName) => {
+      obj[repoName] = Object.fromEntries(
+        Array.from(repoMap.entries()).map(([user, data]) => [user, data])
+      );
+    });
+    fs.writeFileSync(CACHE_PATH, JSON.stringify(obj, null, 2));
+  }
 
 (async () => {
     try {
@@ -54,10 +74,30 @@ const options = program.opts();
 
 
         await analyzer.validateToken();
+        
 
-        // Collect data
-        console.log('Collecting data...');
-        await analyzer.collectPRsAndIssues();
+        if (options.useCache) {
+            const cached = loadCache();
+            if (cached) {
+                console.log("캐시 데이터를 불러왔습니다.");
+                analyzer.participants = new Map(
+                    Object.entries(cached).map(
+                        ([repoName, repoMap]) =>
+                            [repoName, new Map(Object.entries(repoMap))]
+                    )
+                );
+            } else {
+                console.log("캐시 파일이 없어 데이터를 새로 수집합니다.");
+                console.log("Collecting data...");
+                await analyzer.collectPRsAndIssues();
+                saveCache(analyzer.participants);
+            }
+        } else {
+            console.log("캐시를 사용하지 않습니다. 데이터를 새로 수집합니다.");
+            console.log("Collecting data...");
+            await analyzer.collectPRsAndIssues();
+            saveCache(analyzer.participants);
+        }
 
         // Calculate scores
         const scores = analyzer.calculateScores();
