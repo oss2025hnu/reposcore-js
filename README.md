@@ -12,23 +12,11 @@ npm install
 아래는 `node index.js -h` 또는 `node index.js --help` 실행 결과를 붙여넣은 것이므로
 명령줄 관련 코드가 변경되면 아래 내용도 그에 맞게 수정해야 함.
 ```
-<!-- Useage_start
-
+<!-- useage_start -->
 ```
-Usage: index [options]
-
-Options:
-  -a, --api-key <token>   Github Access Token (optional)
-  -t, --text              Save table as text file
-  -r, --repo <path...>    Repository path (e.g., user/repo)
-  -o, --output <dir>      Output directory (default: "results")
-  -f, --format <type>     Output format (table, chart, both) (default: "both")
-  test for update usage_
-  -h, --help              display help for command
+👉 [Usage details are available here.](./ReadmeHelp.md)
 ```
-
-Usage_end -->
-```
+<!-- usage_end -->
 
 ## Score Formula
 아래는 PR 개수와 이슈 개수의 비율에 따라 점수로 인정가능한 최대 개수를 구하고 각 배점에 따라 최종 점수를 산출하는 공식이다.
