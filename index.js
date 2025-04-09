@@ -19,12 +19,6 @@ program
 program.parse(process.argv);
 const options = program.opts();
 
-const validFormats = ['table', 'chart', 'both'];
-if (!validFormats.includes(options.format)) {
-  console.error(`Error : Invalid format: "${options.format}"\nValid formats are: ${validFormats.join(', ')}`);
-  process.exit(1);
-}
-
 (async () => {
     try {
 
@@ -33,34 +27,24 @@ if (!validFormats.includes(options.format)) {
             program.help();
         }
 
-
         // API 토큰이 입력되었으면 .env에 저장 (이미 있지 않은 경우)
         if (options.apiKey) {
             const tokenLine = `GITHUB_TOKEN=${options.apiKey}`;
-            let shouldWrite = true;
-        
-            // 토큰 유효성 검증
-            const { Octokit } = require('@octokit/rest');
-            const testOctokit = new Octokit({ auth: options.apiKey });
-        
-            try {
-                await testOctokit.rest.users.getAuthenticated();
-                console.log('입력된 토큰이 유효합니다.');
-        
-                if (fs.existsSync(ENV_PATH)) {
-                    const envContent = fs.readFileSync(ENV_PATH, 'utf-8');
-                    if (envContent.includes('GITHUB_TOKEN=')) {
-                        shouldWrite = false;
-                        console.log('.env 파일에 이미 토큰이 등록되어 있습니다.');
-                    }
+
+            let existingToken = null;
+            if (fs.existsSync(ENV_PATH)) {
+                const envContent = fs.readFileSync(ENV_PATH, 'utf-8');
+                const match = envContent.match(/^GITHUB_TOKEN=(.*)$/m);
+                if (match) {
+                    existingToken = match[1].trim();
                 }
-        
-                if (shouldWrite) {
-                    fs.appendFileSync(ENV_PATH, `${tokenLine}\n`);
-                    console.log('.env 파일에 토큰이 저장되었습니다.');
-                }
-            } catch (error) {
-                throw new Error('입력된 토큰이 유효하지 않아 프로그램을 종료합니다, 유효한 토큰인지 확인해주세요.');
+            }
+
+            if (existingToken === options.apiKey) {
+                console.log('.env 파일에 입력한 토큰과 동일한 토큰이 이미 저장되어 있습니다.');
+            } else {
+                fs.writeFileSync(ENV_PATH, `${tokenLine}\n`);
+                console.log('.env 파일에 토큰이 저장되었습니다.');
             }
         }
 
@@ -84,10 +68,12 @@ if (!validFormats.includes(options.format)) {
         // Generate outputs based on format
         if (options.format === 'table' || options.format === 'both') {
             analyzer.generateTable(scores, options.text);
-            analyzer.generateCsv(scores, options.output)
         }
         if (options.format === 'chart' || options.format === 'both') {
             await analyzer.generateChart(scores, options.output);
+        }
+        if (options.format === 'csv') {
+            console.log(`CSV 파일이 ${options.output}에 저장하는 기능은 아직 구현되지 않았습니다.`);
         }
 
     } catch (error) {
