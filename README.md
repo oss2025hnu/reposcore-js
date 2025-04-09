@@ -29,7 +29,7 @@ Options:
 - $I_{fb}$ : 기능 또는 버그 관련 Open 또는 해결된 이슈 개수 (**2점**) ($I_{fb} = I_f + I_b$)  
 - $I_d$ : 문서 관련 Open 또는 해결된 이슈 개수 (**1점**)
 
-$P_{\text{valid}} = P_{fb} + \min(P_d, 3P_{fb}) ~~\quad$ 점수 인정 가능 PR 개수\
+$P_{\text{valid}} = P_{fb} + \min(P_d, 3 max(P_{fb},1)) ~~\quad$ 점수 인정 가능 PR 개수\
 $I_{\text{valid}} = \min(I_{fb} + I_d, 4 \times P_{\text{valid}}) \quad$ 점수 인정 가능 이슈 개수
 
 PR의 점수를 최대로 하기 위해 기능/버그 PR을 먼저 계산한 후 문서 PR을 계산합니다.
