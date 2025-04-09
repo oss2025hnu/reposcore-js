@@ -14,12 +14,12 @@ program
     .option('-t, --text', 'Save table as text file')
     .option('-r, --repo <path...>', 'Repository path (e.g., user/repo)')
     .option('-o, --output <dir>', 'Output directory', 'results')
-    .option('-f, --format <type>', 'Output format (table, chart, both, csv)', 'both');
+    .option('-f, --format <type>', 'Output format (table, chart, both)', 'both');
 
 program.parse(process.argv);
 const options = program.opts();
 
-const validFormats = ['table', 'chart', 'both', 'csv'];
+const validFormats = ['table', 'chart', 'both'];
 if (!validFormats.includes(options.format)) {
   console.error(`Error : Invalid format: "${options.format}"\nValid formats are: ${validFormats.join(', ')}`);
   process.exit(1);
