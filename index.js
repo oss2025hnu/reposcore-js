@@ -33,18 +33,29 @@ const options = program.opts();
         if (options.apiKey) {
             const tokenLine = `GITHUB_TOKEN=${options.apiKey}`;
             let shouldWrite = true;
-
-            if (fs.existsSync(ENV_PATH)) {
-                const envContent = fs.readFileSync(ENV_PATH, 'utf-8');
-                if (envContent.includes('GITHUB_TOKEN=')) {
-                    shouldWrite = false;
-                    console.log('.env 파일에 이미 토큰이 등록되어 있습니다.');
+        
+            // 토큰 유효성 검증
+            const { Octokit } = require('@octokit/rest');
+            const testOctokit = new Octokit({ auth: options.apiKey });
+        
+            try {
+                await testOctokit.rest.users.getAuthenticated();
+                console.log('입력된 토큰이 유효합니다.');
+        
+                if (fs.existsSync(ENV_PATH)) {
+                    const envContent = fs.readFileSync(ENV_PATH, 'utf-8');
+                    if (envContent.includes('GITHUB_TOKEN=')) {
+                        shouldWrite = false;
+                        console.log('.env 파일에 이미 토큰이 등록되어 있습니다.');
+                    }
                 }
-            }
-
-            if (shouldWrite) {
-                fs.appendFileSync(ENV_PATH, `${tokenLine}\n`);
-                console.log('.env 파일에 토큰이 저장되었습니다.');
+        
+                if (shouldWrite) {
+                    fs.appendFileSync(ENV_PATH, `${tokenLine}\n`);
+                    console.log('.env 파일에 토큰이 저장되었습니다.');
+                }
+            } catch (error) {
+                throw new Error('입력된 토큰이 유효하지 않아 프로그램을 종료합니다, 유효한 토큰인지 확인해주세요.');
             }
         }
 
