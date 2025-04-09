@@ -20,6 +20,20 @@ Options:
   -f, --format <type>  Output format (table, chart, both) (default: "both")
   -c, --use-cache Use previously cached GitHub data (cache.json)
   -h, --help           display help for command
+
+## 토큰 실행 방법
+
+1. 최초 실행 (API KEY 포함)
+- 처음 실행 시에는 아래와 같이 토큰을 함께 입력해야 합니다.
+```bash
+node index.js -r oss2025hnu/reposcore-js -a ghp_ABC123ABC123
+```
+위 명령어 실행 시 .env 파일이 자동 생성되며, 입력한 토큰이 로컬 환경에 저장됩니다.
+
+2. 이후 실행 (API KEY 생략 가능)
+- .env 파일이 생성된 이후에는 토큰 없이도 실행이 가능합니다.
+```bash
+node index.js -r oss2025hnu/reposcore-js
 ```
 If `--use-cache` is used, GitHub API data is loaded from the `cache.json` file (if it exists).  
 This reduces API requests and speeds up execution.  
