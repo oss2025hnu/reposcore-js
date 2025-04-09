@@ -19,13 +19,18 @@ program
 program.parse(process.argv);
 const options = program.opts();
 
+const validFormats = ['table', 'chart', 'both'];
+if (!validFormats.includes(options.format)) {
+  console.error(`Error : Invalid format: "${options.format}"\nValid formats are: ${validFormats.join(', ')}`);
+  process.exit(1);
+}
+
 (async () => {
     try {
 
         if (!options.repo) {
             console.error('Error :  -r (--repo) 옵션을 필수로 사용하여야 합니다. 예) node index.js -r oss2025hnu/reposcore-js');
             program.help();
-            process.exit(1);
         }
 
 
