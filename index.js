@@ -25,7 +25,6 @@ const options = program.opts();
         if (!options.repo) {
             console.error('Error :  -r (--repo) 옵션을 필수로 사용하여야 합니다. 예) node index.js -r oss2025hnu/reposcore-js');
             program.help();
-            process.exit(1);
         }
 
 
