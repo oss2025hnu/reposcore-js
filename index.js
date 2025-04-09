@@ -5,7 +5,7 @@ const { log } = require('./lib/Utill');
 const { program } = require('commander');
 const RepoAnalyzer = require('./lib/analyzer');
 
-const fs = require('fs');
+const fs = require('fs').promises;
 const path = require('path');
 const ENV_PATH = path.join(__dirname, '.env');
 const CACHE_PATH = path.join(__dirname, 'cache.json');
@@ -43,25 +43,29 @@ function mapToJson(map) {
 }
 // ------------------------------------------------------------
 
-function loadCache() {
-    if (fs.existsSync(CACHE_PATH)) {
-        const data = fs.readFileSync(CACHE_PATH, 'utf-8');
+async function loadCache() {
+    try {
+        await fs.access(CACHE_PATH, fs.constants.R_OK);
+        const data = await fs.readFile(CACHE_PATH, 'utf-8');
         return jsonToMap(JSON.parse(data)); // 수정된 jsonToMap 함수 사용
+    } catch {
+        return null;
     }
-    return null;
 }
 
-function saveCache(participantsMap) {
+async function saveCache(participantsMap) {
     const jsonData = mapToJson(participantsMap);
-    fs.writeFileSync(CACHE_PATH, JSON.stringify(jsonData, null, 2));
+    await fs.writeFile(CACHE_PATH, JSON.stringify(jsonData, null, 2));
 }
 
 // .env 업데이트 유틸리티 함수
-function updateEnvToken(token) {
+async function updateEnvToken(token) {
     const tokenLine = `GITHUB_TOKEN=${token}`;
 
-    if (fs.existsSync(ENV_PATH)) {
-        const envContent = fs.readFileSync(ENV_PATH, 'utf-8');
+    try {
+        await fs.access(ENV_PATH, fs.constants.R_OK);
+
+        const envContent = await fs.readFile(ENV_PATH, 'utf-8');
         const lines = envContent.split('\n');
         let tokenUpdated = false;
         let hasTokenKey = false;
@@ -82,16 +86,16 @@ function updateEnvToken(token) {
         });
 
         if (hasTokenKey && tokenUpdated) {
-            fs.writeFileSync(ENV_PATH, newLines.join('\n'));
+            await fs.writeFile(ENV_PATH, newLines.join('\n'));
             log('.env 파일의 토큰이 업데이트되었습니다.');
         }
 
         if (!hasTokenKey) {
-            fs.appendFileSync(ENV_PATH, `${tokenLine}\n`);
+            await fs.writeFile(ENV_PATH, `${tokenLine}\n`);
             log('.env 파일에 토큰이 저장되었습니다.');
         }
-    } else {
-        fs.writeFileSync(ENV_PATH, `${tokenLine}\n`);
+    } catch {
+        await fs.writeFile(ENV_PATH, `${tokenLine}\n`);
         log('.env 파일이 생성되고 토큰이 저장되었습니다.');
     }
 }
@@ -155,14 +159,12 @@ async function main() {
         analyzer.calculateAverageScore(scores);
 
         // 디렉토리 생성
-        if(!fs.existsSync(options.output)){
-            fs.mkdirSync(options.output);
-        }
+        await fs.mkdir(options.output, { recursive: true });
 
         // Generate outputs based on format
         if (options.format === 'table' || options.format === 'both') {
-            analyzer.generateTable(scores, options.text);
-            analyzer.generateCsv(scores, options.output);
+            await analyzer.generateTable(scores, options.text);
+            await analyzer.generateCsv(scores, options.output);
         }
         if (options.format === 'chart' || options.format === 'both') {
             await analyzer.generateChart(scores, options.output);
