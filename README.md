@@ -11,12 +11,28 @@ npm install
 
 아래는 `node index.js -h` 또는 `node index.js --help` 실행 결과를 붙여넣은 것이므로
 명령줄 관련 코드가 변경되면 아래 내용도 그에 맞게 수정해야 함.
-```
-<!-- useage_start -->
-```
+
+## --Help관련 Readme파일
 👉 [Usage details are available here.](./ReadmeHelp.md)
 ```
-<!-- usage_end -->
+
+
+```
+## 토큰 실행 방법
+
+1. 최초 실행 (API KEY 포함)
+- 처음 실행 시에는 아래와 같이 토큰을 함께 입력해야 합니다.
+```bash
+node index.js -r oss2025hnu/reposcore-js -a ghp_ABC123ABC123
+```
+위 명령어 실행 시 .env 파일이 자동 생성되며, 입력한 토큰이 로컬 환경에 저장됩니다.
+
+2. 이후 실행 (API KEY 생략 가능)
+- .env 파일이 생성된 이후에는 토큰 없이도 실행이 가능합니다.
+```bash
+node index.js -r oss2025hnu/reposcore-js
+```
+
 
 ## Score Formula
 아래는 PR 개수와 이슈 개수의 비율에 따라 점수로 인정가능한 최대 개수를 구하고 각 배점에 따라 최종 점수를 산출하는 공식이다.
@@ -26,7 +42,7 @@ npm install
 - $I_{fb}$ : 기능 또는 버그 관련 Open 또는 해결된 이슈 개수 (**2점**) ($I_{fb} = I_f + I_b$)  
 - $I_d$ : 문서 관련 Open 또는 해결된 이슈 개수 (**1점**)
 
-$P_{\text{valid}} = P_{fb} + \min(P_d, 3P_{fb}) ~~\quad$ 점수 인정 가능 PR 개수\
+$P_{\text{valid}} = P_{fb} + \min(P_d, 3 \times \max(P_{fb},1)) ~~\quad$ 점수 인정 가능 PR 개수\
 $I_{\text{valid}} = \min(I_{fb} + I_d, 4 \times P_{\text{valid}}) \quad$ 점수 인정 가능 이슈 개수
 
 PR의 점수를 최대로 하기 위해 기능/버그 PR을 먼저 계산한 후 문서 PR을 계산합니다.
