@@ -21,17 +21,15 @@ program.parse(process.argv);
 const options = program.opts();
 
 // ------------- JSON ↔ Map 변환 유틸리티 함수 -------------
-function jsonToMap(jsonObj) {
+function jsonToMap(jsonObj, depth = 0) {
+    if (depth >= 2 || typeof jsonObj !== 'object' || jsonObj === null || Array.isArray(jsonObj)) {
+        return jsonObj;
+    }
+
     const map = new Map();
-    Object.keys(jsonObj).forEach(key => {
-        const value = jsonObj[key];
-        map.set(
-            key,
-            (typeof value === 'object' && value !== null && !Array.isArray(value))
-                ? jsonToMap(value)
-                : value
-        );
-    });
+    for (const key of Object.keys(jsonObj)) {
+        map.set(key, jsonToMap(jsonObj[key], depth + 1));
+    }
     return map;
 }
 
@@ -47,7 +45,7 @@ function mapToJson(map) {
 function loadCache() {
     if (fs.existsSync(CACHE_PATH)) {
         const data = fs.readFileSync(CACHE_PATH, 'utf-8');
-        return jsonToMap(JSON.parse(data));
+        return jsonToMap(JSON.parse(data)); // 수정된 jsonToMap 함수 사용
     }
     return null;
 }
@@ -134,11 +132,7 @@ if (!validFormats.includes(options.format)) {
             const cached = loadCache();
             if (cached) {
                 console.log("캐시 데이터를 불러왔습니다.");
-                analyzer.participants = new Map(
-                    Object.entries(cached).map(
-                        ([repoName, repoMap]) => [repoName, new Map(Object.entries(repoMap))]
-                    )
-                );
+                analyzer.participants = cached; // 캐시 데이터를 그대로 할당
             } else {
                 console.log("캐시 파일이 없어 데이터를 새로 수집합니다.");
                 console.log("Collecting data...");
