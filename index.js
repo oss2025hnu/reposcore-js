@@ -7,6 +7,7 @@ const RepoAnalyzer = require('./lib/analyzer');
 const fs = require('fs');
 const path = require('path');
 const ENV_PATH = path.join(__dirname, '.env');
+const CACHE_PATH = path.join(__dirname, 'cache.json');
 
 program
     .option('-a, --api-key <token>', 'Github Access Token (optional)')
@@ -19,35 +20,51 @@ program
 program.parse(process.argv);
 const options = program.opts();
 
+// ------------- JSON ↔ Map 변환 유틸리티 함수 -------------
+function jsonToMap(jsonObj) {
+    const map = new Map();
+    Object.keys(jsonObj).forEach(key => {
+        const value = jsonObj[key];
+        map.set(
+            key,
+            (typeof value === 'object' && value !== null && !Array.isArray(value))
+                ? jsonToMap(value)
+                : value
+        );
+    });
+    return map;
+}
 
-const CACHE_PATH = path.join(__dirname, 'cache.json');
+function mapToJson(map) {
+    const obj = {};
+    for (const [key, value] of map) {
+        obj[key] = value instanceof Map ? mapToJson(value) : value;
+    }
+    return obj;
+}
+// ------------------------------------------------------------
 
 function loadCache() {
     if (fs.existsSync(CACHE_PATH)) {
-      return JSON.parse(fs.readFileSync(CACHE_PATH, 'utf-8'));
+        const data = fs.readFileSync(CACHE_PATH, 'utf-8');
+        return jsonToMap(JSON.parse(data));
     }
     return null;
-  }
-  
-  function saveCache(participantsMap) {
-    const obj = {};
-    participantsMap.forEach((repoMap, repoName) => {
-      obj[repoName] = Object.fromEntries(
-        Array.from(repoMap.entries()).map(([user, data]) => [user, data])
-      );
-    });
-    fs.writeFileSync(CACHE_PATH, JSON.stringify(obj, null, 2));
-  }
+}
+
+function saveCache(participantsMap) {
+    const jsonData = mapToJson(participantsMap);
+    fs.writeFileSync(CACHE_PATH, JSON.stringify(jsonData, null, 2));
+}
+
 const validFormats = ['table', 'chart', 'both'];
 if (!validFormats.includes(options.format)) {
   console.error(`Error : Invalid format: "${options.format}"\nValid formats are: ${validFormats.join(', ')}`);
   process.exit(1);
 }
 
-
 (async () => {
     try {
-
         if (!options.repo) {
             console.error('Error :  -r (--repo) 옵션을 필수로 사용하여야 합니다. 예) node index.js -r oss2025hnu/reposcore-js');
             program.help();
@@ -95,13 +112,11 @@ if (!validFormats.includes(options.format)) {
                         fs.appendFileSync(ENV_PATH, `${tokenLine}\n`);
                         console.log('.env 파일에 토큰이 저장되었습니다.');
                     }
-
                 } else {
                     // .env 파일이 아예 없는 경우
                     fs.writeFileSync(ENV_PATH, `${tokenLine}\n`);
                     console.log('.env 파일이 생성되고 토큰이 저장되었습니다.');
                 }
-
             } catch (error) {
                 throw new Error('입력된 토큰이 유효하지 않아 프로그램을 종료합니다, 유효한 토큰인지 확인해주세요.');
             }
@@ -112,7 +127,6 @@ if (!validFormats.includes(options.format)) {
         const analyzer = new RepoAnalyzer(options.repo, token);
 
         await analyzer.validateToken();
-        
 
         if (options.useCache) {
             const cached = loadCache();
@@ -120,8 +134,7 @@ if (!validFormats.includes(options.format)) {
                 console.log("캐시 데이터를 불러왔습니다.");
                 analyzer.participants = new Map(
                     Object.entries(cached).map(
-                        ([repoName, repoMap]) =>
-                            [repoName, new Map(Object.entries(repoMap))]
+                        ([repoName, repoMap]) => [repoName, new Map(Object.entries(repoMap))]
                     )
                 );
             } else {
