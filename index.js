@@ -13,7 +13,7 @@ program
     .option('-t, --text', 'Save table as text file')
     .option('-r, --repo <path...>', 'Repository path (e.g., user/repo)')
     .option('-o, --output <dir>', 'Output directory', 'results')
-    .option('-f, --format <type>', 'Output format (table, chart, both)', 'both');
+    .option('-f, --format <type>', 'Output format (table, chart, both)', 'both')
     .option('-c, --use-cache', 'Use previously cached GitHub data');
 
 program.parse(process.argv);
@@ -141,7 +141,7 @@ if (!validFormats.includes(options.format)) {
         const scores = analyzer.calculateScores();
 
         // Calculate AverageScore
-        await analyzer.calculateAverageScore(scores);
+        analyzer.calculateAverageScore(scores);
 
         // Generate outputs based on format
         if (options.format === 'table' || options.format === 'both') {
