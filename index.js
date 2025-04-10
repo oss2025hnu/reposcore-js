@@ -19,7 +19,6 @@ program
 program.parse(process.argv);
 const options = program.opts();
 
-
 const CACHE_PATH = path.join(__dirname, 'cache.json');
 
 function loadCache() {
@@ -27,9 +26,9 @@ function loadCache() {
       return JSON.parse(fs.readFileSync(CACHE_PATH, 'utf-8'));
     }
     return null;
-  }
-  
-  function saveCache(participantsMap) {
+}
+
+function saveCache(participantsMap) {
     const obj = {};
     participantsMap.forEach((repoMap, repoName) => {
       obj[repoName] = Object.fromEntries(
@@ -37,13 +36,45 @@ function loadCache() {
       );
     });
     fs.writeFileSync(CACHE_PATH, JSON.stringify(obj, null, 2));
-  }
+}
+
+// .env 업데이트 유틸리티 함수
+function updateEnvVariable(key, newValue) {
+    let updated = false;
+    let content = '';
+
+    if (fs.existsSync(ENV_PATH)) {
+        content = fs.readFileSync(ENV_PATH, 'utf-8');
+        const regex = new RegExp(`^${key}=.*$`, 'm');
+
+        if (regex.test(content)) {
+            const oldValue = content.match(regex)[0].split('=')[1];
+            if (oldValue !== newValue) {
+                content = content.replace(regex, `${key}=${newValue}`);
+                updated = true;
+            } else {
+                console.log(`.env 파일에 이미 동일한 ${key} 값이 등록되어 있습니다.`);
+            }
+        } else {
+            content += `\n${key}=${newValue}`;
+            updated = true;
+        }
+    } else {
+        content = `${key}=${newValue}`;
+        updated = true;
+    }
+
+    if (updated) {
+        fs.writeFileSync(ENV_PATH, content.trim() + '\n');
+        console.log(`.env 파일이 업데이트되었습니다: ${key}`);
+    }
+}
+
 const validFormats = ['table', 'chart', 'both'];
 if (!validFormats.includes(options.format)) {
   console.error(`Error : Invalid format: "${options.format}"\nValid formats are: ${validFormats.join(', ')}`);
   process.exit(1);
 }
-
 
 (async () => {
     try {
@@ -55,9 +86,6 @@ if (!validFormats.includes(options.format)) {
 
         // API 토큰이 입력되었으면 .env에 저장 (이미 있지 않은 경우)
         if (options.apiKey) {
-            const tokenLine = `GITHUB_TOKEN=${options.apiKey}`;
-
-            // 토큰 유효성 검증
             const { Octokit } = require('@octokit/rest');
             const testOctokit = new Octokit({ auth: options.apiKey });
 
@@ -65,42 +93,8 @@ if (!validFormats.includes(options.format)) {
                 await testOctokit.rest.users.getAuthenticated();
                 console.log('입력된 토큰이 유효합니다.');
 
-                if (fs.existsSync(ENV_PATH)) {
-                    const envContent = fs.readFileSync(ENV_PATH, 'utf-8');
-                    const lines = envContent.split('\n');
-                    let tokenUpdated = false;
-                    let hasTokenKey = false;
-
-                    const newLines = lines.map(line => {
-                        if (line.startsWith('GITHUB_TOKEN=')) {
-                            hasTokenKey = true;
-                            const existingToken = line.split('=')[1];
-                            if (existingToken !== options.apiKey) {
-                                tokenUpdated = true;
-                                return tokenLine;
-                            } else {
-                                console.log('.env 파일에 이미 동일한 토큰이 등록되어 있습니다.');
-                                return line;
-                            }
-                        }
-                        return line;
-                    });
-
-                    if (hasTokenKey && tokenUpdated) {
-                        fs.writeFileSync(ENV_PATH, newLines.join('\n'));
-                        console.log('.env 파일의 토큰이 업데이트되었습니다.');
-                    }
-
-                    if (!hasTokenKey) {
-                        fs.appendFileSync(ENV_PATH, `${tokenLine}\n`);
-                        console.log('.env 파일에 토큰이 저장되었습니다.');
-                    }
-
-                } else {
-                    // .env 파일이 아예 없는 경우
-                    fs.writeFileSync(ENV_PATH, `${tokenLine}\n`);
-                    console.log('.env 파일이 생성되고 토큰이 저장되었습니다.');
-                }
+                // .env 저장/업데이트 (유틸 함수 사용)
+                updateEnvVariable('GITHUB_TOKEN', options.apiKey);
 
             } catch (error) {
                 throw new Error('입력된 토큰이 유효하지 않아 프로그램을 종료합니다, 유효한 토큰인지 확인해주세요.');
@@ -112,7 +106,6 @@ if (!validFormats.includes(options.format)) {
         const analyzer = new RepoAnalyzer(options.repo, token);
 
         await analyzer.validateToken();
-        
 
         if (options.useCache) {
             const cached = loadCache();
