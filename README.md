@@ -35,9 +35,9 @@ node index.js -r oss2025hnu/reposcore-js -a ghp_ABC123ABC123
 ```bash
 node index.js -r oss2025hnu/reposcore-js
 ```
-If `--use-cache` is used, GitHub API data is loaded from the `cache.json` file (if it exists).  
-This reduces API requests and speeds up execution.  
-If no cache is found or the file is corrupted, new data will be fetched automatically.
+`--use-cache` 옵션을 사용하면 `cache.json` 파일에 저장된 GitHub API 데이터를 불러옵니다(파일이 존재할 경우).  
+이렇게 하면 API 요청 수를 줄이고 실행 속도를 높일 수 있습니다.  
+만약 캐시 파일이 없거나 손상된 경우, 새로운 데이터를 자동으로 가져옵니다.
 
 
 ## Score Formula
