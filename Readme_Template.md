@@ -9,22 +9,10 @@ npm install
 ## Usage
 아래는 `node index.js -h` 또는 `node index.js --help` 실행 결과를 붙여넣은 것이므로
 명령줄 관련 코드가 변경되면 아래 내용도 그에 맞게 수정해야 함.
+만약 명령줄 코드가 변경될 경우, node lib/GenerateReadme.js를 통헤 Readme.md파일을 최신화 할 것.
 
 ```
-
-
-Usage: index [options]
-
-Options:
-  -a, --api-key <token> Github Access Token (optional)
-  -t, --text', 'Save table as text file
-  -r, --repo <path>    Repository path (e.g., user/repo)
-  -o, --output <dir>   Output directory (default: "results")
-  -f, --format <type>  Output format (table, chart, both) (default: "both")
-  -c, --use-cache Use previously cached GitHub data (cache.json)
-  -h, --help           display help for command
-
-
+{{ Usage }}
 ```
 
 ## 토큰 실행 방법
@@ -41,10 +29,6 @@ node index.js -r oss2025hnu/reposcore-js -a ghp_ABC123ABC123
 ```bash
 node index.js -r oss2025hnu/reposcore-js
 ```
-If `--use-cache` is used, GitHub API data is loaded from the `cache.json` file (if it exists).  
-This reduces API requests and speeds up execution.  
-If no cache is found or the file is corrupted, new data will be fetched automatically.
-
 
 ## Score Formula
 아래는 PR 개수와 이슈 개수의 비율에 따라 점수로 인정가능한 최대 개수를 구하고 각 배점에 따라 최종 점수를 산출하는 공식이다.
@@ -69,14 +53,6 @@ $I_d^* = I_{\text{valid}} - I_{fb}^* ~~\quad$ 남은 개수에서 문서 이슈 
 
 최종 점수 계산 공식:\
 $S = 3P_{fb}^* + 2P_d^* + 2I_{fb}^* + 1I_d^*$
-
-
-## 의존성 관리 주의사항
-새로운 라이브러리를 설치할 경우, package.json 파일에도 반드시 해당 라이브러리 정보를 추가해 주세요.
-이는 협업 중 발생할 수 있는 실행 오류를 방지하고, 의존성 관리를 원활하게 하기 위한 필수 절차입니다.
-
-package.json은 프로젝트에서 사용하는 외부 라이브러리(의존성) 정보를 정리해 놓은 설정 파일입니다.
-이 파일에 정보가 누락되면, 다른 기여자들이 프로젝트를 실행할 때 오류가 발생할 수 있습니다.
 
 
 ## token 생성하는법
