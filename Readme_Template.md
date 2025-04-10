@@ -9,11 +9,13 @@ npm install
 ## Usage
 아래는 `node index.js -h` 또는 `node index.js --help` 실행 결과를 붙여넣은 것이므로
 명령줄 관련 코드가 변경되면 아래 내용도 그에 맞게 수정해야 함.
-만약 명령줄 코드가 변경될 경우, node lib/GenerateReadme.js를 통헤 Readme.md파일을 최신화 할 것.
 
 ```
 {{ Usage }}
 ```
+--use-cache 옵션을 사용하면 cache.json 파일에 저장된 GitHub API 데이터를 불러옵니다(파일이 존재할 경우).
+이렇게 하면 API 요청 수를 줄이고 실행 속도를 높일 수 있습니다.
+만약 캐시 파일이 없거나 손상된 경우, 새로운 데이터를 자동으로 가져옵니다.
 
 ## 토큰 실행 방법
 
