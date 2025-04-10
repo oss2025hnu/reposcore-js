@@ -20,7 +20,7 @@ Options:
   -f, --format <type>  Output format (table, chart, both) (default: "both")
   -c, --use-cache Use previously cached GitHub data (cache.json)
   -h, --help           display help for command
-
+```
 ## 토큰 실행 방법
 
 1. 최초 실행 (API KEY 포함)
