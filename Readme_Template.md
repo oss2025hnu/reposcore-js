@@ -64,6 +64,24 @@ $S = 3P_{fb}^* + 2P_d^* + 2I_{fb}^* + 1I_d^*$
 package.json은 프로젝트에서 사용하는 외부 라이브러리(의존성) 정보를 정리해 놓은 설정 파일입니다.
 이 파일에 정보가 누락되면, 다른 기여자들이 프로젝트를 실행할 때 오류가 발생할 수 있습니다.
 
+## `package-lock.json` 커밋 금지 안내
+GitHub Codespaces에서 본 프로젝트를 열면 `npm install`이 자동으로 실행되며, 이 과정에서 `package-lock.json` 파일이 자동 생성됩니다.
+이 파일은 프로젝트 버전 관리에 포함되지 않아야 하므로, 절대 커밋하지 말아야 합니다.
+
+**커밋 시 `package-lock.json` 제외하는 방법**
+
+- 커밋할 파일을 명시적으로 지정하는 방법:
+
+    ```bash
+    git add index.js analyzer.js package.json
+    ```
+- 또는 `package-lock.json`이 이미 생성된 경우:
+
+    ```bash
+    rm package-lock.json               # 파일 삭제
+    git restore --staged package-lock.json  # 스테이징 영역에서 제외
+    ```
+
 ## token 생성하는법
 <a href="./token_guide/README.md">링크</a>
 
