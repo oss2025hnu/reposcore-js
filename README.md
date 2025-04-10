@@ -14,12 +14,12 @@ Usage: index [options]
 
 Options:
   -a, --api-key <token> Github Access Token (optional)
-  -t, --text            Save table as text file
-  -r, --repo <path...>  Repository path (e.g., user/repo)
-  -o, --output <dir>    Output directory (default: "results")
-  -f, --format <type>   Output format (table, chart, both) (default: "both")
-  -h, --help            display help for command
-```
+  -t, --text', 'Save table as text file
+  -r, --repo <path>    Repository path (e.g., user/repo)
+  -o, --output <dir>   Output directory (default: "results")
+  -f, --format <type>  Output format (table, chart, both) (default: "both")
+  -c, --use-cache Use previously cached GitHub data (cache.json)
+  -h, --help           display help for command
 
 ## 토큰 실행 방법
 
@@ -35,6 +35,10 @@ node index.js -r oss2025hnu/reposcore-js -a ghp_ABC123ABC123
 ```bash
 node index.js -r oss2025hnu/reposcore-js
 ```
+If `--use-cache` is used, GitHub API data is loaded from the `cache.json` file (if it exists).  
+This reduces API requests and speeds up execution.  
+If no cache is found or the file is corrupted, new data will be fetched automatically.
+
 
 ## Score Formula
 아래는 PR 개수와 이슈 개수의 비율에 따라 점수로 인정가능한 최대 개수를 구하고 각 배점에 따라 최종 점수를 산출하는 공식이다.
