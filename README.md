@@ -118,6 +118,9 @@ node lib/GenerateReadme.js
 - CLI 옵션이 변경될 경우 반드시 이 스크립트를 실행하여 `README.md`를 갱신하세요.
 - `README.md`를 직접 수정하더라도 이 스크립트를 실행하면 템플릿을 기준으로 덮어써집니다. 따라서 README.md의 변경 사항은 반드시 Readme_Template.md 파일에 반영해야 합니다.
 
+## 유틸리티 함수 (`Util.js`)
+이 프로젝트에서는 코드의 가독성과 유지보수를 위해, 직접적인 로직이나 핵심 기능에 영향을 주지 않는 공통적인 유틸리티 함수들을 별도의 파일인 Util.js에 분리하여 관리합니다.
+
 ## token 생성하는법
 [링크](./token_guide/README.md)
 
