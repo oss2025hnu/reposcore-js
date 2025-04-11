@@ -83,7 +83,7 @@ GitHub Codespaces에서 본 프로젝트를 열면 `npm install`이 자동으로
     ```
 
 ## token 생성하는법
-<a href="./token_guide/README.md">링크</a>
+[링크](./token_guide/README.md)
 
 ## 프로젝트 가이드라인
-<a href="./project_guidelines.md">링크</a>
+[링크](./docs/project_guidelines.md)
