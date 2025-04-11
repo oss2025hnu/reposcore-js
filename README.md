@@ -119,7 +119,7 @@ node lib/GenerateReadme.js
 - `README.md`를 직접 수정하더라도 이 스크립트를 실행하면 템플릿을 기준으로 덮어써집니다. 따라서 README.md의 변경 사항은 반드시 Readme_Template.md 파일에 반영해야 합니다.
 
 ## token 생성하는법
-<a href="./token_guide/README.md">링크</a>
+[링크](./token_guide/README.md)
 
 ## 프로젝트 가이드라인
-<a href="./project_guidelines.md">링크</a>
+[링크](docs/project_guidelines.md)
