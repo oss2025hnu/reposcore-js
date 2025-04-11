@@ -77,29 +77,6 @@ $S = 3P_{fb}^* + 2P_d^* + 2I_{fb}^* + 1I_d^*$
 package.json은 프로젝트에서 사용하는 외부 라이브러리(의존성) 정보를 정리해 놓은 설정 파일입니다.
 이 파일에 정보가 누락되면, 다른 기여자들이 프로젝트를 실행할 때 오류가 발생할 수 있습니다.
 
-## README 자동 생성 기능 안내
-
-이 프로젝트는 CLI 명령어 옵션(`node index.js --help`)의 변경을 반영하여 README.md를 자동 생성하는 기능을 포함하고 있습니다.
-
-### 구성 요소
-
-- `Readme_Template.md`:  
-  README.md의 템플릿 역할을 하며, `{{ Usage }}` 위치에 CLI 옵션 설명이 삽입됩니다.
-- `lib/GenerateReadme.js`:  
-  자동 생성 스크립트. 실행 시 `README.md`를 갱신합니다.
-
-### 사용 방법
-
-node lib/GenerateReadme.js
-
-- 위 명령을 실행하면 `index.js --help`의 출력 결과가 템플릿에 삽입되고,  
-  최종 결과로 `README.md`가 생성 또는 덮어써집니다.
-
-### 주의사항
-
-- CLI 옵션이 변경될 경우 반드시 이 스크립트를 실행하여 `README.md`를 갱신하세요.
-- `README.md`를 직접 수정해도 이 스크립트를 실행하면 덮어씌워지므로, 템플릿 파일을 먼저 수정해야 변경 내용이 유지됩니다.
-
 ## `package-lock.json` 커밋 금지 안내
 GitHub Codespaces에서 본 프로젝트를 열면 `npm install`이 자동으로 실행되며, 이 과정에서 `package-lock.json` 파일이 자동 생성됩니다.
 이 파일은 프로젝트 버전 관리에 포함되지 않아야 하므로, 절대 커밋하지 말아야 합니다.
@@ -117,6 +94,29 @@ GitHub Codespaces에서 본 프로젝트를 열면 `npm install`이 자동으로
     rm package-lock.json               # 파일 삭제
     git restore --staged package-lock.json  # 스테이징 영역에서 제외
     ```
+## README 자동 생성 기능 안내
+
+이 프로젝트는 CLI 명령어 옵션(`node index.js --help`)의 변경을 반영하여 README.md를 자동 생성하는 기능을 포함하고 있습니다.
+
+### 구성 요소
+
+- `Readme_Template.md`:  
+  README.md의 템플릿 역할을 하며, `{{ Usage }}` 위치에 CLI 옵션 설명이 삽입됩니다.
+- `lib/GenerateReadme.js`:  
+  자동 생성 스크립트. 실행 시 `README.md`를 갱신합니다.
+
+### 사용 방법
+
+```bash
+node lib/GenerateReadme.js
+
+- 위 명령을 실행하면 `index.js --help`의 출력 결과가 템플릿에 삽입되고,  
+  최종 결과로 `README.md`가 생성 또는 덮어써집니다.
+
+### 주의사항
+
+- CLI 옵션이 변경될 경우 반드시 이 스크립트를 실행하여 `README.md`를 갱신하세요.
+- `README.md`를 직접 수정하더라도 이 스크립트를 실행하면 템플릿을 기준으로 덮어써집니다. 따라서 README.md의 변경 사항은 반드시 Readme_Template.md 파일에 반영해야 합니다.
 
 ## token 생성하는법
 <a href="./token_guide/README.md">링크</a>
