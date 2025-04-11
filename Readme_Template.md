@@ -98,8 +98,7 @@ GitHub Codespaces에서 본 프로젝트를 열면 `npm install`이 자동으로
 node lib/GenerateReadme.js
 ```
 
-- 위 명령을 실행하면 `index.js --help`의 출력 결과가 템플릿에 삽입되고,  
-  최종 결과로 `README.md`가 생성 또는 덮어써집니다.
+- 위 명령을 실행하면 `index.js --help`의 출력 결과가 템플릿에 삽입되고, 최종 결과로 `README.md`가 생성 또는 덮어써집니다.
 
 ### 주의사항
 
