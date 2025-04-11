@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 require('dotenv').config();
+const { log } = require('./lib/Utill');
 
 const { program } = require('commander');
 const RepoAnalyzer = require('./lib/analyzer');
@@ -73,7 +74,7 @@ function updateEnvToken(token) {
                     tokenUpdated = true;
                     return tokenLine;
                 } else {
-                    console.log('.env 파일에 이미 동일한 토큰이 등록되어 있습니다.');
+                    log('.env 파일에 이미 동일한 토큰이 등록되어 있습니다.');
                     return line;
                 }
             }
@@ -82,16 +83,16 @@ function updateEnvToken(token) {
 
         if (hasTokenKey && tokenUpdated) {
             fs.writeFileSync(ENV_PATH, newLines.join('\n'));
-            console.log('.env 파일의 토큰이 업데이트되었습니다.');
+            log('.env 파일의 토큰이 업데이트되었습니다.');
         }
 
         if (!hasTokenKey) {
             fs.appendFileSync(ENV_PATH, `${tokenLine}\n`);
-            console.log('.env 파일에 토큰이 저장되었습니다.');
+            log('.env 파일에 토큰이 저장되었습니다.');
         }
     } else {
         fs.writeFileSync(ENV_PATH, `${tokenLine}\n`);
-        console.log('.env 파일이 생성되고 토큰이 저장되었습니다.');
+        log('.env 파일이 생성되고 토큰이 저장되었습니다.');
     }
 }
 
@@ -116,7 +117,7 @@ async function main() {
 
             try {
                 await testOctokit.rest.users.getAuthenticated();
-                console.log('입력된 토큰이 유효합니다.');
+                log('입력된 토큰이 유효합니다.');
                 updateEnvToken(options.apiKey);
             } catch (error) {
                 throw new Error('입력된 토큰이 유효하지 않아 프로그램을 종료합니다, 유효한 토큰인지 확인해주세요.');
@@ -132,17 +133,17 @@ async function main() {
         if (options.useCache) {
             const cached = loadCache();
             if (cached) {
-                console.log("캐시 데이터를 불러왔습니다.");
+                log("캐시 데이터를 불러왔습니다.");
                 analyzer.participants = cached; // 캐시 데이터를 그대로 할당
             } else {
-                console.log("캐시 파일이 없어 데이터를 새로 수집합니다.");
-                console.log("Collecting data...");
+                log("캐시 파일이 없어 데이터를 새로 수집합니다.");
+                log("Collecting data...");
                 await analyzer.collectPRsAndIssues();
                 saveCache(analyzer.participants);
             }
         } else {
-            console.log("캐시를 사용하지 않습니다. 데이터를 새로 수집합니다.");
-            console.log("Collecting data...");
+            log("캐시를 사용하지 않습니다. 데이터를 새로 수집합니다.");
+            log("Collecting data...");
             await analyzer.collectPRsAndIssues();
             saveCache(analyzer.participants);
         }
