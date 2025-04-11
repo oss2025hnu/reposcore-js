@@ -152,6 +152,11 @@ if (!validFormats.includes(options.format)) {
         // Calculate AverageScore
         analyzer.calculateAverageScore(scores);
 
+        // 디렉토리 생성
+        if(!fs.existsSync(options.output)){
+            fs.mkdirSync(options.output);
+        }
+
         // Generate outputs based on format
         if (options.format === 'table' || options.format === 'both') {
             analyzer.generateTable(scores, options.text);
