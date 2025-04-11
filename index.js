@@ -102,7 +102,8 @@ if (!validFormats.includes(options.format)) {
   process.exit(1);
 }
 
-(async () => {
+// 기존 실행 로직을 함수로 분리
+async function main() {
     try {
         if (!options.repo) {
             console.error('Error :  -r (--repo) 옵션을 필수로 사용하여야 합니다. 예) node index.js -r oss2025hnu/reposcore-js');
@@ -171,4 +172,18 @@ if (!validFormats.includes(options.format)) {
         console.error(`Error: ${error.message}`);
         process.exit(1);
     }
-})();
+}
+
+// 실행 여부 확인 및 모듈 내보내기 추가
+if (require.main === module) {
+  main(); // 실행 로직 호출
+}
+
+// 테스트를 위한 모듈 내보내기
+module.exports = {
+  jsonToMap,
+  mapToJson,
+  loadCache,
+  saveCache,
+  updateEnvToken,
+};
