@@ -17,7 +17,7 @@ program
     .option('-o, --output <dir>', 'Output directory', 'results')
     .option('-f, --format <type>', 'Output format (table, chart, both)', 'both')
     .option('-c, --use-cache', 'Use previously cached GitHub data')
-    .option('-u, --user-file', 'Display user`s real name')
+    .option('-u, --user-name', 'Display user`s real name')
 
 program.parse(process.argv);
 const options = program.opts();
@@ -154,7 +154,7 @@ async function main() {
 
         // -u 옵션 선택시 실행
         let realNameScore;
-        if (options.userFile){
+        if (options.userName){
             analyzer.updateUserInfo(scores);
             realNameScore = analyzer.transformUserIdToName(scores);
         }
@@ -169,7 +169,7 @@ async function main() {
 
         // Generate outputs based on format
         if (options.format === 'table' || options.format === 'both') {
-            if (options.userFile){ // -u 옵션의 경우 id와 이름이 치환된 객체인 realNameScore를 사용.
+            if (options.userName){ // -u 옵션의 경우 id와 이름이 치환된 객체인 realNameScore를 사용.
                 analyzer.generateTable(realNameScore, options.text);
                 analyzer.generateCsv(realNameScore, options.output);
             }
