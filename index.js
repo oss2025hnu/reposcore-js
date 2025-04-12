@@ -16,7 +16,8 @@ program
     .option('-r, --repo <path...>', 'Repository path (e.g., user/repo)')
     .option('-o, --output <dir>', 'Output directory', 'results')
     .option('-f, --format <type>', 'Output format (table, chart, both)', 'both')
-    .option('-c, --use-cache', 'Use previously cached GitHub data');
+    .option('-c, --use-cache', 'Use previously cached GitHub data')
+    .option('-u, --user-file', 'Display user`s real name')
 
 program.parse(process.argv);
 const options = program.opts();
@@ -151,6 +152,13 @@ async function main() {
         // Calculate scores
         const scores = analyzer.calculateScores();
 
+        // -u 옵션 선택시 실행
+        let realNameScore;
+        if (options.userFile){
+            analyzer.updateUserInfo(scores);
+            realNameScore = analyzer.transformUserIdToName(scores);
+        }
+
         // Calculate AverageScore
         analyzer.calculateAverageScore(scores);
 
@@ -161,8 +169,14 @@ async function main() {
 
         // Generate outputs based on format
         if (options.format === 'table' || options.format === 'both') {
-            analyzer.generateTable(scores, options.text);
-            analyzer.generateCsv(scores, options.output);
+            if (options.userFile){ // -u 옵션의 경우 id와 이름이 치환된 객체인 realNameScore를 사용.
+                analyzer.generateTable(realNameScore, options.text);
+                analyzer.generateCsv(realNameScore, options.output);
+            }
+            else{
+                analyzer.generateTable(scores, options.text);
+                analyzer.generateCsv(scores, options.output);
+            }
         }
         if (options.format === 'chart' || options.format === 'both') {
             await analyzer.generateChart(scores, options.output);

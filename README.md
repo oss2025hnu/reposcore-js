@@ -23,6 +23,7 @@ Options:
   -o, --output <dir>     Output directory (default: "results")
   -f, --format <type>    Output format (table, chart, both) (default: "both")
   -c, --use-cache        Use previously cached GitHub data
+  -u, --user-file        Display user`s real name
   -h, --help             display help for command
 
 
