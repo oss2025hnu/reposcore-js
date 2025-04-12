@@ -9,6 +9,7 @@
         "cli-table3": "^0.6.5",
         "commander": "^9.0.0",
         "csv-writer": "^1.6.0",
+        "sqlite3": "^5.1.7",
         "yargs": "^17.7.2"
     },
     "scripts": {
