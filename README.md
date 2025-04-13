@@ -123,7 +123,7 @@ node lib/GenerateReadme.js
 이 프로젝트에서는 코드의 가독성과 유지보수를 위해, 직접적인 로직이나 핵심 기능에 영향을 주지 않는 공통적인 유틸리티 함수들을 별도의 파일인 Util.js에 분리하여 관리합니다.
 
 ## token 생성하는법
-[링크](./token_guide/README.md)
+[링크](docs/token_guide.md)
 
 ## 프로젝트 가이드라인
 [링크](docs/project_guidelines.md)

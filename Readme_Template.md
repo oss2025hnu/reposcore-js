@@ -118,7 +118,7 @@ npm run test
 ```
 
 ## token 생성하는법
-[링크](./token_guide/README.md)
+[링크](docs/token_guide.md)
 
 ## 프로젝트 가이드라인
 [링크](docs/project_guidelines.md)
