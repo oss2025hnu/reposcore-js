@@ -5,7 +5,7 @@ const { log } = require('./lib/Utill');
 const { program } = require('commander');
 const RepoAnalyzer = require('./lib/analyzer');
 
-const fs = require('fs');
+const fs = require('fs').promises;
 const path = require('path');
 const ENV_PATH = path.join(__dirname, '.env');
 const CACHE_PATH = path.join(__dirname, 'cache.json');
@@ -44,25 +44,29 @@ function mapToJson(map) {
 }
 // ------------------------------------------------------------
 
-function loadCache() {
-    if (fs.existsSync(CACHE_PATH)) {
-        const data = fs.readFileSync(CACHE_PATH, 'utf-8');
+async function loadCache() {
+    try {
+        await fs.access(CACHE_PATH, fs.constants.R_OK);
+        const data = await fs.readFile(CACHE_PATH, 'utf-8');
         return jsonToMap(JSON.parse(data)); // 수정된 jsonToMap 함수 사용
+    } catch {
+        return null;
     }
-    return null;
 }
 
-function saveCache(participantsMap) {
+async function saveCache(participantsMap) {
     const jsonData = mapToJson(participantsMap);
-    fs.writeFileSync(CACHE_PATH, JSON.stringify(jsonData, null, 2));
+    await fs.writeFile(CACHE_PATH, JSON.stringify(jsonData, null, 2));
 }
 
 // .env 업데이트 유틸리티 함수
-function updateEnvToken(token) {
+async function updateEnvToken(token) {
     const tokenLine = `GITHUB_TOKEN=${token}`;
 
-    if (fs.existsSync(ENV_PATH)) {
-        const envContent = fs.readFileSync(ENV_PATH, 'utf-8');
+    try {
+        await fs.access(ENV_PATH, fs.constants.R_OK);
+
+        const envContent = await fs.readFile(ENV_PATH, 'utf-8');
         const lines = envContent.split('\n');
         let tokenUpdated = false;
         let hasTokenKey = false;
@@ -83,16 +87,16 @@ function updateEnvToken(token) {
         });
 
         if (hasTokenKey && tokenUpdated) {
-            fs.writeFileSync(ENV_PATH, newLines.join('\n'));
+            await fs.writeFile(ENV_PATH, newLines.join('\n'));
             log('.env 파일의 토큰이 업데이트되었습니다.');
         }
 
         if (!hasTokenKey) {
-            fs.appendFileSync(ENV_PATH, `${tokenLine}\n`);
+            await fs.writeFile(ENV_PATH, `${tokenLine}\n`);
             log('.env 파일에 토큰이 저장되었습니다.');
         }
-    } else {
-        fs.writeFileSync(ENV_PATH, `${tokenLine}\n`);
+    } catch {
+        await fs.writeFile(ENV_PATH, `${tokenLine}\n`);
         log('.env 파일이 생성되고 토큰이 저장되었습니다.');
     }
 }
@@ -119,7 +123,7 @@ async function main() {
             try {
                 await testOctokit.rest.users.getAuthenticated();
                 log('입력된 토큰이 유효합니다.');
-                updateEnvToken(options.apiKey);
+                await updateEnvToken(options.apiKey);
             } catch (error) {
                 throw new Error('입력된 토큰이 유효하지 않아 프로그램을 종료합니다, 유효한 토큰인지 확인해주세요.');
             }
@@ -132,7 +136,7 @@ async function main() {
         await analyzer.validateToken();
 
         if (options.useCache) {
-            const cached = loadCache();
+            const cached = await loadCache();
             if (cached) {
                 log("캐시 데이터를 불러왔습니다.");
                 analyzer.participants = cached; // 캐시 데이터를 그대로 할당
@@ -140,13 +144,13 @@ async function main() {
                 log("캐시 파일이 없어 데이터를 새로 수집합니다.");
                 log("Collecting data...");
                 await analyzer.collectPRsAndIssues();
-                saveCache(analyzer.participants);
+                await saveCache(analyzer.participants);
             }
         } else {
             log("캐시를 사용하지 않습니다. 데이터를 새로 수집합니다.");
             log("Collecting data...");
             await analyzer.collectPRsAndIssues();
-            saveCache(analyzer.participants);
+            await saveCache(analyzer.participants);
         }
 
         // Calculate scores
@@ -163,19 +167,17 @@ async function main() {
         analyzer.calculateAverageScore(scores);
 
         // 디렉토리 생성
-        if(!fs.existsSync(options.output)){
-            fs.mkdirSync(options.output);
-        }
+        await fs.mkdir(options.output, { recursive: true });
 
         // Generate outputs based on format
         if (options.format === 'table' || options.format === 'both') {
             if (options.userName){ // -u 옵션의 경우 id와 이름이 치환된 객체인 realNameScore를 사용.
-                analyzer.generateTable(realNameScore, options.text);
-                analyzer.generateCsv(realNameScore, options.output);
+                await analyzer.generateTable(realNameScore, options.text);
+                await analyzer.generateCsv(realNameScore, options.output);
             }
             else{
-                analyzer.generateTable(scores, options.text);
-                analyzer.generateCsv(scores, options.output);
+                await analyzer.generateTable(scores, options.text);
+                await analyzer.generateCsv(scores, options.output);
             }
         }
         if (options.format === 'chart' || options.format === 'both') {
