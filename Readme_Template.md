@@ -12,7 +12,28 @@ npm install
 만약 명령줄 코드가 변경될 경우, node lib/GenerateReadme.js를 통헤 Readme.md파일을 최신화 할 것.
 
 ```
-{{ Usage }}
+
+
+Usage: index [options]
+
+Options:
+  -a, --api-key <token>  Github Access Token (optional)
+  -t, --text             Save table as text file
+  -r, --repo <path...>   Repository path (e.g., user/repo)
+  -o, --output <dir>     Output directory (default: "results")
+  -f, --format <type>    Output format (table, chart, both) (default: "both")
+  -c, --use-cache        Use previously cached GitHub data
+  -h, --help             display help for command
+
+
+```
+
+## Clear 명령어 실행 방법
+
+작업 중 이전 결과물을 삭제하고 싶을 때 아래 명령어를 사용합니다:
+
+```bash
+make clear
 ```
 
 ## 토큰 실행 방법
@@ -81,35 +102,12 @@ GitHub Codespaces에서 본 프로젝트를 열면 `npm install`이 자동으로
     rm package-lock.json               # 파일 삭제
     git restore --staged package-lock.json  # 스테이징 영역에서 제외
     ```
-## README 자동 생성 기능 안내
-
-이 프로젝트는 CLI 명령어 옵션(`node index.js --help`)의 변경을 반영하여 README.md를 자동 생성하는 기능을 포함하고 있습니다.
-
-### 구성 요소
-
-- `Readme_Template.md`:  
-  README.md의 템플릿 역할을 하며, `{{ Usage }}` 위치에 CLI 옵션 설명이 삽입됩니다.
-- `lib/GenerateReadme.js`:  
-  자동 생성 스크립트. 실행 시 `README.md`를 갱신합니다.
-
-### 사용 방법
-
-```bash
-node lib/GenerateReadme.js
-```
-
-- 위 명령을 실행하면 `index.js --help`의 출력 결과가 템플릿에 삽입되고, 최종 결과로 `README.md`가 생성 또는 덮어써집니다.
-
-### 주의사항
-
-- CLI 옵션이 변경될 경우 반드시 이 스크립트를 실행하여 `README.md`를 갱신하세요.
-- `README.md`를 직접 수정하더라도 이 스크립트를 실행하면 템플릿을 기준으로 덮어써집니다. 따라서 README.md의 변경 사항은 반드시 Readme_Template.md 파일에 반영해야 합니다.
 
 ## 유틸리티 함수 (`Util.js`)
 이 프로젝트에서는 코드의 가독성과 유지보수를 위해, 직접적인 로직이나 핵심 기능에 영향을 주지 않는 공통적인 유틸리티 함수들을 별도의 파일인 Util.js에 분리하여 관리합니다.
 
 ## token 생성하는법
-[링크](./token_guide/README.md)
+<a href="./token_guide/README.md">링크</a>
 
 ## 프로젝트 가이드라인
-[링크](docs/project_guidelines.md)
+<a href="./project_guidelines.md">링크</a>
