@@ -6,6 +6,18 @@ A CLI for scoring student participation in an open-source class repo, implemente
 npm install
 ```
 
+##코드 린트(lint) 가이드
+이 프로젝트는 [ESLint](https://eslint.org/)를 사용하여 자바스크립트 코드의 잠재적인 오류를 감지합니다.
+
+- **기본 오류 검사**: 정의되지 않은 변수, 사용하지 않는 변수 등 기본적인 오류를 감지합니다.
+- **코드 스타일 규칙** (Prettier 관련 규칙 등)은 적용하지 않습니다.
+
+### 린트 검사 실행 바법
+
+터미널에서 아래 체령어를 입력하여 전체 코도를 검사할 수 있습니다:
+'''bash
+npx eslint.
+
 ## Usage
 아래는 `node index.js -h` 또는 `node index.js --help` 실행 결과를 붙여넣은 것이므로
 명령줄 관련 코드가 변경되면 아래 내용도 그에 맞게 수정해야 함.
