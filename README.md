@@ -22,8 +22,8 @@ Options:
   -r, --repo <path...>   Repository path (e.g., user/repo)
   -o, --output <dir>     Output directory (default: "results")
   -f, --format <type>    Output format (table, chart, both) (default: "both")
-  -c, --use-cache        Use previously cahed GitHub data
-  -u, --user-name        Display user`s real name
+  -c, --use-cache        Use previously cached GitHub data
+  -u, --user-name        Display users real name
   -h, --help             display help for command
 
 
