@@ -1,0 +1,239 @@
+[33mf360e20[m[33m ([m[1;36mHEAD[m[33m)[m Resolve merge conflicts and remove package-lock.json
+[33mc09a7ba[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m Merge pull request #187 from bym010312/main
+[33mb0ba5d7[m Util.js 함수 분리 내용 README에 추가
+[33m7c02a8e[m Merge pull request #183 from bym010312/main
+[33mc3cd98c[m Merge pull request #182 from KohSeungJae/main
+[33m061835d[m readme.md의 프로젝트 가이드라인 링크 수정
+[33m6a00755[m Merge branch 'oss2025hnu:main' into main
+[33m7ad31ed[m Merge pull request #169 from joon0447/main
+[33m27643f6[m Merge branch 'oss2025hnu:main' into main
+[33m497bdaa[m 차트의 점수 표기 오류 수정.
+[33m45f608e[m Merge pull request #181 from kjason0102/precautions
+[33m2714df8[m Merge pull request #178 from Jae-Hyuk-Lee/main
+[33ma5af5a7[m 줄바꿈 정리
+[33m91d9f20[m 수수정
+[33m2447a2a[m 수정
+[33meedff6b[m 사소한것 수정
+[33md067211[m README Generate 설명
+[33mb347e9b[m Merge branch 'main' of https://github.com/Jae-Hyuk-Lee/reposcore-js
+[33maec5622[m [FEAT] 로그 메시지 타임스탬프 추가
+[33m56368d7[m Merge pull request #175 from hyunsang1021/JEST
+[33m66aae16[m Merge pull request #173 from Jae-Hyuk-Lee/main
+[33m7bb67e0[m Merge pull request #170 from bym010312/main
+[33m05441cf[m Unittest 라이브러리 jest도입
+[33mbb403ce[m Merge branch 'oss2025hnu:main' into main
+[33m10b6683[m [FEAT] 참가자 수를 표시하는 기능 추가 요청
+[33mf135ba3[m Merge branch 'test-branch'
+[33m322bc4c[m Merge branch 'test-branch'
+[33mdbd15a7[m 각 항목별 점수 포함 테이블 출력 기능 추가
+[33ma3b1192[m token_guide img 태그 변경
+[33m7518a19[m readme_template a태그 변경
+[33mf46d14a[m Merge branch 'oss2025hnu:main' into test-branch
+[33ma4edd8c[m Merge branch 'oss2025hnu:main' into main
+[33m8abffa4[m Merge pull request #166 from joon0447/main
+[33m0ca8f84[m initParticipant 함수 추가
+[33md7d7fb7[m update branch
+[33m501306d[m Merge branch 'main' of https://github.com/bym010312/reposcore-js
+[33mf2df38a[m update branch
+[33md8a6ea1[m Merge pull request #163 from taegeon1ee/main
+[33mcc322cf[m Merge pull request #162 from hyunsang1021/cache
+[33m54b15b3[m Merge pull request #160 from jaewon786/main
+[33mf22e342[m Merge pull request #150 from joon0447/main
+[33m5016cd8[m result 디렉터리 생성 코드 개선
+[33m2448f14[m -c 옵션 사용 후 계산 결과 출력 안됨 #156
+[33m7943bd6[m docs: .gitignore에 .DS_Store 추가
+[33m756b175[m Merge branch 'main' of https://github.com/joon0447/reposcore-js
+[33mcba2d54[m bar color
+[33m8cafe3f[m Merge branch 'main' into main
+[33mfd57ef1[m barcolor 단계별로 명확하게 수정
+[33m33860a2[m Merge pull request #155 from Jae-Hyuk-Lee/main
+[33mf9801f4[m Merge pull request #151 from bym010312/main
+[33m5994978[m Merge pull request #149 from Jass2345/main
+[33md4f63c1[m Merge branch 'oss2025hnu:main' into main
+[33mc742038[m [REFACTOR] 항목별 점수 상수화
+[33me8ccfac[m package-lock.json 커밋 금지 안내 추가
+[33m6776cee[m .env 파일 업데이트 로직 단순화
+[33m560b4b7[m chart bar color
+[33m517eacf[m Merge pull request #147 from porvs/patch-1
+[33m0545d15[m Merge pull request #144 from bym010312/main
+[33ma1a447e[m Update index.js
+[33m7b43d9e[m update reademe_template.md
+[33m1b41e61[m README.md 내 cache 관련 설명 한글화
+[33mbb31860[m 제발 좀 lock 파일 커밋하지 마세요 진짜
+[33m9acaf73[m Merge pull request #140 from Jae-Hyuk-Lee/main
+[33m7ead11e[m Remove DS_Store
+[33mce57aa3[m Merge branch 'main' into main
+[33m8eb6041[m Merge pull request #135 from Bluewak/main
+[33meac1b50[m Update README.md
+[33med9639b[m Merge pull request #132 from kjason0102/eddit
+[33meb2fb68[m Merge pull request #131 from hyunsang1021/ts
+[33md7d72a0[m Merge pull request #130 from joon0447/main
+[33m0d6c28d[m Merge pull request #122 from kjason0102/percentage
+[33m9588d3f[m Merge pull request #124 from Jass2345/main
+[33mc4196a0[m Merge pull request #128 from how-to-song/main
+[33mf8f3178[m eddit
+[33m20b62f6[m chart datalabels
+[33m3e874ba[m 불필요한 await 제거
+[33m259bf37[m 확인용 로그 주석 재구성
+[33m5c4c2cf[m Merge pull request #119 from jaewon786/main
+[33mb37511d[m Merge pull request #108 from Bluewak/feat/cache-option
+[33m25e73da[m docs파일생성 및 api guide작성
+[33m92fe9b2[m Add comment
+[33mc9781ca[m Update GenerateReadme.js
+[33mc5bd1bc[m error modify
+[33m6a33dba[m percentage
+[33ma4907ce[m Merge branch 'main' into feat/cache-option
+[33m2887092[m Update help_util.js
+[33m888ed0a[m Merge branch 'main' of https://github.com/Jae-Hyuk-Lee/reposcore-js
+[33m54b1f9b[m refactor: remove unused property
+[33m62202bb[m Fix help_utill.js
+[33m063a511[m Merge pull request #115 from Jass2345/main
+[33m3c32bb7[m Merge pull request #118 from MING9UCCI/main
+[33m315759d[m README 내 토큰 실행 방법 추가
+[33mfac3d6a[m API값 중복 저장 방지 최종
+[33m921233a[m API 값 중복 저장 방지
+[33mdf0aa68[m Merge pull request #111 from hyn033/main
+[33m5928955[m Merge branch 'oss2025hnu:main' into main
+[33m18f9eec[m Merge pull request #102 from JosephStalin0305/main
+[33ma44884e[m Merge pull request #104 from Sernn0/patch-1
+[33m74a41eb[m Merge pull request #99 from joon0447/main
+[33m93c3f9e[m Merge pull request #98 from jaewon786/main
+[33m46c0cec[m Merge pull request #95 from KohSeungJae/main
+[33mae6e585[m Merge pull request #93 from StaySober01/main
+[33m0b3f80a[m Merge branch 'oss2025hnu:main' into main
+[33m0b81e26[m Merge pull request #88 from Sernn0/main
+[33m824e0dc[m Merge pull request #85 from MING9UCCI/main
+[33mbb9f69a[m Merge pull request #91 from Jass2345/main
+[33m3e09b03[m chart.png의 깨짐 현상 해결
+[33m90d876e[m feat: add --use-cache option and caching functionality
+[33mf5f24f9[m 최종 비율 수정 완료
+[33m93e1b98[m README.md의 -t 옵션 오탈자 수정
+[33m1e6d32b[m Merge branch 'oss2025hnu:main' into main
+[33m0a1e517[m README.md text 부분 오탈자 수정
+[33m672e19f[m Merge branch 'oss2025hnu:main' into main
+[33m3a5eda1[m Merge branch 'oss2025hnu:main' into main
+[33m416888c[m[33m ([m[1;32mmain[m[33m)[m Update README.md
+[33m9283ddd[m Update README.md
+[33m7ab7b0c[m Update README.md
+[33mee083ab[m add: npm clean 타겟 추가
+[33mb31d56b[m Merge branch 'oss2025hnu:main' into main
+[33m3367124[m 텍스트 파일 이름 변경
+[33m658b44f[m fix: 유효하지 않은 토큰을 .env에 저장하지 않도록 개선
+[33m1f19993[m generateCsv 함수 구현
+[33me0ccf3c[m [FEAT] 중복된 코드 제거 요청에 대한 PR
+[33macc02ec[m 불필요한 코드 제거
+[33mf2470d8[m valid_value_edit
+[33mfa02d6b[m check_--format_value
+[33m06950c7[m Merge pull request #86 from Sernn0/main
+[33md43da7f[m README-project_guideline_link
+[33md254c48[m Merge pull request #67 from joon0447/main
+[33m3177753[m 최저 점수 및 비율 계산 수정
+[33mb8dd545[m delete chart.png
+[33mcafac9b[m Merge branch 'main' into main
+[33maba63b8[m Delete package-lock.json
+[33m2b0769e[m Merge pull request #78 from bym010312/feature
+[33m7dc42fd[m Merge pull request #77 from hyn033/main
+[33m2899b84[m add token
+[33mb8b051d[m Merge branch 'oss2025hnu:main' into main
+[33m5fbf09f[m Feat help_utill
+[33m49296b5[m 차트 가독성 개선 코드 추가
+[33m3338a75[m [FEAT] score_table.txt 저장 위치를 results 폴더로 이동
+[33m92e3adb[m update
+[33mc955e59[m Merge branch 'main' of https://github.com/bym010312/reposcore-js
+[33m0f58833[m update
+[33m322aa7d[m Merge pull request #66 from JosephStalin0305/main
+[33ma65d645[m Merge branch 'oss2025hnu:main' into main
+[33m6434fd4[m CSV 기능 이상하게 PR 넣어서 깨짐
+[33me127745[m Merge branch 'oss2025hnu:main' into main
+[33m38c2f90[m Merge pull request #59 from KohSeungJae/main
+[33m400fcd4[m Merge branch 'main' into main
+[33m49a1a6a[m Merge branch 'oss2025hnu:main' into main
+[33m7897171[m Merge pull request #71 from Sernn0/work-branch
+[33me754c53[m remove package-lock.json
+[33m3805ddc[m generateCsv_conflict_resolve
+[33mec7bc3f[m Merge branch 'main' into main
+[33m566abdb[m output 폴더 유무 확인 후 생성
+[33m7b969e5[m Add: .gitignore에 제외할 파일 목록 추가
+[33mff3c88f[m Merge branch 'main' into main
+[33m6d24151[m Merge pull request #61 from Jass2345/main
+[33m785cfdf[m Merge pull request #60 from joon0447/main
+[33mf03504b[m Merge branch 'main' into main
+[33m9b45280[m Merge branch 'main' into main
+[33m88a5ddf[m Merge pull request #58 from hyn033/main
+[33m43fe846[m API KEY 환경변수 등록 기능 최종본
+[33m530721d[m Merge branch 'main' of https://github.com/joon0447/reposcore-js
+[33m964aa4d[m Delete score_table.txt
+[33m8e77a82[m txt 생성 옵션 추가
+[33m939f83a[m Merge branch 'main' of https://github.com/bym010312/reposcore-js
+[33m652158b[m Merge branch 'main' of https://github.com/bym010312/reposcore-js
+[33m3c7b2ab[m 다중 저장소 분석 구현
+[33m2e5419b[m CalculateAverageScore함수 구현 및 추가
+[33mbbec14b[m Merge pull request #51 from StaySober01/main
+[33ma09a645[m Merge pull request #54 from jeonggeun1/main
+[33m37df56b[m Update project_guidelines.md
+[33mb24c9e5[m Merge branch 'oss2025hnu:main' into main
+[33m9ad0bac[m Delete participation_chart.png
+[33mc89da56[m Delete package-lock.json
+[33m2925d77[m Merge pull request #46 from jaewon786/main
+[33mf7af8cf[m Merge pull request #39 from joon0447/main
+[33m5303aea[m [FEAT] 차트를 이미지로 저장 PR 요청
+[33m8733f13[m docs: github_token.md의 잘못된 내용 수정 및 폴더/파일명 변경
+[33mc3bfd4b[m -r 옵션 미입력 시 에러 추가
+[33m69f1614[m 404 에러 출력문 수정
+[33m6c4770f[m Merge branch 'main' of https://github.com/joon0447/reposcore-js
+[33m9f21049[m repo 주소 오류문 추가
+[33m1f4d9fa[m Merge pull request #34 from Jass2345/main
+[33md10168f[m package-lock.json
+[33m429e829[m generateScore함수 구현
+[33meea5320[m Merge pull request #31 from JosephStalin0305/main
+[33mecb4f26[m refactor: 불필요한 코드 제거
+[33m93ec3c7[m Merge pull request #29 from joon0447/main
+[33m5dae46c[m Merge branch 'oss2025hnu:main' into main
+[33mb003b57[m generateTable 함수 구현
+[33m735eff0[m README.md 점수 계산 공식 줄 수를 좀 줄임
+[33me14e7bd[m README.md 제목 레벨 수정
+[33m13a0cf4[m Merge pull request #25 from jaewon786/main
+[33m716fc2a[m Merge pull request #24 from jungsuryeon/main
+[33m7427c1d[m Merge pull request #23 from bym010312/main
+[33m77ff5eb[m feat: calculateScores 함수 구현
+[33m1aec4e2[m Update README.md
+[33m1327ed6[m Update README.md
+[33mfbb9cca[m Update README.md
+[33m0d3a2dd[m Update github_token.md
+[33m18df28a[m Update README.md
+[33m9e79fa7[m Initial commit
+[33m2864dbf[m Initial commit
+[33m57875ed[m Merge branch 'oss2025hnu:main' into main
+[33mbad20ac[m 프로젝트 운영방침 정리한 project_guidelines.md 추가
+[33m5fd5a76[m Initial commit
+[33m05aa59d[m Merge pull request #19 from joon0447/main
+[33mcec5f43[m 오타 수정
+[33mf325e84[m Merge pull request #11 from joon0447/main
+[33mcc0b5ad[m Merge pull request #10 from jaewon786/main
+[33m2933a6d[m readme 수정
+[33mc87c5d7[m readme 수정
+[33mea57080[m readme 수정
+[33m2e74aaf[m github token
+[33m7983022[m Merge branch 'oss2025hnu:main' into main
+[33m44e038b[m docs: 점수 산출 공식 추가
+[33m815b84a[m Merge pull request #7 from KohSeungJae/main
+[33m85c7b24[m collectPRsAndIssues 구현
+[33mcaaa075[m Merge branch 'oss2025hnu:main' into main
+[33m945573e[m Merge pull request #5 from KohSeungJae/main
+[33m60683ca[m Create package-lock.json
+[33m822e731[m bugfix : 실행시 오류가 발생하던 문제 수정
+[33m5dccfba[m Update issue templates
+[33m66e59ec[m 버전 정보 재수정
+[33m05318f1[m 라이브러리 버전 조정
+[33me2e11cc[m 불필요하게 커밋에 add 된 파일 제거
+[33m263f8bb[m Merge pull request #2 from KohSeungJae/main
+[33mee5a383[m collectPRs 함수 구현 및 culateScores 수정.
+[33mb5b4b96[m Update issue templates
+[33me46aaed[m Update issue templates
+[33ma25f12e[m Update README.md
+[33m79537dc[m modified analyzer collect functons as stub
+[33m72aeb2c[m Create analyzer.js
+[33m53542b4[m Create index.js
+[33m58a1897[m Create package.json
+[33m3937b4d[m Update README.md
+[33m83e9607[m Initial commit
