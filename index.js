@@ -9,7 +9,7 @@ import dotenv from 'dotenv';
 import { program } from 'commander';
 
 import RepoAnalyzer from './lib/analyzer.js';
-import { log } from './lib/Utill.js';
+import { log } from './lib/Util.js';
 
 dotenv.config();
 
