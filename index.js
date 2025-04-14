@@ -1,15 +1,24 @@
 #!/usr/bin/env node
-require('dotenv').config();
-const { log } = require('./lib/Utill');
 
-const { program } = require('commander');
-const RepoAnalyzer = require('./lib/analyzer');
+import fs from 'fs/promises';
+import path from 'path';
+import process from 'process';
+import { fileURLToPath } from 'url';
 
-const fs = require('fs').promises;
-const path = require('path');
 const ENV_PATH = path.join(__dirname, '.env');
 const CACHE_PATH = path.join(__dirname, 'cache.json')
 const checkRateLimit = require('./lib/checkLimit');
+
+import dotenv from 'dotenv';
+import { program } from 'commander';
+
+import RepoAnalyzer from './lib/analyzer.js';
+import { log } from './lib/Utill.js';
+
+dotenv.config();
+
+const ENV_PATH = path.join(import.meta.dirname, '.env');
+const CACHE_PATH = path.join(import.meta.dirname, 'cache.json');
 
 program
     .option('-a, --api-key <token>', 'Github Access Token (optional)')
@@ -197,15 +206,15 @@ async function main() {
 }
 
 // 실행 여부 확인 및 모듈 내보내기 추가
-if (require.main === module) {
-  main(); // 실행 로직 호출
+if (fileURLToPath(import.meta.url) === process.argv[1]) {
+    main(); // 실행 로직 호출
 }
 
 // 테스트를 위한 모듈 내보내기
-module.exports = {
-  jsonToMap,
-  mapToJson,
-  loadCache,
-  saveCache,
-  updateEnvToken,
+export {
+    jsonToMap,
+    mapToJson,
+    loadCache,
+    saveCache,
+    updateEnvToken,
 };
