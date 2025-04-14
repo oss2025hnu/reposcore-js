@@ -8,7 +8,8 @@ const RepoAnalyzer = require('./lib/analyzer');
 const fs = require('fs');
 const path = require('path');
 const ENV_PATH = path.join(__dirname, '.env');
-const CACHE_PATH = path.join(__dirname, 'cache.json');
+const CACHE_PATH = path.join(__dirname, 'cache.json')
+const checkRateLimit = require('./lib/checkLimit');
 
 program
     .option('-a, --api-key <token>', 'Github Access Token (optional)')
@@ -16,7 +17,8 @@ program
     .option('-r, --repo <path...>', 'Repository path (e.g., user/repo)')
     .option('-o, --output <dir>', 'Output directory', 'results')
     .option('-f, --format <type>', 'Output format (table, chart, both)', 'both')
-    .option('-c, --use-cache', 'Use previously cached GitHub data');
+    .option('-c, --use-cache', 'Use previously cached GitHub data')
+    .option('--check-limit', 'Check remaining GitHub API request limit');
 
 program.parse(process.argv);
 const options = program.opts();
@@ -105,6 +107,10 @@ if (!validFormats.includes(options.format)) {
 // 기존 실행 로직을 함수로 분리
 async function main() {
     try {
+        if (options.checkLimit) {
+            await checkRateLimit(options.apiKey || process.env.GITHUB_TOKEN);
+            process.exit(0);
+          }          
         if (!options.repo) {
             console.error('Error :  -r (--repo) 옵션을 필수로 사용하여야 합니다. 예) node index.js -r oss2025hnu/reposcore-js');
             program.help();

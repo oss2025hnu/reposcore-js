@@ -4,6 +4,7 @@
     "bin": "./index.js",
     "dependencies": {
         "@octokit/rest": "^20.1.2",
+        "axios": "^1.8.4",
         "chartjs-node-canvas": "^5.0.0",
         "chartjs-plugin-datalabels": "^2.2.0",
         "cli-table3": "^0.6.5",
