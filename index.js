@@ -159,8 +159,8 @@ async function main() {
         // -u 옵션 선택시 실행
         let realNameScore;
         if (options.userName){
-            analyzer.updateUserInfo(scores);
-            realNameScore = analyzer.transformUserIdToName(scores);
+            await analyzer.updateUserInfo(scores);
+            realNameScore = await analyzer.transformUserIdToName(scores);
         }
 
         // Calculate AverageScore
