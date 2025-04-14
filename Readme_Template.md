@@ -33,6 +33,14 @@ node index.js -r oss2025hnu/reposcore-js
 이렇게 하면 API 요청 수를 줄이고 실행 속도를 높일 수 있습니다. 
 만약 캐시 파일이 없거나 손상된 경우, 새로운 데이터를 자동으로 가져옵니다.
 
+##  clean 사용 방법
+
+PR전 결과물 - lock.json, result.png.. 등 temp파일들을 삭제하는 코드입니다. 필수적으로 실행 후 PR하시길 바랍니다.
+
+```bash
+npm run clean
+```
+
 ## Score Formula
 아래는 PR 개수와 이슈 개수의 비율에 따라 점수로 인정가능한 최대 개수를 구하고 각 배점에 따라 최종 점수를 산출하는 공식이다.
 
