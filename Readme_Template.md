@@ -37,9 +37,9 @@ node index.js -r oss2025hnu/reposcore-js
 
 PR전 결과물 - lock.json, result.png.. 등 temp파일들을 삭제하는 코드입니다. 필수적으로 실행 후 PR하시길 바랍니다.
 
-'''bash
+```bash
 npm run clean
-'''
+```
 
 ## Score Formula
 아래는 PR 개수와 이슈 개수의 비율에 따라 점수로 인정가능한 최대 개수를 구하고 각 배점에 따라 최종 점수를 산출하는 공식이다.
