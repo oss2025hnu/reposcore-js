@@ -15,7 +15,8 @@
     "scripts": {
         "clean": "rm -rf results **/*.png *-lock.json",
         "test": "jest",
-        "check_readme": "node scripts/check_readme.js"
+        "generate-readme": "node lib/GenerateReadme.js",
+        "check-readme": "make check-readme"
     },
     "devDependencies": {
         "dotenv": "^16.5.0",
