@@ -2,6 +2,7 @@
     "name": "repo-analyzer",
     "version": "0.1.0",
     "bin": "./index.js",
+    "type": "module",
     "dependencies": {
         "@octokit/rest": "^20.1.2",
         "chartjs-node-canvas": "^5.0.0",
