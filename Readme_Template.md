@@ -12,21 +12,7 @@ npm install
 만약 명령줄 코드가 변경될 경우, node lib/GenerateReadme.js를 통헤 Readme.md파일을 최신화 할 것.
 
 ```
-
-
-Usage: index [options]
-
-Options:
-  -a, --api-key <token>  Github Access Token (optional)
-  -t, --text             Save table as text file
-  -r, --repo <path...>   Repository path (e.g., user/repo)
-  -o, --output <dir>     Output directory (default: "results")
-  -f, --format <type>    Output format (table, chart, both) (default: "both")
-  -c, --use-cache        Use previously cached GitHub data
-  -u, --user-name        Display user`s real name
-  -h, --help             display help for command
-
-
+{{ Usage }}
 ```
 
 ## 토큰 실행 방법
