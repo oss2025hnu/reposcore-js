@@ -35,6 +35,7 @@ Options:
   -o, --output <dir>     Output directory (default: "results")
   -f, --format <type>    Output format (table, chart, both) (default: "both")
   -c, --use-cache        Use previously cached GitHub data
+  -u, --user-name        Display user`s real name
   -h, --help             display help for command
 
 
@@ -57,6 +58,14 @@ node index.js -r oss2025hnu/reposcore-js
 또한 `--use-cache` 옵션을 사용하면 `cache.json` 파일에 저장된 GitHub API 데이터를 불러옵니다(파일이 존재할 경우). 
 이렇게 하면 API 요청 수를 줄이고 실행 속도를 높일 수 있습니다. 
 만약 캐시 파일이 없거나 손상된 경우, 새로운 데이터를 자동으로 가져옵니다.
+
+##  clean 사용 방법
+
+PR전 결과물 - lock.json, result.png.. 등 temp파일들을 삭제하는 코드입니다. 필수적으로 실행 후 PR하시길 바랍니다.
+
+'''bash
+npm run clean
+'''
 
 ## Score Formula
 아래는 PR 개수와 이슈 개수의 비율에 따라 점수로 인정가능한 최대 개수를 구하고 각 배점에 따라 최종 점수를 산출하는 공식이다.
@@ -133,8 +142,17 @@ node lib/GenerateReadme.js
 ## 유틸리티 함수 (`Util.js`)
 이 프로젝트에서는 코드의 가독성과 유지보수를 위해, 직접적인 로직이나 핵심 기능에 영향을 주지 않는 공통적인 유틸리티 함수들을 별도의 파일인 Util.js에 분리하여 관리합니다.
 
+## 유닛 테스트 명령어
+Test
+이 저장소에서 기본적인 동작 이상 여부를 테스트하기 위한 자동화된 테스트 스위트를 사용할 수 있습니다.
+현재 PR오류로 인해 작동이 아직은 안되므로, 업데이트가 되면 Readme DOC를 수정할 예정입니다.
+
+```bash
+npm run test
+```
+
 ## token 생성하는법
-[링크](./token_guide/README.md)
+[링크](docs/token_guide.md)
 
 ## 프로젝트 가이드라인
 [링크](docs/project_guidelines.md)
