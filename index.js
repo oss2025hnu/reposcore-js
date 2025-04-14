@@ -17,7 +17,7 @@ program
     .option('-o, --output <dir>', 'Output directory', 'results')
     .option('-f, --format <type>', 'Output format (table, chart, both)', 'both')
     .option('-c, --use-cache', 'Use previously cached GitHub data')
-    .option('-u, --user-name', 'Display user`s real name')
+    .option('-u, --user-name', 'Display user\'s real name')
 
 program.parse(process.argv);
 const options = program.opts();
