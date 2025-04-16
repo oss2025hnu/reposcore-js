@@ -9,7 +9,9 @@ import dotenv from 'dotenv';
 import { program } from 'commander';
 
 import RepoAnalyzer from './lib/analyzer.js';
-import { log } from './lib/Utill.js';
+import { log } from './lib/Util.js';
+
+import getRateLimit from './lib/checkLimit.js';
 
 dotenv.config();
 
@@ -18,15 +20,34 @@ const CACHE_PATH = path.join(import.meta.dirname, 'cache.json');
 
 program
     .option('-a, --api-key <token>', 'Github Access Token (optional)')
-    .option('-t, --text', 'Save table as text file')
+    // .option('-t, --text', 'Save table as text file') // 제거: --format text로 통합
     .option('-r, --repo <path...>', 'Repository path (e.g., user/repo)')
     .option('-o, --output <dir>', 'Output directory', 'results')
-    .option('-f, --format <type>', 'Output format (table, chart, both)', 'both')
+    .option('-f, --format <type>', 'Output format (text, table, chart, all)', 'all') // 수정: both -> all, text 추가
     .option('-c, --use-cache', 'Use previously cached GitHub data')
     .option('-u, --user-name', 'Display user`s real name')
+    .option('--check-limit', 'Check GitHub API rate limit')
 
 program.parse(process.argv);
 const options = program.opts();
+
+if (options.checkLimit) {
+  const apiKey = options.apiKey || process.env.GITHUB_TOKEN;
+  if (!apiKey) {
+    console.error('GITHUB_TOKEN이 필요합니다. --api-key 옵션 또는 .env에 설정하세요.');
+    process.exit(1);
+  }
+
+  await getRateLimit(apiKey); // checkLimit 기능 실행
+  process.exit(0); // 분석 로직 타지 않고 종료
+}
+
+//repo 옵션 검사
+if (!options.repo) {
+  console.error('-r (--repo) 옵션은 필수입니다.');
+  program.help();
+  process.exit(1);
+}
 
 // ------------- JSON ↔ Map 변환 유틸리티 함수 -------------
 function jsonToMap(jsonObj, depth = 0) {
@@ -107,7 +128,7 @@ async function updateEnvToken(token) {
     }
 }
 
-const validFormats = ['table', 'chart', 'both'];
+const validFormats = ['text', 'table', 'chart', 'all']; // 수정: both -> all, text 추가
 if (!validFormats.includes(options.format)) {
   console.error(`Error : Invalid format: "${options.format}"\nValid formats are: ${validFormats.join(', ')}`);
   process.exit(1);
@@ -176,17 +197,21 @@ async function main() {
         await fs.mkdir(options.output, { recursive: true });
 
         // Generate outputs based on format
-        if (options.format === 'table' || options.format === 'both') {
-            if (options.userName){ // -u 옵션의 경우 id와 이름이 치환된 객체인 realNameScore를 사용.
-                await analyzer.generateTable(realNameScore, options.text);
-                await analyzer.generateCsv(realNameScore, options.output);
+        if (options.format === 'text' || options.format === 'table' || options.format === 'all') {
+            if (options.userName){
+                await analyzer.generateTable(realNameScore, options.format === 'text' || options.format === 'all');
+                if (options.format === 'table' || options.format === 'all') {
+                    await analyzer.generateCsv(realNameScore, options.output);
+                }
             }
             else{
-                await analyzer.generateTable(scores, options.text);
-                await analyzer.generateCsv(scores, options.output);
+                await analyzer.generateTable(scores, options.format === 'text' || options.format === 'all');
+                if (options.format === 'table' || options.format === 'all') {
+                    await analyzer.generateCsv(scores, options.output);
+                }
             }
         }
-        if (options.format === 'chart' || options.format === 'both') {
+        if (options.format === 'chart' || options.format === 'all') {
             await analyzer.generateChart(scores, options.output);
         }
 
