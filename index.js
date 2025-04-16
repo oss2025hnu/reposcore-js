@@ -9,7 +9,7 @@ import dotenv from 'dotenv';
 import { program } from 'commander';
 
 import RepoAnalyzer from './lib/analyzer.js';
-import { log } from './lib/Utill.js';
+import { log } from './lib/Util.js';
 
 import getRateLimit from './lib/checkLimit.js';
 
@@ -20,10 +20,10 @@ const CACHE_PATH = path.join(import.meta.dirname, 'cache.json');
 
 program
     .option('-a, --api-key <token>', 'Github Access Token (optional)')
-    .option('-t, --text', 'Save table as text file')
+    // .option('-t, --text', 'Save table as text file') // 제거: --format text로 통합
     .option('-r, --repo <path...>', 'Repository path (e.g., user/repo)')
     .option('-o, --output <dir>', 'Output directory', 'results')
-    .option('-f, --format <type>', 'Output format (table, chart, both)', 'both')
+    .option('-f, --format <type>', 'Output format (text, table, chart, all)', 'all') // 수정: both -> all, text 추가
     .option('-c, --use-cache', 'Use previously cached GitHub data')
     .option('-u, --user-name', 'Display user`s real name')
     .option('--check-limit', 'Check GitHub API rate limit')
@@ -128,7 +128,7 @@ async function updateEnvToken(token) {
     }
 }
 
-const validFormats = ['table', 'chart', 'both'];
+const validFormats = ['text', 'table', 'chart', 'all']; // 수정: both -> all, text 추가
 if (!validFormats.includes(options.format)) {
   console.error(`Error : Invalid format: "${options.format}"\nValid formats are: ${validFormats.join(', ')}`);
   process.exit(1);
@@ -197,17 +197,21 @@ async function main() {
         await fs.mkdir(options.output, { recursive: true });
 
         // Generate outputs based on format
-        if (options.format === 'table' || options.format === 'both') {
-            if (options.userName){ // -u 옵션의 경우 id와 이름이 치환된 객체인 realNameScore를 사용.
-                await analyzer.generateTable(realNameScore, options.text);
-                await analyzer.generateCsv(realNameScore, options.output);
+        if (options.format === 'text' || options.format === 'table' || options.format === 'all') {
+            if (options.userName){
+                await analyzer.generateTable(realNameScore, options.format === 'text' || options.format === 'all');
+                if (options.format === 'table' || options.format === 'all') {
+                    await analyzer.generateCsv(realNameScore, options.output);
+                }
             }
             else{
-                await analyzer.generateTable(scores, options.text);
-                await analyzer.generateCsv(scores, options.output);
+                await analyzer.generateTable(scores, options.format === 'text' || options.format === 'all');
+                if (options.format === 'table' || options.format === 'all') {
+                    await analyzer.generateCsv(scores, options.output);
+                }
             }
         }
-        if (options.format === 'chart' || options.format === 'both') {
+        if (options.format === 'chart' || options.format === 'all') {
             await analyzer.generateChart(scores, options.output);
         }
 

@@ -15,7 +15,9 @@
     "scripts": {
         "clean": "rm -rf results **/*.png *-lock.json",
         "test": "jest",
-        "lint": "eslint ."
+        "lint": "eslint .",
+        "generate-readme": "make generate-readme",
+        "check-readme": "make check-readme"
     },
     "devDependencies": {
         "dotenv": "^16.5.0",
