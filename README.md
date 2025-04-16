@@ -18,12 +18,13 @@ Usage: index [options]
 
 Options:
   -a, --api-key <token>  Github Access Token (optional)
-  -t, --text             Save table as text file
   -r, --repo <path...>   Repository path (e.g., user/repo)
   -o, --output <dir>     Output directory (default: "results")
-  -f, --format <type>    Output format (table, chart, both) (default: "both")
+  -f, --format <type>    Output format (text, table, chart, all) (default:
+                         "all")
   -c, --use-cache        Use previously cached GitHub data
-  -u, --user-name        Display user's real name
+  -u, --user-name        Display user`s real name
+  --check-limit          Check GitHub API rate limit
   -h, --help             display help for command
 
 
@@ -116,13 +117,13 @@ GitHub Codespaces에서 본 프로젝트를 열면 `npm install`이 자동으로
 ### 사용 방법
 
 ```bash
-node lib/GenerateReadme.js
+make generate-readme
 ```
 
 - 위 명령을 실행하면 `index.js --help`의 출력 결과가 템플릿에 삽입되고, 최종 결과로 `README.md`가 생성 또는 덮어써집니다.
 
 ```bash
-npm run check_readme
+npm run check-readme
 ```
 - 위 명령을 실행하면 README.md의 상태가 최신 상태인지 확인합니다.
 

@@ -102,13 +102,13 @@ GitHub Codespaces에서 본 프로젝트를 열면 `npm install`이 자동으로
 ### 사용 방법
 
 ```bash
-node lib/GenerateReadme.js
+make generate-readme
 ```
 
 - 위 명령을 실행하면 `index.js --help`의 출력 결과가 템플릿에 삽입되고, 최종 결과로 `README.md`가 생성 또는 덮어써집니다.
 
 ```bash
-npm run check_readme
+npm run check-readme
 ```
 - 위 명령을 실행하면 README.md의 상태가 최신 상태인지 확인합니다.
 

@@ -15,7 +15,7 @@
     "scripts": {
         "clean": "rm -rf results **/*.png *-lock.json",
         "test": "jest",
-        "generate-readme": "node lib/GenerateReadme.js",
+        "generate-readme": "make generate-readme",
         "check-readme": "make check-readme"
     },
     "devDependencies": {
