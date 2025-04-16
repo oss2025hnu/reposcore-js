@@ -1,7 +1,7 @@
-name: README Sync Check
-
-on: [push, pull_request]
-
+# name: README Sync Check
+# 
+# on: [push, pull_request]
+# 
 # jobs:
 #   check-readme:
 #     runs-on: ubuntu-latest
