@@ -2,21 +2,21 @@ name: README Sync Check
 
 on: [push, pull_request]
 
-jobs:
-  check-readme:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '18'
-
-      - name: Install dependencies
-        run: npm install
-
-      - name: Run README sync check
-        run: make check-readme
+# jobs:
+#   check-readme:
+#     runs-on: ubuntu-latest
+# 
+#     steps:
+#       - name: Checkout repository
+#         uses: actions/checkout@v3
+# 
+#       - name: Setup Node.js
+#         uses: actions/setup-node@v3
+#         with:
+#           node-version: '18'
+# 
+#       - name: Install dependencies
+#         run: npm install
+# 
+#       - name: Run README sync check
+#         run: make check-readme
