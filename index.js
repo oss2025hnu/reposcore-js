@@ -7,6 +7,7 @@ import { fileURLToPath } from 'url';
 
 import dotenv from 'dotenv';
 import { program } from 'commander';
+import { Octokit } from '@octokit/rest';
 
 import RepoAnalyzer from './lib/analyzer.js';
 import {
@@ -72,7 +73,6 @@ async function main() {
 
         // API 토큰이 입력되었으면 .env에 저장 (이미 있지 않은 경우)
         if (options.apiKey) {
-            const { Octokit } = require('@octokit/rest');
             const testOctokit = new Octokit({ auth: options.apiKey });
 
             try {
