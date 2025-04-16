@@ -9,7 +9,14 @@ import dotenv from 'dotenv';
 import { program } from 'commander';
 
 import RepoAnalyzer from './lib/analyzer.js';
-import { log } from './lib/Util.js';
+import {
+    log,
+    jsonToMap,
+    mapToJson,
+    loadCache,
+    saveCache,
+    updateEnvToken
+  } from './lib/Util.js';
 
 import getRateLimit from './lib/checkLimit.js';
 
