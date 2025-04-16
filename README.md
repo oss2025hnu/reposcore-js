@@ -184,3 +184,6 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 ```
+
+## 디버깅 가이드
+[링크](docs/debug_guide.md)

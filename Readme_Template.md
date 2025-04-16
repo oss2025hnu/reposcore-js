@@ -40,6 +40,13 @@ PR전 결과물 - lock.json, result.png.. 등 temp파일들을 삭제하는 코�
 ```bash
 npm run clean
 ```
+## 코드 검사 (Lint)
+
+ESLint 설정이 적용되어 있습니다. 다음 명령어로 검사할 수 있습니다:
+
+```bash
+npm run lint
+
 
 ## Score Formula
 아래는 PR 개수와 이슈 개수의 비율에 따라 점수로 인정가능한 최대 개수를 구하고 각 배점에 따라 최종 점수를 산출하는 공식이다.
@@ -134,3 +141,34 @@ npm run test
 
 ## 프로젝트 가이드라인
 [링크](docs/project_guidelines.md)
+
+---
+
+## ESM(ECMAScript Module) 전환 안내
+
+이 프로젝트는 기존의 CommonJS 방식에서 ESM(ECMAScript Module) 방식으로 전환되었습니다. 
+이에 따라 모듈을 불러오고 내보내는 방법, 파일 확장자 처리 방식 등에서 일부 주의사항이 있습니다.
+
+### 주요 변경 사항
+- `require(...)` → `import ... from '...'`
+- `module.exports = ...` → `export default ...`
+- 상대 경로 import 시 `.js` 확장자 명시 필요
+- `__dirname`, `__filename` 사용 불가 → `import.meta.url` 사용
+
+###  사용 시 주의사항
+
+- **Node.js 14 이상**에서만 동작합니다. (16 이상 권장)
+- 파일 import 시 **확장자를 반드시 명시**해야 합니다.
+
+### 예시
+```js
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+// __filename, __dirname 대체 방법
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+```
+
+## 디버깅 가이드
+[링크](docs/debug_guide.md)
