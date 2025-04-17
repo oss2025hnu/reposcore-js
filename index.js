@@ -21,7 +21,6 @@ const CACHE_PATH = path.join(import.meta.dirname, 'cache.json');
 
 program
     .option('-a, --api-key <token>', 'Github Access Token (optional)')
-    // .option('-t, --text', 'Save table as text file') // 제거: --format text로 통합
     .option('-r, --repo <path...>', 'Repository path (e.g., user/repo)')
     .option('-o, --output <dir>', 'Output directory', 'results')
     .option('-f, --format <type>', 'Output format (text, table, chart, all)', 'all') // 수정: both -> all, text 추가
