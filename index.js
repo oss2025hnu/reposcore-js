@@ -43,13 +43,6 @@ if (options.checkLimit) {
   process.exit(0); // 분석 로직 타지 않고 종료
 }
 
-//repo 옵션 검사
-if (!options.repo) {
-  console.error('-r (--repo) 옵션은 필수입니다.');
-  program.help();
-  process.exit(1);
-}
-
 // ------------- JSON ↔ Map 변환 유틸리티 함수 -------------
 function jsonToMap(jsonObj, depth = 0) {
     if (depth >= 2 || typeof jsonObj !== 'object' || jsonObj === null || Array.isArray(jsonObj)) {
