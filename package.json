@@ -16,7 +16,7 @@
         "clean": "rm -rf results **/*.png *-lock.json",
         "test": "jest",
         "lint": "eslint .",
-        "readme": "make readme",
+        "readme": "make readme"
     },
     "devDependencies": {
         "dotenv": "^16.5.0",
