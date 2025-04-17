@@ -40,6 +40,13 @@ PR전 결과물 - lock.json, result.png.. 등 temp파일들을 삭제하는 코�
 ```bash
 npm run clean
 ```
+## 코드 검사 (Lint)
+
+ESLint 설정이 적용되어 있습니다. 다음 명령어로 검사할 수 있습니다:
+
+```bash
+npm run lint
+```
 
 ## Score Formula
 아래는 PR 개수와 이슈 개수의 비율에 따라 점수로 인정가능한 최대 개수를 구하고 각 배점에 따라 최종 점수를 산출하는 공식이다.
@@ -95,18 +102,22 @@ GitHub Codespaces에서 본 프로젝트를 열면 `npm install`이 자동으로
 
 ### 구성 요소
 
-- `Readme_Template.md`:  
-  README.md의 템플릿 역할을 하며, `{{ Usage }}` 위치에 CLI 옵션 설명이 삽입됩니다.
-- `lib/GenerateReadme.js`:  
-  자동 생성 스크립트. 실행 시 `README.md`를 갱신합니다.
+- `Readme_Template.md` : README.md의 템플릿 역할을 하며, `{{ Usage }}` 위치에 CLI 옵션 설명이 삽입됩니다.
+- `lib/GenerateReadme.js` : 자동 생성 스크립트. 실행 시 `README.md`를 갱신합니다.
+- `scripts/check_readme.js` : 템플릿만 수정하였을 경우를 대비하여 업데이트 되었는지 확인합니다.
 
 ### 사용 방법
 
 ```bash
-node lib/GenerateReadme.js
+make generate-readme
 ```
 
 - 위 명령을 실행하면 `index.js --help`의 출력 결과가 템플릿에 삽입되고, 최종 결과로 `README.md`가 생성 또는 덮어써집니다.
+
+```bash
+npm run check-readme
+```
+- 위 명령을 실행하면 README.md의 상태가 최신 상태인지 확인합니다.
 
 ### 주의사항
 
@@ -130,3 +141,11 @@ npm run test
 
 ## 프로젝트 가이드라인
 [링크](docs/project_guidelines.md)
+
+---
+
+## ESM(ECMAScript Module) 전환 안내
+[링크](docs/esm_guide.md)
+
+## 디버깅 가이드
+[링크](docs/debug_guide.md)
