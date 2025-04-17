@@ -43,13 +43,6 @@ if (options.checkLimit) {
   process.exit(0); // 분석 로직 타지 않고 종료
 }
 
-//repo 옵션 검사
-if (!options.repo) {
-  console.error('-r (--repo) 옵션은 필수입니다.');
-  program.help();
-  process.exit(1);
-}
-
 // ------------- JSON ↔ Map 변환 유틸리티 함수 -------------
 function jsonToMap(jsonObj, depth = 0) {
     if (depth >= 2 || typeof jsonObj !== 'object' || jsonObj === null || Array.isArray(jsonObj)) {
@@ -143,24 +136,21 @@ async function main() {
             program.help();
         }
 
+
+        // Initialize analyzer with repo path
+        const token = options.apiKey || process.env.GITHUB_TOKEN;
+        const analyzer = new RepoAnalyzer(options.repo, token);
+
         // API 토큰이 입력되었으면 .env에 저장 (이미 있지 않은 경우)
         if (options.apiKey) {
-            const testOctokit = new Octokit({ auth: options.apiKey });
-
             try {
-                await testOctokit.rest.users.getAuthenticated();
+                await analyzer.validateToken();
                 log('입력된 토큰이 유효합니다.');
                 await updateEnvToken(options.apiKey);
             } catch (error) {
                 throw new Error('입력된 토큰이 유효하지 않아 프로그램을 종료합니다, 유효한 토큰인지 확인해주세요.');
             }
         }
-
-        // Initialize analyzer with repo path
-        const token = options.apiKey || process.env.GITHUB_TOKEN;
-        const analyzer = new RepoAnalyzer(options.repo, token);
-
-        await analyzer.validateToken();
 
         if (options.useCache) {
             const cached = await loadCache();
