@@ -122,24 +122,22 @@ async function main() {
         }
 
         // API 토큰이 입력되었으면 .env에 저장 (이미 있지 않은 경우)
-        if (options.apiKey) {
-            const { Octokit } = require('@octokit/rest');
-            const testOctokit = new Octokit({ auth: options.apiKey });
+   
 
+        // Initialize analyzer with repo path
+        const token = options.apiKey || process.env.GITHUB_TOKEN;
+        const analyzer = new RepoAnalyzer(options.repo, token);
+
+        // API 토큰이 입력되었으면 .env에 저장 (이미 있지 않은 경우)
+        if (options.apiKey) {
             try {
-                await testOctokit.rest.users.getAuthenticated();
+                await analyzer.validateToken();
                 log('입력된 토큰이 유효합니다.');
                 await updateEnvToken(options.apiKey);
             } catch (error) {
                 throw new Error('입력된 토큰이 유효하지 않아 프로그램을 종료합니다, 유효한 토큰인지 확인해주세요.');
             }
         }
-
-        // Initialize analyzer with repo path
-        const token = options.apiKey || process.env.GITHUB_TOKEN;
-        const analyzer = new RepoAnalyzer(options.repo, token);
-
-        await analyzer.validateToken();
 
         if (options.useCache) {
             const cached = await loadCache();
