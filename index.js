@@ -8,9 +8,10 @@ import dotenv from 'dotenv';
 import {program, Option} from 'commander';
 
 import RepoAnalyzer from './lib/analyzer.js';
-import {jsonToMap, mapToJson, log, loadCache, saveCache, updateEnvToken} from './lib/Util.js';
+import {jsonToMap, mapToJson, log, loadCache, saveCache, updateEnvToken, setTextColor} from './lib/Util.js';
 
 import getRateLimit from './lib/checkLimit.js';
+import ThemeManager from './lib/ThemeManager.js';
 
 dotenv.config();
 
@@ -40,7 +41,11 @@ program
     )
     .addOption(
         new Option('--check-limit', 'Check GitHub API rate limit')
-    );
+    )
+    .option('-t, --theme <theme>', 'Set theme for analysis (default/dark)')
+    .option('--create-theme <theme>', '새 테마 생성 (JSON 형식)')
+    .option('--change-theme <theme>', '사용할 테마 선택 (default, dark, 또는 커스텀 테마)')
+    .option('--create-theme <json>', 'Create custom theme');
 
 program.parse(process.argv);
 const options = program.opts();
@@ -71,9 +76,53 @@ async function main() {
             program.help();
         }
 
+        // 테마 매니저 초기화
+        const themeManager = new ThemeManager();
+        
+        // 테마 관련 작업을 위한 비동기 대기
+        await themeManager.loadThemes();
+        
+        // 테마 생성 옵션 처리
+        if (options.createTheme) {
+            try {
+                const themeData = JSON.parse(options.createTheme);
+                if (!themeData.name || !themeData.theme) {
+                    console.error('테마 데이터 형식이 잘못되었습니다. {"name": "테마명", "theme": {...}} 형식이 필요합니다.');
+                    process.exit(1);
+                }
+                themeManager.addTheme(themeData.name, themeData.theme);
+                log(`'${themeData.name}' 테마가 성공적으로 생성되었습니다. 누락된 속성은 기본 테마에서 상속됩니다.`, 'INFO');
+            } catch (error) {
+                console.error('테마 생성 중 오류가 발생했습니다:', error.message);
+                process.exit(1);
+            }
+        }
+
+        // 테마 변경 옵션 처리
+        if (options.changeTheme) {
+            const success = themeManager.setTheme(options.changeTheme);
+            if (!success) {
+                console.error(`유효하지 않은 테마: ${options.changeTheme}`);
+                console.log(`사용 가능한 테마: ${themeManager.getAvailableThemes().join(', ')}`);
+                process.exit(1);
+            }
+        }
+        
+        // 현재 테마 로깅
+        log(`현재 테마: '${themeManager.currentTheme}'`, 'INFO');
+
         // Initialize analyzer with repo path
         const token = options.apiKey || process.env.GITHUB_TOKEN;
         const analyzer = new RepoAnalyzer(options.repo, token);
+        analyzer.themeManager = themeManager; // 테마 매니저 설정
+
+        // 기본 테마의 텍스트 색상 설정
+        const currentTheme = themeManager.getCurrentTheme();
+        if (currentTheme && currentTheme.colors) {
+            setTextColor(currentTheme.colors.text);
+        } else {
+            log('경고: 기본 테마를 불러올 수 없습니다. 기본 텍스트 색상을 사용합니다.', 'WARN');
+        }
 
         // API 토큰이 입력되었으면 .env에 저장 (이미 있지 않은 경우)
         if (options.apiKey) {
