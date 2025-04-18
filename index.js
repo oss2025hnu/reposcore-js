@@ -2,15 +2,13 @@
 
 import fs from 'fs/promises';
 import path from 'path';
-import process from 'process';
-import { fileURLToPath } from 'url';
+import {fileURLToPath} from 'url';
 
 import dotenv from 'dotenv';
-import { program } from 'commander';
-import { Octokit } from '@octokit/rest';
+import {program, Option} from 'commander';
 
 import RepoAnalyzer from './lib/analyzer.js';
-import { jsonToMap, mapToJson, log, loadCache, saveCache, updateEnvToken } from './lib/Util.js';
+import {jsonToMap, mapToJson, log, loadCache, saveCache, updateEnvToken} from './lib/Util.js';
 
 import getRateLimit from './lib/checkLimit.js';
 
@@ -20,35 +18,49 @@ const ENV_PATH = path.join(import.meta.dirname, '.env');
 const CACHE_PATH = path.join(import.meta.dirname, 'cache.json');
 
 program
-    .option('-a, --api-key <token>', 'Github Access Token (optional)')
-    .option('-r, --repo <path...>', 'Repository path (e.g., user/repo)')
-    .option('-o, --output <dir>', 'Output directory', 'results')
-    .option('-f, --format <type>', 'Output format (text, table, chart, all)', 'all') // 수정: both -> all, text 추가
-    .option('-c, --use-cache', 'Use previously cached GitHub data')
-    .option('-u, --user-name', 'Display user`s real name')
-    .option('--check-limit', 'Check GitHub API rate limit')
+    .addOption(
+        new Option('-a, --api-key <token>', 'Github Access Token (optional)')
+    )
+    .addOption(
+        new Option('-r, --repo <path...>', 'Repository path (e.g., user/repo)')
+    )
+    .addOption(
+        new Option('-o, --output <dir>', 'Output directory')
+            .default('results')
+    )
+    .addOption(new Option('-f, --format <type>', 'Output format ')
+        .choices(['text', 'table', 'chart', 'all'])
+        .default('all')
+    )
+    .addOption(
+        new Option('-c, --use-cache', 'Use previously cached GitHub data')
+    )
+    .addOption(
+        new Option('-u, --user-name', 'Display user\'s real name')
+    )
+    .addOption(
+        new Option('--check-limit', 'Check GitHub API rate limit')
+    );
 
 program.parse(process.argv);
 const options = program.opts();
 
 if (options.checkLimit) {
-  const apiKey = options.apiKey || process.env.GITHUB_TOKEN;
-  if (!apiKey) {
-    console.error('GITHUB_TOKEN이 필요합니다. --api-key 옵션 또는 .env에 설정하세요.');
-    process.exit(1);
-  }
+    const apiKey = options.apiKey || process.env.GITHUB_TOKEN;
+    if (!apiKey) {
+        console.error('GITHUB_TOKEN이 필요합니다. --api-key 옵션 또는 .env에 설정하세요.');
+        process.exit(1);
+    }
 
-  await getRateLimit(apiKey); // checkLimit 기능 실행
-  process.exit(0); // 분석 로직 타지 않고 종료
+    await getRateLimit(apiKey); // checkLimit 기능 실행
+    process.exit(0); // 분석 로직 타지 않고 종료
 }
-
-
 
 
 const validFormats = ['text', 'table', 'chart', 'all']; // 수정: both -> all, text 추가
 if (!validFormats.includes(options.format)) {
-  console.error(`Error : Invalid format: "${options.format}"\nValid formats are: ${validFormats.join(', ')}`);
-  process.exit(1);
+    console.error(`Error : Invalid format: "${options.format}"\nValid formats are: ${validFormats.join(', ')}`);
+    process.exit(1);
 }
 
 // 기존 실행 로직을 함수로 분리
@@ -58,7 +70,6 @@ async function main() {
             console.error('Error :  -r (--repo) 옵션을 필수로 사용하여야 합니다. 예) node index.js -r oss2025hnu/reposcore-js');
             program.help();
         }
-
 
         // Initialize analyzer with repo path
         const token = options.apiKey || process.env.GITHUB_TOKEN;
@@ -98,7 +109,7 @@ async function main() {
 
         // -u 옵션 선택시 실행
         let realNameScore;
-        if (options.userName){
+        if (options.userName) {
             await analyzer.updateUserInfo(scores);
             realNameScore = await analyzer.transformUserIdToName(scores);
         }
@@ -107,27 +118,18 @@ async function main() {
         analyzer.calculateAverageScore(scores);
 
         // 디렉토리 생성
-        await fs.mkdir(options.output, { recursive: true });
+        await fs.mkdir(options.output, {recursive: true});
 
         // Generate outputs based on format
-        if (options.format === 'text' || options.format === 'table' || options.format === 'all') {
-            if (options.userName){
-                await analyzer.generateTable(realNameScore, options.format === 'text' || options.format === 'all');
-                if (options.format === 'table' || options.format === 'all') {
-                    await analyzer.generateCsv(realNameScore, options.output);
-                }
-            }
-            else{
-                await analyzer.generateTable(scores, options.format === 'text' || options.format === 'all');
-                if (options.format === 'table' || options.format === 'all') {
-                    await analyzer.generateCsv(scores, options.output);
-                }
-            }
+        if (['all', 'text'].includes(options.format)) {
+            await analyzer.generateTable(realNameScore || scores || [], options.output);
         }
-        if (options.format === 'chart' || options.format === 'all') {
-            await analyzer.generateChart(scores, options.output);
+        if (['all', 'table'].includes(options.format)) {
+            await analyzer.generateCsv(realNameScore || scores || [], options.output);
         }
-
+        if (['all', 'chart'].includes(options.format)) {
+            await analyzer.generateChart(realNameScore || scores || [], options.output);
+        }
     } catch (error) {
         console.error(`Error: ${error.message}`);
         process.exit(1);
