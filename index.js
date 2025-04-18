@@ -8,9 +8,10 @@ import dotenv from 'dotenv';
 import {program, Option} from 'commander';
 
 import RepoAnalyzer from './lib/analyzer.js';
-import {jsonToMap, mapToJson, log, loadCache, saveCache, updateEnvToken} from './lib/Util.js';
+import {jsonToMap, mapToJson, log, loadCache, saveCache, updateEnvToken, setTextColor} from './lib/Util.js';
 
 import getRateLimit from './lib/checkLimit.js';
+import ThemeManager from './lib/ThemeManager.js';
 
 dotenv.config();
 
@@ -37,7 +38,11 @@ program
     )
     .addOption(
         new Option('--check-limit', 'Check GitHub API rate limit')
-    );
+    )
+    .option('-t, --theme <theme>', 'Set theme for analysis (default/dark)')
+    .option('--create-theme <theme>', '새 테마 생성 (JSON 형식)')
+    .option('--change-theme <theme>', '사용할 테마 선택 (default, dark, 또는 커스텀 테마)')
+    .option('--create-theme <json>', 'Create custom theme');
 
 program.parse(process.argv);
 const options = program.opts();
@@ -56,7 +61,7 @@ if (options.checkLimit) {
 
 const validFormats = ['text', 'table', 'chart', 'all']; // 수정: both -> all, text 추가
 if (!validFormats.includes(options.format)) {
-    console.error(`Error : Invalid format: "${options.format}"\nValid formats are: ${validFormats.join(', ')}`);
+    console.error(`에러: 유효하지 않은 형식입니다: "${options.format}"\n사용 가능한 형식: ${validFormats.join(', ')}`);
     process.exit(1);
 }
 
@@ -68,9 +73,53 @@ async function main() {
             program.help();
         }
 
+        // 테마 매니저 초기화
+        const themeManager = new ThemeManager();
+        
+        // 테마 관련 작업을 위한 비동기 대기
+        await themeManager.loadThemes();
+        
+        // 테마 생성 옵션 처리
+        if (options.createTheme) {
+            try {
+                const themeData = JSON.parse(options.createTheme);
+                if (!themeData.name || !themeData.theme) {
+                    console.error('테마 데이터 형식이 잘못되었습니다. {"name": "테마명", "theme": {...}} 형식이 필요합니다.');
+                    process.exit(1);
+                }
+                themeManager.addTheme(themeData.name, themeData.theme);
+                log(`'${themeData.name}' 테마가 성공적으로 생성되었습니다. 누락된 속성은 기본 테마에서 상속됩니다.`, 'INFO');
+            } catch (error) {
+                console.error('테마 생성 중 오류가 발생했습니다:', error.message);
+                process.exit(1);
+            }
+        }
+
+        // 테마 변경 옵션 처리
+        if (options.changeTheme) {
+            const success = themeManager.setTheme(options.changeTheme);
+            if (!success) {
+                console.error(`유효하지 않은 테마: ${options.changeTheme}`);
+                console.log(`사용 가능한 테마: ${themeManager.getAvailableThemes().join(', ')}`);
+                process.exit(1);
+            }
+        }
+        
+        // 현재 테마 로깅
+        log(`현재 테마: '${themeManager.currentTheme}'`, 'INFO');
+
         // Initialize analyzer with repo path
         const token = options.apiKey || process.env.GITHUB_TOKEN;
         const analyzer = new RepoAnalyzer(options.repo, token);
+        analyzer.themeManager = themeManager; // 테마 매니저 설정
+
+        // 기본 테마의 텍스트 색상 설정
+        const currentTheme = themeManager.getCurrentTheme();
+        if (currentTheme && currentTheme.colors) {
+            setTextColor(currentTheme.colors.text);
+        } else {
+            log('경고: 기본 테마를 불러올 수 없습니다. 기본 텍스트 색상을 사용합니다.', 'WARN');
+        }
 
         // API 토큰이 입력되었으면 .env에 저장 (이미 있지 않은 경우)
         if (options.apiKey) {
@@ -79,7 +128,7 @@ async function main() {
                 log('입력된 토큰이 유효합니다.');
                 await updateEnvToken(options.apiKey);
             } catch (error) {
-                throw new Error('입력된 토큰이 유효하지 않아 프로그램을 종료합니다, 유효한 토큰인지 확인해주세요.');
+                throw new Error('입력된 토큰이 유효하지 않아 프로그램을 종료합니다.\n\n다음 사항을 확인해주세요:\n1. 토큰이 만료되지 않았는지 확인\n2. GitHub 설정에서 토큰의 권한이 올바르게 설정되어 있는지 확인\n3. 토큰 문자열이 정확하게 복사되었는지 확인\n\n문제가 지속되면 GitHub에서 새로운 토큰을 발급받아 사용해주세요.');
             }
         }
 
@@ -107,6 +156,13 @@ async function main() {
         // -u 옵션 선택시 실행
         let realNameScore;
         if (options.userName) {
+            log('Checking user_info.json for --user-name option...');
+            try {
+                await fs.access('user_info.json', fs.constants.R_OK);
+                log('user_info.json found');
+            } catch {
+                log('user_info.json will be created during user info update');
+            }
             await analyzer.updateUserInfo(scores);
             realNameScore = await analyzer.transformUserIdToName(scores);
         }
@@ -128,7 +184,7 @@ async function main() {
             await analyzer.generateChart(realNameScore || scores || [], options.output);
         }
     } catch (error) {
-        console.error(`Error: ${error.message}`);
+        console.error(`\n⚠️ 오류가 발생했습니다 ⚠️\n\n${error.message}\n\n문제가 지속되면 GitHub 이슈를 생성하거나 관리자에게 문의해주세요.\n`);
         process.exit(1);
     }
 }
