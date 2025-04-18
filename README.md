@@ -23,7 +23,7 @@ Options:
   -f, --format <type>    Output format (text, table, chart, all) (default:
                          "all")
   -c, --use-cache        Use previously cached GitHub data
-  -u, --user-name        Display user`s real name
+  -u, --user-name        Display user's real name
   --check-limit          Check GitHub API rate limit
   -h, --help             display help for command
 
