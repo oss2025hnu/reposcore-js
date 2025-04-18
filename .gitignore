@@ -137,3 +137,5 @@ dist
 .env
 
 score_table.txt
+
+user_info.json

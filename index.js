@@ -110,6 +110,13 @@ async function main() {
         // -u 옵션 선택시 실행
         let realNameScore;
         if (options.userName) {
+            log('Checking user_info.json for --user-name option...');
+            try {
+                await fs.access('user_info.json', fs.constants.R_OK);
+                log('user_info.json found');
+            } catch {
+                log('user_info.json will be created during user info update');
+            }
             await analyzer.updateUserInfo(scores);
             realNameScore = await analyzer.transformUserIdToName(scores);
         }
