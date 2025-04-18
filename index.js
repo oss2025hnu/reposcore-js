@@ -14,9 +14,6 @@ import getRateLimit from './lib/checkLimit.js';
 
 dotenv.config();
 
-const ENV_PATH = path.join(import.meta.dirname, '.env');
-const CACHE_PATH = path.join(import.meta.dirname, 'cache.json');
-
 program
     .addOption(
         new Option('-a, --api-key <token>', 'Github Access Token (optional)')
