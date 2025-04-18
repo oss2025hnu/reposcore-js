@@ -59,7 +59,7 @@ if (options.checkLimit) {
 
 const validFormats = ['text', 'table', 'chart', 'all']; // 수정: both -> all, text 추가
 if (!validFormats.includes(options.format)) {
-    console.error(`Error : Invalid format: "${options.format}"\nValid formats are: ${validFormats.join(', ')}`);
+    console.error(`에러: 유효하지 않은 형식입니다: "${options.format}"\n사용 가능한 형식: ${validFormats.join(', ')}`);
     process.exit(1);
 }
 
@@ -82,7 +82,7 @@ async function main() {
                 log('입력된 토큰이 유효합니다.');
                 await updateEnvToken(options.apiKey);
             } catch (error) {
-                throw new Error('입력된 토큰이 유효하지 않아 프로그램을 종료합니다, 유효한 토큰인지 확인해주세요.');
+                throw new Error('입력된 토큰이 유효하지 않아 프로그램을 종료합니다.\n\n다음 사항을 확인해주세요:\n1. 토큰이 만료되지 않았는지 확인\n2. GitHub 설정에서 토큰의 권한이 올바르게 설정되어 있는지 확인\n3. 토큰 문자열이 정확하게 복사되었는지 확인\n\n문제가 지속되면 GitHub에서 새로운 토큰을 발급받아 사용해주세요.');
             }
         }
 
@@ -131,7 +131,7 @@ async function main() {
             await analyzer.generateChart(realNameScore || scores || [], options.output);
         }
     } catch (error) {
-        console.error(`Error: ${error.message}`);
+        console.error(`\n⚠️ 오류가 발생했습니다 ⚠️\n\n${error.message}\n\n문제가 지속되면 GitHub 이슈를 생성하거나 관리자에게 문의해주세요.\n`);
         process.exit(1);
     }
 }
