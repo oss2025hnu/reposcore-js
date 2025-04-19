@@ -152,13 +152,14 @@ npm run test
 ## 프로젝트 가이드라인
 [링크](docs/project_guidelines.md)
 
----
-
 ## ESM(ECMAScript Module) 전환 안내
 [링크](docs/esm_guide.md)
 
 ## 디버깅 가이드
 [링크](docs/debug_guide.md)
+
+## 테마 설정 가이드
+[링크](docs/theme_guide.md)
 
 ## 로그 레벨별 사용 방식
 프로젝트에서는 다음과 같은 로그 레벨을 제공하며, 각 상황에 맞게 적절한 레벨을 사용해야 합니다:
