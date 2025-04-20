@@ -14,18 +14,21 @@ npm install
 ```
 
 
-Usage: index [options]
+Usage: index [options] <path..>
 
 Options:
-  -a, --api-key <token>  Github Access Token (optional)
-  -r, --repo <path...>   Repository path (e.g., user/repo)
-  -o, --output <dir>     Output directory (default: "results")
-  -f, --format <type>    Output format  (choices: "text", "table", "chart",
-                         "all", default: "all")
-  -c, --use-cache        Use previously cached GitHub data
-  -u, --user-name        Display user's real name
-  --check-limit          Check GitHub API rate limit
-  -h, --help             display help for command
+  -a, --api-key <token>   Github Access Token (optional)
+  -o, --output <dir>      Output directory (default: "results")
+  -f, --format <type>     Output format  (choices: "text", "table", "chart",
+                          "all", default: "all")
+  -c, --use-cache         Use previously cached GitHub data
+  -u, --user-name         Display user's real name
+  --check-limit           Check GitHub API rate limit
+  -t, --theme <theme>     Set theme for analysis (default/dark)
+  --create-theme <theme>  새 테마 생성 (JSON 형식)
+  --change-theme <theme>  사용할 테마 선택 (default, dark, 또는 커스텀 테마)
+  --create-theme <json>   Create custom theme
+  -h, --help              display help for command
 
 
 ```
@@ -35,14 +38,14 @@ Options:
 1. 최초 실행 (API KEY 포함)
 - 처음 실행 시에는 아래와 같이 토큰을 함께 입력해야 합니다.
 ```bash
-node index.js -r oss2025hnu/reposcore-js -a ghp_ABC123ABC123
+node index.js -a ghp_ABC123ABC123 oss2025hnu/reposcore-js 
 ```
 위 명령어 실행 시 .env 파일이 자동 생성되며, 입력한 토큰이 로컬 환경에 저장됩니다.
 
 2. 이후 실행 (API KEY 생략 가능)
 - .env 파일이 생성된 이후에는 토큰 없이도 실행이 가능합니다.
 ```bash
-node index.js -r oss2025hnu/reposcore-js
+node index.js oss2025hnu/reposcore-js
 ```
 또한 `--use-cache` 옵션을 사용하면 `cache.json` 파일에 저장된 GitHub API 데이터를 불러옵니다(파일이 존재할 경우). 
 이렇게 하면 API 요청 수를 줄이고 실행 속도를 높일 수 있습니다. 
@@ -152,13 +155,14 @@ npm run test
 ## 프로젝트 가이드라인
 [링크](docs/project_guidelines.md)
 
----
-
 ## ESM(ECMAScript Module) 전환 안내
 [링크](docs/esm_guide.md)
 
 ## 디버깅 가이드
 [링크](docs/debug_guide.md)
+
+## 테마 설정 가이드
+[링크](docs/theme_guide.md)
 
 ## 로그 레벨별 사용 방식
 프로젝트에서는 다음과 같은 로그 레벨을 제공하며, 각 상황에 맞게 적절한 레벨을 사용해야 합니다:
