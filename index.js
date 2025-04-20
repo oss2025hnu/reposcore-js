@@ -19,9 +19,9 @@ program
     .addOption(
         new Option('-a, --api-key <token>', 'Github Access Token (optional)')
     )
-    .addOption(
+    /*.addOption(
         new Option('-r, --repo <path...>', 'Repository path (e.g., user/repo)')
-    )
+    )*/
     .addOption(
         new Option('-o, --output <dir>', 'Output directory')
             .default('results')
@@ -42,7 +42,8 @@ program
     .option('-t, --theme <theme>', 'Set theme for analysis (default/dark)')
     .option('--create-theme <theme>', '새 테마 생성 (JSON 형식)')
     .option('--change-theme <theme>', '사용할 테마 선택 (default, dark, 또는 커스텀 테마)')
-    .option('--create-theme <json>', 'Create custom theme');
+    .option('--create-theme <json>', 'Create custom theme')
+    .arguments('<path..>','Repository path (e.g., user/repo)');
 
 program.parse(process.argv);
 const options = program.opts();
@@ -68,7 +69,7 @@ if (!validFormats.includes(options.format)) {
 // 기존 실행 로직을 함수로 분리
 async function main() {
     try {
-        if (!options.repo) {
+        if (!program.args) {
             console.error('Error :  -r (--repo) 옵션을 필수로 사용하여야 합니다. 예) node index.js -r oss2025hnu/reposcore-js');
             program.help();
         }
@@ -110,7 +111,7 @@ async function main() {
 
         // Initialize analyzer with repo path
         const token = options.apiKey || process.env.GITHUB_TOKEN;
-        const analyzer = new RepoAnalyzer(options.repo, token);
+        const analyzer = new RepoAnalyzer(program.args, token);
         analyzer.themeManager = themeManager; // 테마 매니저 설정
 
         // 기본 테마의 텍스트 색상 설정
