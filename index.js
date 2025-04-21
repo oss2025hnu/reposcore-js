@@ -133,19 +133,14 @@ async function main() {
             }
         }
 
-        if (options.useCache) {
-            const cached = await loadCache();
-            if (cached) {
-                log("캐시 데이터를 불러왔습니다.");
-                analyzer.participants = cached; // 캐시 데이터를 그대로 할당
-            } else {
-                log("캐시 파일이 없어 데이터를 새로 수집합니다.");
-                log("Collecting data...");
-                await analyzer.collectPRsAndIssues();
-                await saveCache(analyzer.participants);
-            }
+        const shouldUseCache = options.useCache;
+        const cached = shouldUseCache ? await loadCache() : null;
+        
+        if (cached) {
+            log("캐시 데이터를 불러왔습니다.");
+            analyzer.participants = cached;
         } else {
-            log("캐시를 사용하지 않습니다. 데이터를 새로 수집합니다.");
+            log(shouldUseCache ? "캐시 파일이 없어 데이터를 새로 수집합니다." : "캐시를 사용하지 않습니다. 데이터를 새로 수집합니다.");
             log("Collecting data...");
             await analyzer.collectPRsAndIssues();
             await saveCache(analyzer.participants);
