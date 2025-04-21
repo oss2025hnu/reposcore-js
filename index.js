@@ -85,7 +85,7 @@ async function main() {
             try {
                 const themeData = JSON.parse(options.createTheme);
                 if (!themeData.name || !themeData.theme) {
-                    console.error('테마 데이터 형식이 잘못되었습니다. {"name": "테마명", "theme": {...}} 형식이 필요합니다.');
+                    console.error('테마 데이터 형식이 잘못되었습니다. {"name": "테마명", "theme": {...}} 형식이 필요합니다.', 'WARN');
                     process.exit(1);
                 }
                 themeManager.addTheme(themeData.name, themeData.theme);
@@ -101,7 +101,7 @@ async function main() {
             const success = themeManager.setTheme(options.changeTheme);
             if (!success) {
                 console.error(`유효하지 않은 테마: ${options.changeTheme}`);
-                console.log(`사용 가능한 테마: ${themeManager.getAvailableThemes().join(', ')}`);
+                console.log(`사용 가능한 테마: ${themeManager.getAvailableThemes().join(', ')}`, 'INFO');
                 process.exit(1);
             }
         }
@@ -126,7 +126,7 @@ async function main() {
         if (options.apiKey) {
             try {
                 await analyzer.validateToken();
-                log('입력된 토큰이 유효합니다.');
+                log('입력된 토큰이 유효합니다.', 'INFO');
                 await updateEnvToken(options.apiKey);
             } catch (error) {
                 throw new Error('입력된 토큰이 유효하지 않아 프로그램을 종료합니다.\n\n다음 사항을 확인해주세요:\n1. 토큰이 만료되지 않았는지 확인\n2. GitHub 설정에서 토큰의 권한이 올바르게 설정되어 있는지 확인\n3. 토큰 문자열이 정확하게 복사되었는지 확인\n\n문제가 지속되면 GitHub에서 새로운 토큰을 발급받아 사용해주세요.');
@@ -136,16 +136,16 @@ async function main() {
         if (options.useCache) {
             const cached = await loadCache();
             if (cached) {
-                log("캐시 데이터를 불러왔습니다.");
+                log("캐시 데이터를 불러왔습니다.", 'INFO');
                 analyzer.participants = cached; // 캐시 데이터를 그대로 할당
             } else {
-                log("캐시 파일이 없어 데이터를 새로 수집합니다.");
+                log("캐시 파일이 없어 데이터를 새로 수집합니다.", 'INFO');
                 log("Collecting data...");
                 await analyzer.collectPRsAndIssues();
                 await saveCache(analyzer.participants);
             }
         } else {
-            log("캐시를 사용하지 않습니다. 데이터를 새로 수집합니다.");
+            log("캐시를 사용하지 않습니다. 데이터를 새로 수집합니다.", 'INFO');
             log("Collecting data...");
             await analyzer.collectPRsAndIssues();
             await saveCache(analyzer.participants);
