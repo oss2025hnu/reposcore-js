@@ -15,6 +15,9 @@ import ThemeManager from './lib/ThemeManager.js';
 
 import { generateReportHtml } from './lib/htmlGenerator.js';
 
+import { collectContributions } from './lib/ContributionAnalyzer.js';
+import { calculateAllScores } from './lib/ContributionStats.js';
+
 dotenv.config();
 
 program
@@ -146,12 +149,14 @@ async function main() {
         } else {
             log(shouldUseCache ? "캐시 파일이 없어 데이터를 새로 수집합니다." : "캐시를 사용하지 않습니다. 데이터를 새로 수집합니다.", 'INFO');
             log("Collecting data...",);
-            await analyzer.collectPRsAndIssues();
-            await saveCache(analyzer.participants);
+            //데이터 수집
+            const contributions = await collectContributions(program.args, token);
+            analyzer.participants = contributions;
+            await saveCache(contributions);
         }
 
         // Calculate scores
-        const scores = analyzer.calculateScores();
+        const scores = calculateAllScores(contributions);
 
         // -u 옵션 선택시 실행
         let realNameScore;
