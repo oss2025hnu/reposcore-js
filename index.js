@@ -13,6 +13,8 @@ import {jsonToMap, mapToJson, log, loadCache, saveCache, updateEnvToken, setText
 import getRateLimit from './lib/checkLimit.js';
 import ThemeManager from './lib/ThemeManager.js';
 
+import { generateReportHtml } from './lib/htmlGenerator.js';
+
 dotenv.config();
 
 program
@@ -65,6 +67,7 @@ if (!validFormats.includes(options.format)) {
     console.error(`에러: 유효하지 않은 형식입니다: "${options.format}"\n사용 가능한 형식: ${validFormats.join(', ')}`);
     process.exit(1);
 }
+
 
 // 기존 실행 로직을 함수로 분리
 async function main() {
@@ -162,6 +165,14 @@ async function main() {
             }
             await analyzer.updateUserInfo(scores);
             realNameScore = await analyzer.transformUserIdToName(scores);
+        }
+
+        //csv, png, txt를 포함하여 html 생성
+        if (options.format === 'all') {
+            await analyzer.generateTable(realNameScore || scores || [], options.output);
+            await analyzer.generateCsv(realNameScore || scores || [], options.output);
+            await analyzer.generateChart(realNameScore || scores || [], options.output);
+            await generateReportHtml(program.args[0].split('/')[1], options.output); // repo 이름만 추출
         }
 
         // Calculate AverageScore
