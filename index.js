@@ -13,7 +13,7 @@ import {jsonToMap, mapToJson, log, loadCache, saveCache, updateEnvToken, setText
 import getRateLimit from './lib/checkLimit.js';
 import ThemeManager from './lib/ThemeManager.js';
 
-import { generateReportHtml } from './lib/htmlGenerator.js';
+import { generateHTML } from './lib/htmlGenerator.js';
 
 dotenv.config();
 
@@ -167,12 +167,11 @@ async function main() {
             realNameScore = await analyzer.transformUserIdToName(scores);
         }
 
-        //csv, png, txt를 포함하여 html 생성
+        // csv, png, txt를 포함하여 html 생성
         if (options.format === 'all') {
             await analyzer.generateTable(realNameScore || scores || [], options.output);
             await analyzer.generateCsv(realNameScore || scores || [], options.output);
             await analyzer.generateChart(realNameScore || scores || [], options.output);
-            await generateReportHtml(program.args[0].split('/')[1], options.output); // repo 이름만 추출
         }
 
         // Calculate AverageScore
@@ -190,6 +189,19 @@ async function main() {
         }
         if (['all', 'chart'].includes(options.format)) {
             await analyzer.generateChart(realNameScore || scores || [], options.output);
+        }
+
+        // 모든 출력 형식이 "all" 인 경우에만 HTML 리포트 생성
+        if (options.format === 'all') {
+            // HTML 생성
+            const repositories = process.argv.slice(2);
+            const resultsDir = options.output; // 또는 'results'
+            const htmlContent = await generateHTML(repositories, resultsDir);
+            const htmlFilePath = path.join(resultsDir, 'index.html');
+
+            // HTML 파일 저장
+            await fs.writeFile(htmlFilePath, htmlContent);
+            console.log(`HTML 보고서가 ${htmlFilePath}에 생성되었습니다.`);
         }
     } catch (error) {
         console.error(`\n⚠️ 오류가 발생했습니다 ⚠️\n\n${error.message}\n\n문제가 지속되면 GitHub 이슈를 생성하거나 관리자에게 문의해주세요.\n`);
