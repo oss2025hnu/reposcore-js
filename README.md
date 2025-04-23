@@ -153,7 +153,7 @@ npm run test
 
 ## [Github Token 발급 가이드](docs/token_guide.md)
 
-## [ESM(ECMAScript Module) 전환 안내]docs/esm_guide.md)
+## [ESM(ECMAScript Module) 전환 안내](docs/esm_guide.md)
 
 ## [디버깅 가이드](docs/debug_guide.md)
 
