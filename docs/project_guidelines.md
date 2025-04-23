@@ -73,3 +73,4 @@ node index.js $REPOS --format all --api-key $MYKEY
 `chmod +x run.sh` 명령으로 실행 가능하도록 한 다음
 터미널에서 `./run.sh`라고 치기만 하면 편리하다.
 
+
