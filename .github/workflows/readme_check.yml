@@ -1,22 +1,45 @@
-# name: README Sync Check
-# 
-# on: [push, pull_request]
-# 
-# jobs:
-#   check-readme:
-#     runs-on: ubuntu-latest
-# 
-#     steps:
-#       - name: Checkout repository
-#         uses: actions/checkout@v3
-# 
-#       - name: Setup Node.js
-#         uses: actions/setup-node@v3
-#         with:
-#           node-version: '18'
-# 
-#       - name: Install dependencies
-#         run: npm install
-# 
-#       - name: Run README sync check
-#         run: make check-readme
+name: Update README on Code Change
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  update-readme:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # Python 환경 설정
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'  # 원하는 Python 버전 (3.x 추천)
+
+      # 의존성 설치
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install -r requirements-dev.txt
+
+      # README.md 파일을 자동으로 생성하는 스크립트 실행
+      - name: Generate README.md
+        run: |
+          python generate_readme.py  # 예시로 Python 스크립트 사용 (실제 구현에 맞게 수정)
+
+      # 변경된 README.md 파일을 커밋하고 푸시
+      - name: Commit updated README.md
+        run: |
+          git config --global user.name "Your GitHub Username"
+          git config --global user.email "your-email@example.com"
+          git add README.md
+          git commit -m "Update README.md automatically"
+          git push origin main
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # GitHub token 사용
