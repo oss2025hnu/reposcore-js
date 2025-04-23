@@ -65,7 +65,7 @@
 ## 5. 코드나 스크립트를 변경하는 PR 요청하기 전 최소한의 테스트 실행하기
 매번 긴 명령어를 타이핑하는 게 귀찮으으므로 다음과 같은 쉘 스크립트 파일을 `run.sh`같은 이름으로 만들고
 ```bash
-MYKEY=<자신의깃헙아이디>
+MYKEY=<자신의깃헙토큰>
 REPOS="oss2025hnu/reposcore-py oss2025hnu/reposcore-js oss2025hnu/reposcore-cs"
 
 node index.js $REPOS --format all --api-key $MYKEY
