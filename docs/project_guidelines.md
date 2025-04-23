@@ -59,3 +59,17 @@
 - 문제는 **구체적으로** 명시할 것.
 - 해결 시 **기대되는 결과**와 사용 방식도 설명.
 - 가능하면 **수정할 코드 위치**도 함께 제시.
+
+---
+
+## 5. 코드나 스크립트를 변경하는 작업 후 PR 하기 전에 반드시 테스트
+매번 긴 명령어를 타이핑하는 게 귀찮으으므로 다음과 같은 쉘 스크립트 파일을 `run.sh`같은 이름으로 만들고
+```bash
+MYKEY=<자신의깃헙아이디>
+REPOS="oss2025hnu/reposcore-py oss2025hnu/reposcore-js oss2025hnu/reposcore-cs"
+
+node index.js $REPOS --format all --api-key $MYKEY
+```
+`chmod +x run.sh` 명령으로 실행 가능하도록 한 다음
+터미널에서 `./run.sh`라고 치기만 하면 편리하다.
+
