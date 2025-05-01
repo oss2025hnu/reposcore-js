@@ -42,9 +42,8 @@ program
         new Option('--check-limit', 'Check GitHub API rate limit')
     )
     .option('-t, --theme <theme>', 'Set theme for analysis (default/dark)')
-    .option('--create-theme <theme>', '새 테마 생성 (JSON 형식)')
-    .option('--change-theme <theme>', '사용할 테마 선택 (default, dark, 또는 커스텀 테마)')
-    .option('--create-theme <json>', 'Create custom theme')
+    .option('--create-theme <json>', '새 테마 생성 (JSON 형식)')
+    .option('--change-theme <name>', '사용할 테마 선택 (default, dark, 또는 커스텀 테마)')
     .arguments('<path..>','Repository path (e.g., user/repo)');
 
 program.parse(process.argv);
