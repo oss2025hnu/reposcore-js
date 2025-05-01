@@ -133,6 +133,8 @@ npm run test
 
 ## [프로젝트 가이드라인](docs/project_guidelines.md)
 
+## [포크 동기화 가이드](docs/fork_sync_guide.md)
+
 ## [Github Token 발급 가이드](docs/token_guide.md)
 
 ## [ESM(ECMAScript Module) 전환 안내](docs/esm_guide.md)
