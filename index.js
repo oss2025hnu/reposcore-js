@@ -18,6 +18,7 @@ import { generateHTML } from './lib/htmlGenerator.js';
 dotenv.config();
 
 program
+    .name('node index.js')
     .addOption(
         new Option('-a, --api-key <token>', 'Github Access Token (optional)')
     )
