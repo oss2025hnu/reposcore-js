@@ -1,0 +1,36 @@
+name: Update README
+
+on:
+  push:
+    paths:
+      - 'index.js'
+      - 'lib/**'
+      - 'Readme_Template.md'
+  workflow_dispatch:
+
+jobs:
+  generate-readme:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Generate README
+        run: make readme
+
+      - name: Commit and push if README.md changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add README.md
+          git diff --staged --quiet || git commit -m "ci: auto-update README.md"
+          git push
