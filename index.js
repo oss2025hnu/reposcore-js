@@ -186,12 +186,6 @@ async function main() {
 
             return;
         }
-        // csv, png, txt를 포함하여 html 생성
-        if (options.format === 'all') {
-            await analyzer.generateTable(realNameScore || scores || [], options.output);
-            await analyzer.generateCsv(realNameScore || scores || [], options.output);
-            await analyzer.generateChart(realNameScore || scores || [], options.output);
-        }
 
         // Calculate AverageScore
         analyzer.calculateAverageScore(scores);
