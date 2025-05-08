@@ -14,26 +14,25 @@ npm install
 ```
 
 
-Usage: index [options] <path..>
+Usage: node index.js [options] <path..>
 
 Options:
-  -a, --api-key <token>   Github Access Token (optional)
-  -o, --output <dir>      Output directory (default: "results")
-  -f, --format <type>     Output format  (choices: "text", "table", "chart",
-                          "all", default: "all")
-  -c, --use-cache         Use previously cached GitHub data
-  -u, --user-name         Display user's real name
-  --check-limit           Check GitHub API rate limit
-  -t, --theme <theme>     Set theme for analysis (default/dark)
-  --create-theme <theme>  새 테마 생성 (JSON 형식)
-  --change-theme <theme>  사용할 테마 선택 (default, dark, 또는 커스텀 테마)
-  --create-theme <json>   Create custom theme
-  -h, --help              display help for command
+  -a, --api-key <token>  Github Access Token (optional)
+  -o, --output <dir>     Output directory (default: "results")
+  -f, --format <type>    Output format  (choices: "text", "table", "chart",
+                         "all", default: "all")
+  -c, --use-cache        Use previously cached GitHub data
+  -u, --user-name        Display user's real name
+  --check-limit          Check GitHub API rate limit
+  -t, --theme <theme>    Set theme for analysis (default/dark)
+  --create-theme <json>  새 테마 생성 (JSON 형식)
+  --change-theme <name>  사용할 테마 선택 (default, dark, 또는 커스텀 테마)
+  -h, --help             display help for command
 
 
 ```
 
-## 토큰 실행 방법
+## 토큰 실행 및 기여도 점수 확인 방법
 
 1. 최초 실행 (API KEY 포함)
 - 처음 실행 시에는 아래와 같이 토큰을 함께 입력해야 합니다.
@@ -50,6 +49,20 @@ node index.js oss2025hnu/reposcore-js
 또한 `--use-cache` 옵션을 사용하면 `cache.json` 파일에 저장된 GitHub API 데이터를 불러옵니다(파일이 존재할 경우). 
 이렇게 하면 API 요청 수를 줄이고 실행 속도를 높일 수 있습니다. 
 만약 캐시 파일이 없거나 손상된 경우, 새로운 데이터를 자동으로 가져옵니다.
+
+3. 기여도 점수 확인
+- 저장소 하나의 기여도 점수를 확인하려면 바로 위 2번 항목의 예시 명령어처럼 한 개의 저장소 링크만 인자로 사용합니다.
+- 모든 저장소의 통합 기여도 점수를 확인하려면 모든 저장소 링크를 인자로 사용합니다.
+```bash
+node index.js oss2025hnu/reposcore-js oss2025hnu/reposcore-py oss2025hnu/reposcore-cs
+```
+저장소 분석 명령어를 실행하면 자동으로 결과물이 생성되며, 결과물은 results/ 폴더에서 확인할 수 있습니다. 생성되는 결과물은 아래와 같습니다.
+- index.html : 통합 리포트인 html 형식 웹 파일
+- table.csv : 기여도 점수의 csv 파일
+- table.txt : 기여도 점수의 txt 형식 텍스트 표 파일
+- table.png : 기여도 점수의 png 형식 사진 파일
+- total.* : 각 저장소 기여도 점수 파일을 같은 형식끼리 모두 통합한 파일
+통합 리포트나 png 파일을 확인하면 가장 손쉽게 결과를 확인할 수 있습니다.
 
 ##  clean 사용 방법
 
@@ -150,6 +163,8 @@ npm run test
 ```
 
 ## [프로젝트 가이드라인](docs/project_guidelines.md)
+
+## [포크 동기화 가이드](docs/fork_sync_guide.md)
 
 ## [Github Token 발급 가이드](docs/token_guide.md)
 
