@@ -14,21 +14,21 @@ npm install
 ```
 
 
-Usage: node index.js [options] <path..>
+Usage: node index.js [옵션] <저장소 경로..>
 
 Options:
-  -a, --api-key <token>  Github Access Token (optional)
-  -o, --output <dir>     Output directory (default: "results")
-  -f, --format <type>    Output format  (choices: "text", "table", "chart",
-                         "all", default: "all")
-  -c, --use-cache        Use previously cached GitHub data
-  -u, --user-name        Display user's real name
-  --check-limit          Check GitHub API rate limit
-  -t, --theme <theme>    Set theme for analysis (default/dark)
+  -a, --api-key <token>  GitHub 액세스 토큰 (선택)
+  -o, --output <dir>     결과 저장 폴더 (default: "results")
+  -f, --format <type>    출력 형식 (choices: "text", "table", "chart", "all",
+                         default: "all")
+  -c, --use-cache        저장된 GitHub 데이터 사용
+  -u, --user-name        사용자 실명 표시
+  --check-limit          GitHub API 사용량 확인
+  -t, --theme <theme>    분석 테마 설정 (default/dark)
   --create-theme <json>  새 테마 생성 (JSON 형식)
-  --change-theme <name>  사용할 테마 선택 (default, dark, 또는 커스텀 테마)
-  --user <username>      특정 사용자 점수만 출력
-  -h, --help             display help for command
+  --change-theme <name>  사용할 테마 선택 (default, dark, 또는 사용자 정의)
+  --user <username>      해당 사용자 결과만 표시
+  -h, --help             도움말 보기
 
 
 ```
