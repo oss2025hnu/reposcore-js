@@ -28,6 +28,7 @@ Options:
   --create-theme <theme>  새 테마 생성 (JSON 형식)
   --change-theme <theme>  사용할 테마 선택 (default, dark, 또는 커스텀 테마)
   --create-theme <json>   Create custom theme
+  --user <username>       특정 사용자 점수만 출력
   -h, --help              display help for command
 
 
