@@ -45,6 +45,7 @@ program
     .option('--create-theme <theme>', '새 테마 생성 (JSON 형식)')
     .option('--change-theme <theme>', '사용할 테마 선택 (default, dark, 또는 커스텀 테마)')
     .option('--create-theme <json>', 'Create custom theme')
+    .option('--user <username>', '특정 사용자 점수만 출력')
     .arguments('<path..>','Repository path (e.g., user/repo)');
 
 program.parse(process.argv);
@@ -167,6 +168,24 @@ async function main() {
             realNameScore = await analyzer.transformUserIdToName(scores);
         }
 
+        const scoresMap = analyzer.calculateScores();
+
+        if (options.user) {
+            const scores = Array.from(scoresMap.values())[0];
+
+            const target = scores.find(
+                (s) => s[0]?.toLowerCase() === options.user.toLowerCase()
+            );
+
+            if (!target) {
+                console.log(`사용자 "${options.user}"를 찾을 수 없습니다.`);
+            } else {
+                console.log(`\n [${target[0]}] 점수 출력`);
+                console.log(`- Score: ${target[6]}`);
+            }
+
+            return;
+        }
         // csv, png, txt를 포함하여 html 생성
         if (options.format === 'all') {
             await analyzer.generateTable(realNameScore || scores || [], options.output);
