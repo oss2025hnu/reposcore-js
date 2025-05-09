@@ -19,34 +19,33 @@ dotenv.config();
 
 program
     .name('node index.js')
+    .usage('[옵션] <저장소 경로..>')
+    .helpOption('-h, --help', '도움말 보기')
     .addOption(
-        new Option('-a, --api-key <token>', 'Github Access Token (optional)')
+        new Option('-a, --api-key <token>', 'GitHub 액세스 토큰 (선택)')
     )
-    /*.addOption(
-        new Option('-r, --repo <path...>', 'Repository path (e.g., user/repo)')
-    )*/
     .addOption(
-        new Option('-o, --output <dir>', 'Output directory')
+        new Option('-o, --output <dir>', '결과 저장 폴더')
             .default('results')
     )
-    .addOption(new Option('-f, --format <type>', 'Output format ')
+    .addOption(new Option('-f, --format <type>', '출력 형식')
         .choices(['text', 'table', 'chart', 'all'])
         .default('all')
     )
     .addOption(
-        new Option('-c, --use-cache', 'Use previously cached GitHub data')
+        new Option('-c, --use-cache', '저장된 GitHub 데이터 사용')
     )
     .addOption(
-        new Option('-u, --user-name', 'Display user\'s real name')
+        new Option('-u, --user-name', '사용자 실명 표시')
     )
     .addOption(
-        new Option('--check-limit', 'Check GitHub API rate limit')
+        new Option('--check-limit', 'GitHub API 사용량 확인')
     )
-    .option('-t, --theme <theme>', 'Set theme for analysis (default/dark)')
+    .option('-t, --theme <theme>', '분석 테마 설정 (default/dark)')
     .option('--create-theme <json>', '새 테마 생성 (JSON 형식)')
-    .option('--change-theme <name>', '사용할 테마 선택 (default, dark, 또는 커스텀 테마)')
-    .option('--user <username>', '특정 사용자 점수만 출력')
-    .arguments('<path..>','Repository path (e.g., user/repo)');
+    .option('--change-theme <name>', '사용할 테마 선택 (default, dark, 또는 사용자 정의)')
+    .option('--user <username>', '해당 사용자 결과만 표시')
+    .arguments('<path..>', '저장소 경로 (예: user/repo)');
 
 program.parse(process.argv);
 const options = program.opts();
