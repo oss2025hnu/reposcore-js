@@ -47,6 +47,9 @@ node index.js oss2025hnu/reposcore-js oss2025hnu/reposcore-py oss2025hnu/reposco
 - total.* : 각 저장소 기여도 점수 파일을 같은 형식끼리 모두 통합한 파일
 통합 리포트나 png 파일을 확인하면 가장 손쉽게 결과를 확인할 수 있습니다.
 
+4. 기여도 점수 등수 표기
+사용자 등수는 공동 순위 방식을 사용합니다. 이는 동일한 점수의 사용자는 모두 같은 등수로 처리되며, 이후 순위는 해당 인원 수만큼 건너 뜀을 의미합니다.
+
 ##  clean 사용 방법
 
 PR전 결과물 - lock.json, result.png.. 등 temp파일들을 삭제하는 코드입니다. 필수적으로 실행 후 PR하시길 바랍니다.
