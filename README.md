@@ -9,8 +9,7 @@ npm install
 ## Usage
 아래는 `node index.js -h` 또는 `node index.js --help` 실행 결과를 붙여넣은 것이므로
 명령줄 관련 코드가 변경되면 아래 내용도 그에 맞게 수정해야 함.
-
-만약 명령줄 코드가 변경될 경우, node lib/GenerateReadme.js를 통해 Readme.md파일을 최신화 할 것.
+만약 명령줄 코드가 변경될 경우, node lib/GenerateReadme.js를 통헤 Readme.md파일을 최신화 할 것.
 
 ```
 
