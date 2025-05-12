@@ -138,6 +138,8 @@ Test
 ```bash
 npm run test
 ```
+## 결과 리포트(index.html) 확인 가이드
+ [HTML 리포트 보기](docs/view_results_guide.md)
 
 ## token 생성하는법
 [링크](docs/token_guide.md)
