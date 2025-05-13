@@ -181,3 +181,5 @@ npm run test
 ## [테마 설정 가이드](docs/theme_guide.md)
 
 ## [로그 레벨별 사용 방식](docs/logging_guide.md)
+
+## [Cherry Pick 사용 방법](docs/cherry-pick_guide.md)
