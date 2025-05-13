@@ -4,37 +4,37 @@ GitHub API 제한을 피하고 private 저장소에 접근하려면 **Personal A
 
 ## 1. GitHub에 로그인 후 우측 상단 프로필 클릭 
 
-![step1](./img/token_guide/token_step1_profile.jpg)
+![step1](./img/1.jpg)
 
 ---
 
 ## 2. `Settings` 선택
 
-![step2](./img/token_guide/token_step2_setting.jpg)
+![step2](./img/2.jpg)
 
 ---
 
 ## 3. 좌측 사이드바에서 `Developer settings` 선택
 
-![step3](./img/token_guide/token_step3_Developer.jpg)
+![step3](./img/3.jpg)
 
 ---
 
 ## 4.  `Personal access tokens` → `Fine-grained tokens` 클릭 -> 기존 토큰 확인 또는 `Generate new token` 클릭
 
-![step4](./img/token_guide/token_step4_fine_grained.jpg)
+![step4](./img/4.jpg)
 
 ---
 
 ## 5. 토큰 이름과 만료일을 설정하고 `Generate token`을 눌러 생성
 
-![step5](./img/token_guide/token_step5_token_create.jpg)
+![step5](./img/5.jpg)
 
 ---
 
 ## 6. ⚠️ 주의:** 토큰은 **한 번만** 보여지므로 반드시 안전한 곳에 복사해두세요.
 
-![step6](./img/token_guide/token_step6_token_access.jpg)
+![step6](./img/6.jpg)
 
 
 ---
