@@ -6,7 +6,7 @@
 ---
 1. GitHub에서 업스트림 저장소 (원본 저장소)와 포크된 저장소(내 저장소)로 페이지로 이동.
 2. 파일 목록 상단에서 sync fork 선택.
-![alt text](img/image.png)
+![alt text](./img/fork_sync_guide/fork_sync_button.png)
 3. 업스트림 저장소의 커밋에 대한 세부 정보 검토 후, 브랜치 업데이트를 클릭.
 
 
