@@ -19,8 +19,8 @@ Usage: node index.js [옵션] <저장소 경로..>
 Options:
   -a, --api-key <token>  GitHub 액세스 토큰 (선택)
   -o, --output <dir>     결과 저장 폴더 (default: "results")
-  -f, --format <type>    출력 형식 (choices: "text", "table", "chart", "all",
-                         default: "all")
+  -f, --format <type>    출력 형식 (choices: "text", "table", "chart", "html",
+                         "all", default: "all")
   -c, --use-cache        저장된 GitHub 데이터 사용
   -u, --user-name        사용자 실명 표시
   --check-limit          GitHub API 사용량 확인
