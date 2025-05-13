@@ -147,6 +147,8 @@ Test
 ```bash
 npm run test
 ```
+## 결과 리포트(index.html) 확인 가이드
+ [HTML 리포트 보기](docs/view_results_guide.md)
 
 ## [프로젝트 가이드라인](docs/project_guidelines.md)
 
