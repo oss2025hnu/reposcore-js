@@ -29,7 +29,7 @@ program
             .default('results')
     )
     .addOption(new Option('-f, --format <type>', '출력 형식')
-        .choices(['text', 'table', 'chart', 'all'])
+        .choices(['text', 'table', 'chart', 'html','all'])
         .default('all')
     )
     .addOption(
@@ -62,7 +62,7 @@ if (options.checkLimit) {
 }
 
 
-const validFormats = ['text', 'table', 'chart', 'all']; // 수정: both -> all, text 추가
+const validFormats = ['text', 'table', 'chart', 'html', 'all']; // 수정: both -> all, text 추가
 if (!validFormats.includes(options.format)) {
     console.error(`에러: 유효하지 않은 형식입니다: "${options.format}"\n사용 가능한 형식: ${validFormats.join(', ')}`);
     process.exit(1);
@@ -191,7 +191,18 @@ async function main() {
 
         // 디렉토리 생성
         await fs.mkdir(options.output, {recursive: true});
-
+        
+        // format이 html인 경우: 오직 HTML만 생성하고 종료
+        if (options.format === 'html') {
+        const repositories = program.args;
+        const resultsDir = options.output;
+        const htmlContent = await generateHTML(repositories, resultsDir);
+        const htmlFilePath = path.join(resultsDir, 'index.html');
+        await fs.writeFile(htmlFilePath, htmlContent);
+        console.log(`HTML 보고서가 ${htmlFilePath}에 생성되었습니다.`);
+        return;
+        }
+        
         // Generate outputs based on format
         if (['all', 'text'].includes(options.format)) {
             await analyzer.generateTable(realNameScore || scores || [], options.output);
