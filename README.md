@@ -32,6 +32,7 @@ Options:
   -t, --theme <theme>    분석 테마 설정 (default/dark)
   --create-theme <json>  새 테마 생성 (JSON 형식)
   --change-theme <name>  사용할 테마 선택 (default, dark, 또는 사용자 정의)
+  --threshold <score>    특정 점수 이상인 참여자만 출력
   --user <username>      해당 사용자 결과만 표시
   --colored-output       색상이 포함된 텍스트 파일 출력
   -h, --help             도움말 보기
