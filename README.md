@@ -165,6 +165,7 @@ Test
 ```bash
 npm run test
 ```
+## [결과 리포트(index.html) 확인 가이드](docs/view_results_guide.md)
 
 ## [프로젝트 가이드라인](docs/project_guidelines.md)
 
@@ -179,3 +180,5 @@ npm run test
 ## [테마 설정 가이드](docs/theme_guide.md)
 
 ## [로그 레벨별 사용 방식](docs/logging_guide.md)
+
+## [Cherry Pick 사용 방법](docs/cherry-pick_guide.md)
