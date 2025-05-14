@@ -45,7 +45,8 @@ program
     .option('--create-theme <json>', '새 테마 생성 (JSON 형식)')
     .option('--change-theme <name>', '사용할 테마 선택 (default, dark, 또는 사용자 정의)')
     .option('--user <username>', '해당 사용자 결과만 표시')
-    .arguments('<path..>', '저장소 경로 (예: user/repo)');
+    .arguments('<path..>', '저장소 경로 (예: user/repo)')
+    .option('--colored-output', '색상이 포함된 텍스트 파일 출력');
 
 program.parse(process.argv);
 const options = program.opts();
@@ -194,7 +195,7 @@ async function main() {
 
         // Generate outputs based on format
         if (['all', 'text'].includes(options.format)) {
-            await analyzer.generateTable(realNameScore || scores || [], options.output);
+            await analyzer.generateTable(realNameScore || scores || [], options.output, options);
         }
         if (['all', 'table'].includes(options.format)) {
             await analyzer.generateCsv(realNameScore || scores || [], options.output);
