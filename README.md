@@ -28,6 +28,7 @@ Options:
   --create-theme <json>  새 테마 생성 (JSON 형식)
   --change-theme <name>  사용할 테마 선택 (default, dark, 또는 사용자 정의)
   --user <username>      해당 사용자 결과만 표시
+  --colored-output       하위 70% 참여자의 이름에 색상 적용 (터미널 가독성용)
   -h, --help             도움말 보기
 
 
