@@ -2,7 +2,8 @@
   "customizations": {
     "vscode": {
       "extensions": [
-        "mechatroner.rainbow-csv"
+        "mechatroner.rainbow-csv",
+        "ritwickdey.LiveServer"
       ]
     }
   }
