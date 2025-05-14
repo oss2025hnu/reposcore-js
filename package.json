@@ -17,12 +17,14 @@
         "test": "jest",
         "lint": "eslint .",
         "readme": "make readme",
-        "report": "http-server results -p 3000 -o report.html"
+        "report": "http-server results -p 3000 -o report.html",
+        "lint:jslint": "jslint index.js lib/**/*.js"
     },
     "devDependencies": {
         "dotenv": "^16.5.0",
         "eslint": "^9.24.0",
         "jest": "^29.7.0",
-        "mock-fs": "^5.5.0"
+        "mock-fs": "^5.5.0",
+        "jslint": "^0.12.1"
     }
 }
