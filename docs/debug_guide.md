@@ -214,6 +214,6 @@ DEBUG_LEVEL=debug node index.js -r oss2025hnu/reposcore-js --use-cache
 ---
 
 ### 참고자료
-- [📘디버깅 가이드](https://github.com/codingforeveryone/zero-to-hero)
+- [📘JavaScript 디버깅 가이드](https://github.com/codingforeveryone/zero-to-hero/blob/master/My-Guide-to-Debugging-JS.md)
 
 ---
