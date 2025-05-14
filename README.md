@@ -82,7 +82,12 @@ ESLint 설정이 적용되어 있습니다. 다음 명령어로 검사할 수 �
 ```bash
 npm run lint
 ```
-
+## --check-limit
+--check-limit는 자신의 GitHub API한도를 알 수 있는 명령어입니다. 터미널(콘솔)에 자신의 남은 API 요청 수,전체 한도,리셋 시간이 출력됩니다.
+터미널에서 사용 할 떄ex) node 파일이름 --check-limit
+```bash
+npm run check-limit
+```
 ## Score Formula
 아래는 PR 개수와 이슈 개수의 비율에 따라 점수로 인정가능한 최대 개수를 구하고 각 배점에 따라 최종 점수를 산출하는 공식이다.
 
