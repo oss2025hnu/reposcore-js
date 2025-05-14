@@ -171,7 +171,7 @@ async function main() {
 
         const scoresMap = analyzer.calculateScores();
 
-        let filteredScores = realNameScore || scoresMap;
+        let filteredScores = scoresMap;
 
         if (options.threshold !== undefined) {
             filteredScores = Array.from(filteredScores).map(([repo, scoreList]) => {
@@ -181,21 +181,23 @@ async function main() {
         }
 
         if (options.user) {
-            const scores = Array.from(scoresMap.values())[0];
-
-            const target = scores.find(
-                (s) => s[0]?.toLowerCase() === options.user.toLowerCase()
-            );
-
-            if (!target) {
-                console.log(`사용자 "${options.user}"를 찾을 수 없습니다.`);
-            } else {
-                console.log(`\n [${target[0]}] 점수 출력`);
-                console.log(`- Score: ${target[6]}`);
-            }
-
-            return;
+        
+        const allScores = Array.from(scoresMap.values()).flat();
+    
+        const target = allScores.find(
+            (s) => s[0]?.toLowerCase() === options.user.toLowerCase()
+        );
+    
+        if (!target) {
+            console.log(`사용자 "${options.user}"를 찾을 수 없습니다.`);
+        } else {
+            console.log(`\n[${target[0]}] 점수 출력`);
+            console.log(`- Score: ${target[6]}`);
         }
+    
+        return;
+    }
+
 
         // Calculate AverageScore
         analyzer.calculateAverageScore(scores);
