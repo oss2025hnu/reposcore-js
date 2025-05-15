@@ -180,24 +180,68 @@ async function main() {
             }).filter(([_, list]) => list.length > 0); 
         }
 
-        if (options.user) {
-        
-        const allScores = Array.from(scoresMap.values()).flat();
-    
-        const target = allScores.find(
-            (s) => s[0]?.toLowerCase() === options.user.toLowerCase()
-        );
-    
-        if (!target) {
-            console.log(`사용자 "${options.user}"를 찾을 수 없습니다.`);
-        } else {
-            console.log(`\n[${target[0]}] 점수 출력`);
-            console.log(`- Score: ${target[6]}`);
-        }
-    
-        return;
-    }
+       if (options.user) {
+            const allScoresRaw = Array.from(scoresMap.entries()); // [repoName, [[user1], ...]]
+            const userScores = new Map(); // username → { total: number, perRepo: Map }
 
+            for (const [repoName, users] of allScoresRaw) {
+                // 'total' 저장소는 합산에서 제외
+                if (repoName.toLowerCase() === 'total') continue;
+
+                for (const score of users) {
+                    const username = score[0]?.toLowerCase();
+                    const repoScore = score[6];
+                    if (!username) continue;
+
+                    if (!userScores.has(username)) {
+                        userScores.set(username, { total: 0, perRepo: new Map() });
+                    }
+
+                    const entry = userScores.get(username);
+                    entry.total += repoScore;
+                    const repoKey = repoName.replace("oss2025hnu_", ""); // 깔끔하게
+                    entry.perRepo.set(repoKey, repoScore);
+                }
+            }
+
+            // 'total' 점수는 따로 perRepo에만 표시
+            const totalRepo = allScoresRaw.find(([name]) => name.toLowerCase() === 'total');
+            if (totalRepo) {
+                for (const score of totalRepo[1]) {
+                    const username = score[0]?.toLowerCase();
+                    const totalScore = score[6];
+                    if (!username || !userScores.has(username)) continue;
+
+                    userScores.get(username).perRepo.set('total', totalScore);
+                }
+            }
+
+            const targetKey = options.user.toLowerCase();
+            const targetData = userScores.get(targetKey);
+            if (!targetData) {
+                console.log(`사용자 "${options.user}"를 찾을 수 없습니다.`);
+                return;
+            }
+
+            const sorted = Array.from(userScores.entries())
+                .sort((a, b) => b[1].total - a[1].total);
+            const rank = sorted.findIndex(([name]) => name === targetKey) + 1;
+            const totalUsers = sorted.length;
+
+            // 출력
+            console.log(`\n[${options.user}] 기여 정보`);
+            console.log(`- total: ${targetData.perRepo.get('total') ?? targetData.total}`);
+            console.log(`- 등수: ${rank}등 (전체 ${totalUsers}명 중)\n`);
+            console.log(`저장소별 점수:`);
+
+            for (const [repo, score] of targetData.perRepo.entries()) {
+                if (repo === 'total') continue; // total은 위에서 출력했으므로 생략
+                console.log(`- ${repo}: ${score}`);
+            }
+
+            return;
+        }
+        
 
         // Calculate AverageScore
         analyzer.calculateAverageScore(scores);
