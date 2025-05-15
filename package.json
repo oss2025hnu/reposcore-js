@@ -18,7 +18,7 @@
         "lint": "eslint .",
         "readme": "make readme",
         "report": "http-server results -p 3000 -o report.html",
-        "lint:jslint": "jslint index.js lib/**/*.js"
+        "lint:jslint": "jslint --edition=es6 index.js lib/**/*.js"
     },
     "devDependencies": {
         "dotenv": "^16.5.0",
