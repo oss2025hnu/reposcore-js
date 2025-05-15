@@ -32,6 +32,7 @@ Options:
   -t, --theme <theme>    분석 테마 설정 (default/dark)
   --create-theme <json>  새 테마 생성 (JSON 형식)
   --change-theme <name>  사용할 테마 선택 (default, dark, 또는 사용자 정의)
+  --threshold <score>    특정 점수 이상인 참여자만 출력
   --user <username>      해당 사용자 결과만 표시
   --colored-output       색상이 포함된 텍스트 파일 출력
   -h, --help             도움말 보기
@@ -78,6 +79,13 @@ ESLint 설정이 적용되어 있습니다. 다음 명령어로 검사할 수 �
 ```bash
 npm run lint
 ```
+
+JSLint 설정이 적용되어 있습니다. 다음 명령어로 검사할 수 있습니다:
+
+```bash
+npm run lint:jslint
+```
+
 ## --check-limit
 --check-limit는 자신의 GitHub API한도를 알 수 있는 명령어입니다. 터미널(콘솔)에 자신의 남은 API 요청 수,전체 한도,리셋 시간이 출력됩니다.
 터미널에서 사용 할 떄ex) node 파일이름 --check-limit

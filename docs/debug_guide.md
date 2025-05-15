@@ -210,3 +210,10 @@ DEBUG_LEVEL=debug node index.js -r oss2025hnu/reposcore-js --use-cache
   - 오래된 `cache.json`은 오류 원인. 정기적으로 삭제.
 - **의존성**:
   - `npm install` 후 `package-lock.json` 커밋 금지.
+
+---
+
+### 참고자료
+- [📘JavaScript 디버깅 가이드](https://github.com/codingforeveryone/zero-to-hero/blob/master/My-Guide-to-Debugging-JS.md)
+
+---

@@ -44,6 +44,7 @@ program
     .option('-t, --theme <theme>', '분석 테마 설정 (default/dark)')
     .option('--create-theme <json>', '새 테마 생성 (JSON 형식)')
     .option('--change-theme <name>', '사용할 테마 선택 (default, dark, 또는 사용자 정의)')
+    .option('--threshold <score>', '특정 점수 이상인 참여자만 출력', parseInt)
     .option('--user <username>', '해당 사용자 결과만 표시')
     .arguments('<path..>', '저장소 경로 (예: user/repo)')
     .option('--colored-output', '색상이 포함된 텍스트 파일 출력');
@@ -170,22 +171,33 @@ async function main() {
 
         const scoresMap = analyzer.calculateScores();
 
-        if (options.user) {
-            const scores = Array.from(scoresMap.values())[0];
+        let filteredScores = scoresMap;
 
-            const target = scores.find(
-                (s) => s[0]?.toLowerCase() === options.user.toLowerCase()
-            );
-
-            if (!target) {
-                console.log(`사용자 "${options.user}"를 찾을 수 없습니다.`);
-            } else {
-                console.log(`\n [${target[0]}] 점수 출력`);
-                console.log(`- Score: ${target[6]}`);
-            }
-
-            return;
+        if (options.threshold !== undefined) {
+            filteredScores = Array.from(filteredScores).map(([repo, scoreList]) => {
+                const filteredList = scoreList.filter(entry => entry[6] >= options.threshold);
+                return [repo, filteredList];
+            }).filter(([_, list]) => list.length > 0); 
         }
+
+        if (options.user) {
+        
+        const allScores = Array.from(scoresMap.values()).flat();
+    
+        const target = allScores.find(
+            (s) => s[0]?.toLowerCase() === options.user.toLowerCase()
+        );
+    
+        if (!target) {
+            console.log(`사용자 "${options.user}"를 찾을 수 없습니다.`);
+        } else {
+            console.log(`\n[${target[0]}] 점수 출력`);
+            console.log(`- Score: ${target[6]}`);
+        }
+    
+        return;
+    }
+
 
         // Calculate AverageScore
         analyzer.calculateAverageScore(scores);
@@ -195,14 +207,15 @@ async function main() {
 
         // Generate outputs based on format
         if (['all', 'text'].includes(options.format)) {
-            await analyzer.generateTable(realNameScore || scores || [], options.output, options);
+            await analyzer.generateTable(filteredScores, options.output, options);
         }
         if (['all', 'table'].includes(options.format)) {
-            await analyzer.generateCsv(realNameScore || scores || [], options.output);
+            await analyzer.generateCsv(filteredScores, options.output);
         }
         if (['all', 'chart'].includes(options.format)) {
-            await analyzer.generateChart(realNameScore || scores || [], options.output);
+            await analyzer.generateChart(filteredScores, options.output);
         }
+
 
         // 모든 출력 형식이 "all" 인 경우에만 HTML 리포트 생성
         if (options.format === 'all') {
