@@ -87,19 +87,11 @@ npm run lint:jslint
 ```
 
 ## --check-limit
---check-limit는 자신의 GitHub API한도를 알 수 있는 명령어입니다. 터미널(콘솔)에 자신의 남은 API 요청 수,전체 한도,리셋 시간이 출력됩니다.
+`--check-limit`은 자신의 GitHub API한도를 알 수 있는 명령어입니다. 터미널(콘솔)에 자신의 남은 API 요청 수,전체 한도,리셋 시간이 출력됩니다.
 
-터미널에서 사용 할 때 ex) node 파일이름 --check-limit
+터미널에서 사용 할 때 : `node index.js --check-limit` (항상 동작하는 명령어)
 
-**단**, script 내에 `"check-limit"`이 구현되어야 사용 가능합니다.
 
-```bash
-{
-  "scripts": {
-    "check-limit": "node index.js --check-limit"
-  }
-}
-```
 
 
 ## Score Formula
