@@ -3,6 +3,7 @@
     "vscode": {
       "extensions": [
         "mechatroner.rainbow-csv",
+        "dbaeumer.vscode-eslint",
         "ritwickdey.LiveServer"
       ]
     }
