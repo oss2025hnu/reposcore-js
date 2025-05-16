@@ -71,7 +71,11 @@ npm run lint:jslint
 
 터미널에서 사용 할 때 : `node index.js --check-limit` (항상 동작하는 명령어)
 
+## index.js 설명
 
+`index.js`는 `reposcore-js` 저장소의 메인 실행 파일로, CLI 명령어를 처리하고 전체 분석 과정을 총괄하고 있습니다.
+
+`reposcore-js` 저장소에서 명령어 실행 시 가장 먼저 실행되는 파일입니다.
 
 
 ## Score Formula
