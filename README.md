@@ -171,6 +171,8 @@ npm run test
 ```
 ## 📚 가이드 문서 모음
 
+### [Github API 가이드](docs/github-api-guide.md)
+
 ### [결과 리포트(index.html) 확인 가이드](docs/view_results_guide.md)
 
 ### [프로젝트 가이드라인](docs/project_guidelines.md)
