@@ -27,14 +27,14 @@ git cherry-pick {시작 커밋 ID}^..{종료 커밋 ID}
 ```bash
 git cherry-pick -m 1 {머지할 커밋 ID}
 ```
--m 1 옵션은 병합 커밋의 어느 부모를 기준으로 삼을지 의미
+- -m 1 옵션은 병합 커밋의 어느 부모를 기준으로 삼을지 의미
 일반적으로 '1'은 기본 브랜치(main 등) 의미
----
-### GUI를 사용하여 cherry-pick 사용하기
+
+## GUI를 사용하여 cherry-pick 사용하기
 [커밋 cherry-pick 깃허브 공식 문서 참고](https://docs.github.com/ko/enterprise-cloud@latest/desktop/managing-commits/cherry-picking-a-commit-in-github-desktop)
 
 
-## cherry-Pick 시 충돌 해결법
+## cherry-Pick 사용 중 충돌 해결법
 다 브랜치로부터 특정 커밋을 복사해올 때 현재 브랜치와의 코드버전이 맞지 않아 충돌이 일어나는 경우가 있음
 1. 충돌 난 코드 수정
 2. 충돌 해결된 파일을 staging
