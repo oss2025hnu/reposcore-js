@@ -35,6 +35,7 @@ Options:
   --threshold <score>    특정 점수 이상인 참여자만 출력
   --user <username>      해당 사용자 결과만 표시
   --colored-output       색상이 포함된 텍스트 파일 출력
+  --serve                로컬 서버에서 HTML 보고서를 실행합니다.
   -h, --help             도움말 보기
 
 
