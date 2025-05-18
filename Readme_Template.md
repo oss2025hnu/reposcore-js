@@ -67,11 +67,17 @@ npm run lint:jslint
 ```
 
 ## --check-limit
---check-limit는 자신의 GitHub API한도를 알 수 있는 명령어입니다. 터미널(콘솔)에 자신의 남은 API 요청 수,전체 한도,리셋 시간이 출력됩니다.
-터미널에서 사용 할 떄ex) node 파일이름 --check-limit
-```bash
-npm run check-limit
-```
+`--check-limit`은 자신의 GitHub API한도를 알 수 있는 명령어입니다. 터미널(콘솔)에 자신의 남은 API 요청 수,전체 한도,리셋 시간이 출력됩니다.
+
+터미널에서 사용 할 때 : `node index.js --check-limit` (항상 동작하는 명령어)
+
+## index.js 설명
+
+`index.js`는 `reposcore-js` 저장소의 메인 실행 파일로, CLI 명령어를 처리하고 전체 분석 과정을 총괄하고 있습니다.
+
+`reposcore-js` 저장소에서 명령어 실행 시 가장 먼저 실행되는 파일입니다.
+
+
 ## Score Formula
 아래는 PR 개수와 이슈 개수의 비율에 따라 점수로 인정가능한 최대 개수를 구하고 각 배점에 따라 최종 점수를 산출하는 공식이다.
 
