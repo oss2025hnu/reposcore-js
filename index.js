@@ -7,6 +7,9 @@ import {fileURLToPath} from 'url';
 import dotenv from 'dotenv';
 import {program, Option} from 'commander';
 
+import { createRequire } from 'module';
+const require = createRequire(import.meta.url);
+
 import RepoAnalyzer from './lib/analyzer.js';
 import {jsonToMap, mapToJson, log, loadCache, saveCache, updateEnvToken, setTextColor} from './lib/Util.js';
 
@@ -47,7 +50,8 @@ program
     .option('--threshold <score>', '특정 점수 이상인 참여자만 출력', parseInt)
     .option('--user <username>', '해당 사용자 결과만 표시')
     .arguments('<path..>', '저장소 경로 (예: user/repo)')
-    .option('--colored-output', '색상이 포함된 텍스트 파일 출력');
+    .option('--colored-output', '색상이 포함된 텍스트 파일 출력')
+    .option('--serve', '로컬 서버에서 HTML 보고서를 실행합니다.');
 
 program.parse(process.argv);
 const options = program.opts();
@@ -272,6 +276,22 @@ async function main() {
             // HTML 파일 저장
             await fs.writeFile(htmlFilePath, htmlContent);
             console.log(`HTML 보고서가 ${htmlFilePath}에 생성되었습니다.`);
+
+            if (options.serve) {
+                const express = await import('express');
+                const open = await import('open');
+                const app = express.default();
+        
+                const port = 3000;
+                const reportPath = path.resolve(htmlFilePath);
+        
+                app.use(express.static(resultsDir));
+        
+                app.listen(port, () => {
+                    console.log(`📊 로컬 서버 실행 중: http://localhost:${port}/index.html`);
+                    open.default(`http://localhost:${port}/index.html`);
+        });
+    }
         }
     } catch (error) {
         console.error(`\n⚠️ 오류가 발생했습니다 ⚠️\n\n${error.message}\n\n문제가 지속되면 GitHub 이슈를 생성하거나 관리자에게 문의해주세요.\n`);
