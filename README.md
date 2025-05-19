@@ -174,19 +174,28 @@ npm run test
 ### [Github API 가이드](docs/github-api-guide.md)
 
 ### [결과 리포트(index.html) 확인 가이드](docs/view_results_guide.md)
+- 결과 리포트(index.html) 확인 방법
 
 ### [프로젝트 가이드라인](docs/project_guidelines.md)
+- 프로젝트 참여 규칙 요약
 
 ### [포크 동기화 가이드](docs/fork_sync_guide.md)
+- fork 저장소를 원본과 동기화하는 방법
 
 ### [Github Token 발급 가이드](docs/token_guide.md)
+- GitHub API 토큰 발급 방법
 
 ### [ESM(ECMAScript Module) 전환 안내](docs/esm_guide.md)
+- ESM으로 전환하는 절차
 
 ### [디버깅 가이드](docs/debug_guide.md)
+- 실행 오류 추적 및 해결 방법
 
 ### [테마 설정 가이드](docs/theme_guide.md)
+- 결과 차트 테마 설정 방법
 
 ### [로그 레벨별 사용 방식](docs/logging_guide.md)
+- 로그 레벨(INFO, ERROR 등) 사용 가이드
 
 ### [Cherry Pick 사용 방법](docs/cherry-pick_guide.md)
+- 커밋 하나만 선택적으로 적용하는 방법
