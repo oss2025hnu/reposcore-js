@@ -35,6 +35,7 @@ Options:
   --threshold <score>    특정 점수 이상인 참여자만 출력
   --user <username>      해당 사용자 결과만 표시
   --colored-output       색상이 포함된 텍스트 파일 출력
+  --serve                로컬 서버에서 HTML 보고서를 실행합니다.
   -h, --help             도움말 보기
 
 
@@ -172,6 +173,7 @@ npm run test
 ## 📚 가이드 문서 모음
 
 ### [Github API 가이드](docs/github-api-guide.md)
+- Github API 사용방법 안내
 
 ### [결과 리포트(index.html) 확인 가이드](docs/view_results_guide.md)
 - 결과 리포트(index.html) 확인 방법

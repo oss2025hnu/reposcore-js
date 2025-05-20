@@ -152,6 +152,7 @@ npm run test
 ## 📚 가이드 문서 모음
 
 ### [Github API 가이드](docs/github-api-guide.md)
+- Github API 사용방법 안내
 
 ### [결과 리포트(index.html) 확인 가이드](docs/view_results_guide.md)
 - 결과 리포트(index.html) 확인 방법
