@@ -252,7 +252,6 @@ async function main() {
         log(`총 ${program.args.length}개의 저장소 분석을 시작합니다.`, 'INFO');
 
         for (const [repoName, scoreData] of scoresMap.entries()) {
-            if (repoName === 'total') continue;
             log("--------------------------------------------------", "INFO");
             log(`저장소 분석 시작: ${repoName}`, "INFO");
 
