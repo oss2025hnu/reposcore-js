@@ -251,32 +251,35 @@ async function main() {
         await fs.mkdir(options.output, { recursive: true });
         log(`총 ${program.args.length}개의 저장소 분석을 시작합니다.`, 'INFO');
 
+        let totalEntry = null; // total 저장소 따로 저장
+
         for (const [repoName, scoreData] of scoresMap.entries()) {
+            if (repoName === 'total') {
+                totalEntry = { repoName, scoreData };
+                continue; // total은 나중에 따로 처리
+            }
+
             log("--------------------------------------------------", "INFO");
             log(`저장소 분석 시작: ${repoName}`, "INFO");
 
             const repoDir = path.join(options.output, repoName);
             const generatedFiles = [];
 
-            // 텍스트 파일 생성
             if (['all', 'text'].includes(options.format)) {
                 await analyzer.generateTable(new Map([[repoName, scoreData]]), options.output, options);
                 generatedFiles.push(`${repoDir}/${repoName}.txt`);
             }
 
-            // CSV 생성
             if (['all', 'table'].includes(options.format)) {
                 await analyzer.generateCsv(new Map([[repoName, scoreData]]), options.output);
                 generatedFiles.push(`${repoDir}/${repoName}_data.csv`);
             }
 
-            // 차트 이미지 생성
             if (['all', 'chart'].includes(options.format)) {
                 await analyzer.generateChart(new Map([[repoName, scoreData]]), options.output);
                 generatedFiles.push(`${repoDir}/${repoName}_chart.png`);
             }
 
-            // 평균 점수 및 파일 목록 로그
             log(`  - ${repoName} 평균 점수: ${averageScores.get(repoName)?.toFixed(2) ?? 'N/A'}`, 'INFO');
             log('  - 결과 파일 생성:', 'INFO');
             for (const filePath of generatedFiles) {
@@ -285,9 +288,42 @@ async function main() {
 
             log(`✅ 저장소 분석 완료: ${repoName}`, 'INFO');
         }
+
+        // 마지막에 total 저장소 처리
+        if (totalEntry) {
+            const { repoName, scoreData } = totalEntry;
+            const repoDir = path.join(options.output, repoName);
+            const generatedFiles = [];
+
+            log("--------------------------------------------------", "INFO");
+            log(`저장소 분석 시작: ${repoName}`, "INFO");
+
+            if (['all', 'text'].includes(options.format)) {
+                await analyzer.generateTable(new Map([[repoName, scoreData]]), options.output, options);
+                generatedFiles.push(`${repoDir}/${repoName}.txt`);
+            }
+
+            if (['all', 'table'].includes(options.format)) {
+                await analyzer.generateCsv(new Map([[repoName, scoreData]]), options.output);
+                generatedFiles.push(`${repoDir}/${repoName}_data.csv`);
+            }
+
+            if (['all', 'chart'].includes(options.format)) {
+                await analyzer.generateChart(new Map([[repoName, scoreData]]), options.output);
+                generatedFiles.push(`${repoDir}/${repoName}_chart.png`);
+            }
+
+            log(`  - ${repoName} 평균 점수: ${averageScores.get(repoName)?.toFixed(2) ?? 'N/A'}`, 'INFO');
+            log('  - 결과 파일 생성:', 'INFO');
+            for (const filePath of generatedFiles) {
+                log(`    - ${filePath}`, 'INFO');
+            }
+
+            log(`✅ 저장소 분석 완료: ${repoName}`, 'INFO');
+        }
+
         log("--------------------------------------------------", "INFO");
         log('모든 저장소 분석 완료.', 'INFO');
-        log(`전체 평균 점수 (Total): ${averageScores.get('total')?.toFixed(2) ?? 'N/A'}`, 'INFO');
 
 
         // 모든 출력 형식이 "all" 인 경우에만 HTML 리포트 생성
