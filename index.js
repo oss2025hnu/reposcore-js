@@ -46,7 +46,6 @@ program
     )
     .option('-t, --theme <theme>', '분석 테마 설정 (default/dark)')
     .option('--create-theme <json>', '새 테마 생성 (JSON 형식)')
-    .option('--change-theme <name>', '사용할 테마 선택 (default, dark, 또는 사용자 정의)')
     .option('--threshold <score>', '특정 점수 이상인 참여자만 출력', parseInt)
     .option('--user <username>', '해당 사용자 결과만 표시')
     .arguments('<path..>', '저장소 경로 (예: user/repo)')
@@ -101,16 +100,6 @@ async function main() {
                 log(`'${themeData.name}' 테마가 성공적으로 생성되었습니다. 누락된 속성은 기본 테마에서 상속됩니다.`, 'INFO');
             } catch (error) {
                 console.error('테마 생성 중 오류가 발생했습니다:', error.message);
-                process.exit(1);
-            }
-        }
-
-        // 테마 변경 옵션 처리
-        if (options.changeTheme) {
-            const success = themeManager.setTheme(options.changeTheme);
-            if (!success) {
-                console.error(`유효하지 않은 테마: ${options.changeTheme}`);
-                console.log(`사용 가능한 테마: ${themeManager.getAvailableThemes().join(', ')}`, 'INFO');
                 process.exit(1);
             }
         }
