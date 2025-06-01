@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+/* eslint-disable no-console */ 
 
 import fs from 'fs/promises';
 import path from 'path';
@@ -157,10 +158,10 @@ async function main() {
         }
 
         // Calculate scores
-        const scores = analyzer.calculateScores();
+        let scoresMap = analyzer.calculateScores();
+        let chartScoresMap = scoresMap; // 차트용 원본 데이터 보존
 
-        // -u 옵션 선택시 실행
-        let realNameScore;
+        // -u 옵션 선택시 실행 (실명 표시)
         if (options.userName) {
             log('Checking user_info.json for --user-name option...');
             try {
@@ -169,11 +170,15 @@ async function main() {
             } catch {
                 log('user_info.json will be created during user info update');
             }
-            await analyzer.updateUserInfo(scores);
-            realNameScore = await analyzer.transformUserIdToName(scores);
+            
+            // 차트용 데이터는 원본 유지
+            chartScoresMap = new Map(scoresMap);
+            
+            // 텍스트/테이블용만 실명 변환
+            await analyzer.updateUserInfo(scoresMap);
+            scoresMap = await analyzer.transformUserIdToName(scoresMap);
+            log('사용자 이름을 실명으로 변환 완료 (차트는 아이디 유지)', 'INFO');
         }
-
-        const scoresMap = analyzer.calculateScores();
 
         let filteredScores = scoresMap;
 
@@ -276,7 +281,9 @@ async function main() {
             }
 
             if (['all', 'chart'].includes(options.format)) {
-                await analyzer.generateChart(new Map([[repoName, scoreData]]), options.output);
+                // 차트만 원본 아이디 데이터 사용
+                const chartData = chartScoresMap.get(repoName) || scoreData;
+                await analyzer.generateChart(new Map([[repoName, chartData]]), options.output);
                 generatedFiles.push(`${repoDir}/${repoName}_chart.png`);
             }
 
@@ -309,7 +316,9 @@ async function main() {
             }
 
             if (['all', 'chart'].includes(options.format)) {
-                await analyzer.generateChart(new Map([[repoName, scoreData]]), options.output);
+                // 차트만 원본 아이디 데이터 사용
+                const chartData = chartScoresMap.get(repoName) || scoreData;
+                await analyzer.generateChart(new Map([[repoName, chartData]]), options.output);
                 generatedFiles.push(`${repoDir}/${repoName}_chart.png`);
             }
 
