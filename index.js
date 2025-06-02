@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+/* eslint-disable no-console */
 
 import fs from 'fs/promises';
 import path from 'path';
@@ -39,19 +40,17 @@ program
         new Option('-c, --use-cache', '저장된 GitHub 데이터 사용')
     )
     .addOption(
-        new Option('-u, --user-name', '사용자 실명 표시')
+        new Option('-u, --user-name', 'GitHub ID 대신 실명으로 표시 (user_info.json 파일 필수)')
     )
     .addOption(
         new Option('--check-limit', 'GitHub API 사용량 확인')
     )
     .option('-t, --theme <theme>', '분석 테마 설정 (default/dark)')
     .option('--create-theme <json>', '새 테마 생성 (JSON 형식)')
-    .option('--change-theme <name>', '사용할 테마 선택 (default, dark, 또는 사용자 정의)')
     .option('--threshold <score>', '특정 점수 이상인 참여자만 출력', parseInt)
     .option('--user <username>', '해당 사용자 결과만 표시')
     .arguments('<path..>', '저장소 경로 (예: user/repo)')
-    .option('--colored-output', '색상이 포함된 텍스트 파일 출력')
-    .option('--serve', '로컬 서버에서 HTML 보고서를 실행합니다.');
+    .option('--colored-output', '색상이 포함된 텍스트 파일 출력');
 
 program.parse(process.argv);
 const options = program.opts();
@@ -68,7 +67,7 @@ if (options.checkLimit) {
 }
 
 
-const validFormats = ['text', 'table', 'chart', 'all']; // 수정: both -> all, text 추가
+const validFormats = ['text', 'table', 'chart', 'all'];
 if (!validFormats.includes(options.format)) {
     console.error(`에러: 유효하지 않은 형식입니다: "${options.format}"\n사용 가능한 형식: ${validFormats.join(', ')}`);
     process.exit(1);
@@ -85,10 +84,10 @@ async function main() {
 
         // 테마 매니저 초기화
         const themeManager = new ThemeManager();
-        
+
         // 테마 관련 작업을 위한 비동기 대기
         await themeManager.loadThemes();
-        
+
         // 테마 생성 옵션 처리
         if (options.createTheme) {
             try {
@@ -105,16 +104,6 @@ async function main() {
             }
         }
 
-        // 테마 변경 옵션 처리
-        if (options.changeTheme) {
-            const success = themeManager.setTheme(options.changeTheme);
-            if (!success) {
-                console.error(`유효하지 않은 테마: ${options.changeTheme}`);
-                console.log(`사용 가능한 테마: ${themeManager.getAvailableThemes().join(', ')}`, 'INFO');
-                process.exit(1);
-            }
-        }
-        
         // 현재 테마 로깅
         log(`현재 테마: '${themeManager.currentTheme}'`, 'INFO');
 
@@ -145,7 +134,7 @@ async function main() {
 
         const shouldUseCache = options.useCache;
         const cached = shouldUseCache ? await loadCache() : null;
-        
+
         if (cached) {
             log("캐시 데이터를 불러왔습니다.", 'INFO');
             analyzer.participants = cached;
@@ -157,10 +146,11 @@ async function main() {
         }
 
         // Calculate scores
-        const scores = analyzer.calculateScores();
+        let scores = analyzer.calculateScores(); // scoresMap -> scores로 변경
 
-        // -u 옵션 선택시 실행
-        let realNameScore;
+        let realNameScores = null; // 실명 변환된 점수를 저장할 변수
+
+        // -u 옵션 선택시 실행 (실명 표시)
         if (options.userName) {
             log('Checking user_info.json for --user-name option...');
             try {
@@ -169,21 +159,25 @@ async function main() {
             } catch {
                 log('user_info.json will be created during user info update');
             }
-            await analyzer.updateUserInfo(scores);
-            realNameScore = await analyzer.transformUserIdToName(scores);
+
+            // scores는 원본(GitHub ID) 유지. realNameScores에 실명 변환된 버전 저장
+            await analyzer.updateUserInfo(scores); // GitHub ID 기반으로 사용자 정보 업데이트
+            realNameScores = await analyzer.transformUserIdToName(scores); // 실명 변환된 새 맵 생성
+
+            log('사용자 이름을 실명으로 변환 완료 (차트는 아이디 유지)', 'INFO');
         }
 
-        let filteredScores = scores;
+        let filteredScores = options.userName && realNameScores ? realNameScores : scores; // 필터링에 사용할 데이터 선택
 
         if (options.threshold !== undefined) {
             filteredScores = Array.from(filteredScores).map(([repo, scoreList]) => {
                 const filteredList = scoreList.filter(entry => entry[6] >= options.threshold);
                 return [repo, filteredList];
-            }).filter(([_, list]) => list.length > 0); 
+            }).filter(([_, list]) => list.length > 0);
         }
 
-       if (options.user) {
-            const allScoresRaw = Array.from(scores.entries()); // Use scores instead of scoresMap
+        if (options.user) {
+            const allScoresRaw = Array.from(scores.entries()); // GitHub ID 기준으로 사용자 찾기
             const userScores = new Map(); // username → { total: number, perRepo: Map }
 
             for (const [repoName, users] of allScoresRaw) {
@@ -243,15 +237,17 @@ async function main() {
 
             return;
         }
-        
 
-        const averageScores = analyzer.calculateAverageScore(scores); // Use scores instead of scoresMap
+        const averageScores = analyzer.calculateAverageScore(scores); // scoresMap -> scores로 변경
         await fs.mkdir(options.output, { recursive: true });
         log(`총 ${program.args.length}개의 저장소 분석을 시작합니다.`, 'INFO');
 
         let totalEntry = null; // total 저장소 따로 저장
 
-        for (const [repoName, scoreData] of scores.entries()) { // Use scores instead of scoresMap
+        // 실제 출력 시 사용할 데이터 맵 결정
+        const displayScores = options.userName && realNameScores ? realNameScores : scores;
+
+        for (const [repoName, scoreData] of displayScores.entries()) { // scoresMap -> displayScores로 변경
             if (repoName === 'total') {
                 totalEntry = { repoName, scoreData };
                 continue; // total은 나중에 따로 처리
@@ -274,8 +270,14 @@ async function main() {
             }
 
             if (['all', 'chart'].includes(options.format)) {
-                await analyzer.generateChart(new Map([[repoName, scoreData]]), options.output);
-                generatedFiles.push(`${repoDir}/${repoName}_chart.png`);
+                // 차트는 항상 GitHub ID(원본 scores)를 사용하도록 수정
+                const chartData = scores.get(repoName) || scores.get('total'); // 원본 scores에서 가져옴
+                if (chartData) {
+                    await analyzer.generateChart(new Map([[repoName, chartData]]), options.output);
+                    generatedFiles.push(`${repoDir}/${repoName}_chart.png`);
+                } else {
+                    log(`경고: 차트 생성을 위한 ${repoName} 저장소 데이터를 찾을 수 없습니다.`, 'WARN');
+                }
             }
 
             log(`  - ${repoName} 평균 점수: ${averageScores.get(repoName)?.toFixed(2) ?? 'N/A'}`, 'INFO');
@@ -307,8 +309,14 @@ async function main() {
             }
 
             if (['all', 'chart'].includes(options.format)) {
-                await analyzer.generateChart(new Map([[repoName, scoreData]]), options.output);
-                generatedFiles.push(`${repoDir}/${repoName}_chart.png`);
+                // 'total' 차트도 항상 GitHub ID(원본 scores)를 사용하도록 수정
+                const chartData = scores.get(repoName) || scores.get('total'); // 원본 scores에서 가져옴
+                 if (chartData) {
+                    await analyzer.generateChart(new Map([[repoName, chartData]]), options.output);
+                    generatedFiles.push(`${repoDir}/${repoName}_chart.png`);
+                } else {
+                    log(`경고: 차트 생성을 위한 ${repoName} 저장소 데이터를 찾을 수 없습니다.`, 'WARN');
+                }
             }
 
             log(`  - ${repoName} 평균 점수: ${averageScores.get(repoName)?.toFixed(2) ?? 'N/A'}`, 'INFO');
@@ -327,30 +335,14 @@ async function main() {
         // 모든 출력 형식이 "all" 인 경우에만 HTML 리포트 생성
         if (options.format === 'all') {
             // HTML 생성
-            const repositories = process.argv.slice(2);
-            const resultsDir = options.output; // 또는 'results'
+            const repositories = program.args; // program.args를 직접 사용
+            const resultsDir = options.output;
             const htmlContent = await generateHTML(repositories, resultsDir);
             const htmlFilePath = path.join(resultsDir, 'index.html');
 
             // HTML 파일 저장
             await fs.writeFile(htmlFilePath, htmlContent);
             console.log(`HTML 보고서가 ${htmlFilePath}에 생성되었습니다.`);
-
-            if (options.serve) {
-                const express = await import('express');
-                const open = await import('open');
-                const app = express.default();
-        
-                const port = 3000;
-                const reportPath = path.resolve(htmlFilePath);
-        
-                app.use(express.static(resultsDir));
-        
-                app.listen(port, () => {
-                    console.log(`📊 로컬 서버 실행 중: http://localhost:${port}/index.html`);
-                    open.default(`http://localhost:${port}/index.html`);
-        });
-    }
         }
     } catch (error) {
         console.error(`\n⚠️ 오류가 발생했습니다 ⚠️\n\n${error.message}\n\n문제가 지속되면 GitHub 이슈를 생성하거나 관리자에게 문의해주세요.\n`);
