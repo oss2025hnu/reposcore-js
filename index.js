@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-/* eslint-disable no-console */ 
+/* eslint-disable no-console */
 
 import fs from 'fs/promises';
 import path from 'path';
@@ -67,7 +67,7 @@ if (options.checkLimit) {
 }
 
 
-const validFormats = ['text', 'table', 'chart', 'all']; // 수정: both -> all, text 추가
+const validFormats = ['text', 'table', 'chart', 'all'];
 if (!validFormats.includes(options.format)) {
     console.error(`에러: 유효하지 않은 형식입니다: "${options.format}"\n사용 가능한 형식: ${validFormats.join(', ')}`);
     process.exit(1);
@@ -84,10 +84,10 @@ async function main() {
 
         // 테마 매니저 초기화
         const themeManager = new ThemeManager();
-        
+
         // 테마 관련 작업을 위한 비동기 대기
         await themeManager.loadThemes();
-        
+
         // 테마 생성 옵션 처리
         if (options.createTheme) {
             try {
@@ -103,7 +103,7 @@ async function main() {
                 process.exit(1);
             }
         }
-        
+
         // 현재 테마 로깅
         log(`현재 테마: '${themeManager.currentTheme}'`, 'INFO');
 
@@ -134,7 +134,7 @@ async function main() {
 
         const shouldUseCache = options.useCache;
         const cached = shouldUseCache ? await loadCache() : null;
-        
+
         if (cached) {
             log("캐시 데이터를 불러왔습니다.", 'INFO');
             analyzer.participants = cached;
@@ -146,8 +146,9 @@ async function main() {
         }
 
         // Calculate scores
-        let scoresMap = analyzer.calculateScores();
-        let chartScoresMap = scoresMap; // 차트용 원본 데이터 보존
+        let scores = analyzer.calculateScores(); // scoresMap -> scores로 변경
+
+        let realNameScores = null; // 실명 변환된 점수를 저장할 변수
 
         // -u 옵션 선택시 실행 (실명 표시)
         if (options.userName) {
@@ -158,27 +159,25 @@ async function main() {
             } catch {
                 log('user_info.json will be created during user info update');
             }
-            
-            // 차트용 데이터는 원본 유지
-            chartScoresMap = new Map(scoresMap);
-            
-            // 텍스트/테이블용만 실명 변환
-            await analyzer.updateUserInfo(scoresMap);
-            scoresMap = await analyzer.transformUserIdToName(scoresMap);
+
+            // scores는 원본(GitHub ID) 유지. realNameScores에 실명 변환된 버전 저장
+            await analyzer.updateUserInfo(scores); // GitHub ID 기반으로 사용자 정보 업데이트
+            realNameScores = await analyzer.transformUserIdToName(scores); // 실명 변환된 새 맵 생성
+
             log('사용자 이름을 실명으로 변환 완료 (차트는 아이디 유지)', 'INFO');
         }
 
-        let filteredScores = scoresMap;
+        let filteredScores = options.userName && realNameScores ? realNameScores : scores; // 필터링에 사용할 데이터 선택
 
         if (options.threshold !== undefined) {
             filteredScores = Array.from(filteredScores).map(([repo, scoreList]) => {
                 const filteredList = scoreList.filter(entry => entry[6] >= options.threshold);
                 return [repo, filteredList];
-            }).filter(([_, list]) => list.length > 0); 
+            }).filter(([_, list]) => list.length > 0);
         }
 
-       if (options.user) {
-            const allScoresRaw = Array.from(scoresMap.entries()); // [repoName, [[user1], ...]]
+        if (options.user) {
+            const allScoresRaw = Array.from(scores.entries()); // GitHub ID 기준으로 사용자 찾기
             const userScores = new Map(); // username → { total: number, perRepo: Map }
 
             for (const [repoName, users] of allScoresRaw) {
@@ -238,15 +237,17 @@ async function main() {
 
             return;
         }
-        
 
-        const averageScores = analyzer.calculateAverageScore(scoresMap);
+        const averageScores = analyzer.calculateAverageScore(scores); // scoresMap -> scores로 변경
         await fs.mkdir(options.output, { recursive: true });
         log(`총 ${program.args.length}개의 저장소 분석을 시작합니다.`, 'INFO');
 
         let totalEntry = null; // total 저장소 따로 저장
 
-        for (const [repoName, scoreData] of scoresMap.entries()) {
+        // 실제 출력 시 사용할 데이터 맵 결정
+        const displayScores = options.userName && realNameScores ? realNameScores : scores;
+
+        for (const [repoName, scoreData] of displayScores.entries()) { // scoresMap -> displayScores로 변경
             if (repoName === 'total') {
                 totalEntry = { repoName, scoreData };
                 continue; // total은 나중에 따로 처리
@@ -269,10 +270,14 @@ async function main() {
             }
 
             if (['all', 'chart'].includes(options.format)) {
-                // 차트만 원본 아이디 데이터 사용
-                const chartData = chartScoresMap.get(repoName) || scoreData;
-                await analyzer.generateChart(new Map([[repoName, chartData]]), options.output);
-                generatedFiles.push(`${repoDir}/${repoName}_chart.png`);
+                // 차트는 항상 GitHub ID(원본 scores)를 사용하도록 수정
+                const chartData = scores.get(repoName) || scores.get('total'); // 원본 scores에서 가져옴
+                if (chartData) {
+                    await analyzer.generateChart(new Map([[repoName, chartData]]), options.output);
+                    generatedFiles.push(`${repoDir}/${repoName}_chart.png`);
+                } else {
+                    log(`경고: 차트 생성을 위한 ${repoName} 저장소 데이터를 찾을 수 없습니다.`, 'WARN');
+                }
             }
 
             log(`  - ${repoName} 평균 점수: ${averageScores.get(repoName)?.toFixed(2) ?? 'N/A'}`, 'INFO');
@@ -304,10 +309,14 @@ async function main() {
             }
 
             if (['all', 'chart'].includes(options.format)) {
-                // 차트만 원본 아이디 데이터 사용
-                const chartData = chartScoresMap.get(repoName) || scoreData;
-                await analyzer.generateChart(new Map([[repoName, chartData]]), options.output);
-                generatedFiles.push(`${repoDir}/${repoName}_chart.png`);
+                // 'total' 차트도 항상 GitHub ID(원본 scores)를 사용하도록 수정
+                const chartData = scores.get(repoName) || scores.get('total'); // 원본 scores에서 가져옴
+                 if (chartData) {
+                    await analyzer.generateChart(new Map([[repoName, chartData]]), options.output);
+                    generatedFiles.push(`${repoDir}/${repoName}_chart.png`);
+                } else {
+                    log(`경고: 차트 생성을 위한 ${repoName} 저장소 데이터를 찾을 수 없습니다.`, 'WARN');
+                }
             }
 
             log(`  - ${repoName} 평균 점수: ${averageScores.get(repoName)?.toFixed(2) ?? 'N/A'}`, 'INFO');
@@ -326,8 +335,8 @@ async function main() {
         // 모든 출력 형식이 "all" 인 경우에만 HTML 리포트 생성
         if (options.format === 'all') {
             // HTML 생성
-            const repositories = process.argv.slice(2);
-            const resultsDir = options.output; // 또는 'results'
+            const repositories = program.args; // program.args를 직접 사용
+            const resultsDir = options.output;
             const htmlContent = await generateHTML(repositories, resultsDir);
             const htmlFilePath = path.join(resultsDir, 'index.html');
 
