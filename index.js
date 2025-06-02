@@ -39,7 +39,7 @@ program
         new Option('-c, --use-cache', '저장된 GitHub 데이터 사용')
     )
     .addOption(
-        new Option('-u, --user-name', '사용자 실명 표시')
+        new Option('-u, --user-name', 'GitHub ID 대신 실명으로 표시 (user_info.json 파일 필수)')
     )
     .addOption(
         new Option('--check-limit', 'GitHub API 사용량 확인')
