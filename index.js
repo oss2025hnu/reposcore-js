@@ -1,5 +1,7 @@
 #!/usr/bin/env node
+
 /* eslint-disable no-console */
+
 import fs from 'fs/promises';
 import path from 'path';
 import {fileURLToPath} from 'url';
@@ -39,19 +41,17 @@ program
         new Option('-c, --use-cache', '저장된 GitHub 데이터 사용')
     )
     .addOption(
-        new Option('-u, --user-name', '사용자 실명 표시')
+        new Option('-u, --user-name', 'GitHub ID 대신 실명으로 표시 (user_info.json 파일 필수)')
     )
     .addOption(
         new Option('--check-limit', 'GitHub API 사용량 확인')
     )
     .option('-t, --theme <theme>', '분석 테마 설정 (default/dark)')
     .option('--create-theme <json>', '새 테마 생성 (JSON 형식)')
-    .option('--change-theme <name>', '사용할 테마 선택 (default, dark, 또는 사용자 정의)')
     .option('--threshold <score>', '특정 점수 이상인 참여자만 출력', parseInt)
     .option('--user <username>', '해당 사용자 결과만 표시')
     .arguments('<path..>', '저장소 경로 (예: user/repo)')
-    .option('--colored-output', '색상이 포함된 텍스트 파일 출력')
-    .option('--serve', '로컬 서버에서 HTML 보고서를 실행합니다.');
+    .option('--colored-output', '색상이 포함된 텍스트 파일 출력');
 
 program.parse(process.argv);
 const options = program.opts();
@@ -104,16 +104,6 @@ async function main() {
                 process.exit(1);
             }
         }
-
-        // 테마 변경 옵션 처리
-        if (options.changeTheme) {
-            const success = themeManager.setTheme(options.changeTheme);
-            if (!success) {
-                console.error(`유효하지 않은 테마: ${options.changeTheme}`);
-                console.log(`사용 가능한 테마: ${themeManager.getAvailableThemes().join(', ')}`, 'INFO');
-                process.exit(1);
-            }
-        }
         
         // 현재 테마 로깅
         log(`현재 테마: '${themeManager.currentTheme}'`, 'INFO');
@@ -157,10 +147,10 @@ async function main() {
         }
 
         // Calculate scores
-        const scores = analyzer.calculateScores();
+        let scoresMap = analyzer.calculateScores();
+        let chartScoresMap = scoresMap; // 차트용 원본 데이터 보존
 
-        // -u 옵션 선택시 실행
-        let realNameScore;
+        // -u 옵션 선택시 실행 (실명 표시)
         if (options.userName) {
             log('Checking user_info.json for --user-name option...');
             try {
@@ -169,11 +159,15 @@ async function main() {
             } catch {
                 log('user_info.json will be created during user info update');
             }
-            await analyzer.updateUserInfo(scores);
-            realNameScore = await analyzer.transformUserIdToName(scores);
+            
+            // 차트용 데이터는 원본 유지
+            chartScoresMap = new Map(scoresMap);
+            
+            // 텍스트/테이블용만 실명 변환
+            await analyzer.updateUserInfo(scoresMap);
+            scoresMap = await analyzer.transformUserIdToName(scoresMap);
+            log('사용자 이름을 실명으로 변환 완료 (차트는 아이디 유지)', 'INFO');
         }
-
-        const scoresMap = analyzer.calculateScores();
 
         let filteredScores = scoresMap;
 
@@ -282,7 +276,9 @@ async function main() {
             }
 
             if (['all', 'chart'].includes(options.format)) {
-                await analyzer.generateChart(new Map([[repoName, scoreData]]), options.output);
+                // 차트만 원본 아이디 데이터 사용
+                const chartData = chartScoresMap.get(repoName) || scoreData;
+                await analyzer.generateChart(new Map([[repoName, chartData]]), options.output);
                 generatedFiles.push(`${repoDir}/${repoName}_chart.png`);
             }
 
@@ -315,7 +311,9 @@ async function main() {
             }
 
             if (['all', 'chart'].includes(options.format)) {
-                await analyzer.generateChart(new Map([[repoName, scoreData]]), options.output);
+                // 차트만 원본 아이디 데이터 사용
+                const chartData = chartScoresMap.get(repoName) || scoreData;
+                await analyzer.generateChart(new Map([[repoName, chartData]]), options.output);
                 generatedFiles.push(`${repoDir}/${repoName}_chart.png`);
             }
 
@@ -343,22 +341,6 @@ async function main() {
             // HTML 파일 저장
             await fs.writeFile(htmlFilePath, htmlContent);
             console.log(`HTML 보고서가 ${htmlFilePath}에 생성되었습니다.`);
-
-            if (options.serve) {
-                const express = await import('express');
-                const open = await import('open');
-                const app = express.default();
-        
-                const port = 3000;
-                const reportPath = path.resolve(htmlFilePath);
-        
-                app.use(express.static(resultsDir));
-        
-                app.listen(port, () => {
-                    console.log(`📊 로컬 서버 실행 중: http://localhost:${port}/index.html`);
-                    open.default(`http://localhost:${port}/index.html`);
-        });
-    }
         }
     } catch (error) {
         console.error(`\n⚠️ 오류가 발생했습니다 ⚠️\n\n${error.message}\n\n문제가 지속되면 GitHub 이슈를 생성하거나 관리자에게 문의해주세요.\n`);
