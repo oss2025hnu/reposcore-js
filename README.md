@@ -27,7 +27,7 @@ Options:
   -f, --format <type>    출력 형식 (choices: "text", "table", "chart", "all",
                          default: "all")
   -c, --use-cache        저장된 GitHub 데이터 사용
-  -u, --user-name        사용자 실명 표시
+  -u, --user-name        GitHub ID 대신 실명으로 표시 (user_info.json 파일 필수)
   --check-limit          GitHub API 사용량 확인
   -t, --theme <theme>    분석 테마 설정 (default/dark)
   --create-theme <json>  새 테마 생성 (JSON 형식)
