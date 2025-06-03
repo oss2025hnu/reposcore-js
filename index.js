@@ -1,5 +1,6 @@
 #!/usr/bin/env node
-/* eslint-disable no-console */ 
+
+/* eslint-disable no-console */
 
 import fs from 'fs/promises';
 import path from 'path';
@@ -18,8 +19,8 @@ import getRateLimit from './lib/checkLimit.js';
 import ThemeManager from './lib/ThemeManager.js';
 
 import { generateHTML } from './lib/htmlGenerator.js';
-
 dotenv.config();
+
 
 program
     .name('node index.js')
@@ -171,11 +172,17 @@ async function main() {
         let filteredScores = scoresMap;
 
         if (options.threshold !== undefined) {
-            filteredScores = Array.from(filteredScores).map(([repo, scoreList]) => {
+            const filteredArray = Array.from(scoresMap).map(([repo, scoreList]) => {
                 const filteredList = scoreList.filter(entry => entry[6] >= options.threshold);
                 return [repo, filteredList];
-            }).filter(([_, list]) => list.length > 0); 
+            }).filter(([_, list]) => list.length > 0);
+            
+            filteredScores = new Map(filteredArray);
+            console.log(`임계값 ${options.threshold} 이상인 참여자만 표시합니다.`);
+        } else {
+            filteredScores = scoresMap;
         }
+
 
        if (options.user) {
             const allScoresRaw = Array.from(scoresMap.entries()); // [repoName, [[user1], ...]]
@@ -246,7 +253,7 @@ async function main() {
 
         let totalEntry = null; // total 저장소 따로 저장
 
-        for (const [repoName, scoreData] of scoresMap.entries()) {
+        for (const [repoName, scoreData] of filteredScores.entries()) {
             if (repoName === 'total') {
                 totalEntry = { repoName, scoreData };
                 continue; // total은 나중에 따로 처리
